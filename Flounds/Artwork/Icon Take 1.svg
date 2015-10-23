@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Icon Take 1.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="586.23282"
+     inkscape:cy="669.26237"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-global="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1280"
+     inkscape:window-height="752"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       position="284.86302,1008.6373"
+       orientation="1,0"
+       id="guide3356" />
+    <sodipodi:guide
+       position="585.35715,666.07144"
+       orientation="1,0"
+       id="guide3362" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000"
+       id="path3346"
+       sodipodi:type="arc"
+       sodipodi:cx="363.42133"
+       sodipodi:cy="416.19965"
+       sodipodi:rx="222"
+       sodipodi:ry="222"
+       sodipodi:start="5.0614548"
+       sodipodi:end="0"
+       d="m 439.34979,207.58788 a 222,222 0 0 1 146.07154,208.61177 l -222,0 z" />
+    <circle
+       style="fill:#ffffff"
+       id="path3350"
+       cx="360.11172"
+       cy="415.46869"
+       r="150" />
+    <path
+       sodipodi:type="star"
+       style="fill:#000000"
+       id="path3354"
+       sodipodi:sides="3"
+       sodipodi:cx="313.14728"
+       sodipodi:cy="185.65132"
+       sodipodi:r1="95.040268"
+       sodipodi:r2="47.520134"
+       sodipodi:arg1="1.5282688"
+       sodipodi:arg2="2.5754663"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 317.18789,280.60566 -44.14689,-69.46612 -44.14689,-69.46612 82.23286,-3.49927 82.23287,-3.49927 -38.08597,72.96539 z"
+       inkscape:transform-center-x="8.6897415"
+       inkscape:transform-center-y="15.833891"
+       transform="matrix(0.99002366,-0.14090124,0.14090124,0.99002366,39.595021,84.320148)" />
+    <rect
+       style="fill:#000000"
+       id="rect3360"
+       width="300.72961"
+       height="25.25"
+       x="284.86301"
+       y="420.59793" />
+  </g>
+</svg>
