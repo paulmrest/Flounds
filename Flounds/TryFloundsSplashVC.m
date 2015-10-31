@@ -20,6 +20,8 @@ static NSString *TRY_IT_DIFFICULTY_LEVEL_LABEL;
 
 static NSString *TRY_IT_STARTING_SHAPES_LABEL;
 
+const CGFloat COUNT_DOWN_TEXT_VIEW_FONT_SIZE = 150.0f;
+
 
 @interface TryFloundsSplashVC ()
 
@@ -36,36 +38,86 @@ static NSString *TRY_IT_STARTING_SHAPES_LABEL;
 
 @implementation TryFloundsSplashVC
 
+const NSInteger TIMER_START_VALUE = 5;
+
+const NSInteger TIMER_FIRE_VALUE = -1;
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     
-    //>>>
-    NSLog(@"TryItFloundsSplashVC - viewDidLoad");
-    //<<<
-    
-    //>>>
-//    self.beforeSnooze = NO;
-//    self.snoozeCount = 1;
-    //<<<
-//    self.beforeSnooze = YES;
     self.snoozeCount = 0;
     self.countdownValue = TIMER_START_VALUE;
     
     [self.tryItFloundsModel getNewStartingSequence];
     
+//    UIFont *countDownTextViewFont = [UIFont fontWithName:[FloundsViewConstants getDefaultFont].fontName size:COUNT_DOWN_TEXT_VIEW_FONT_SIZE];
+//    self.countDownTextView.displayFont = countDownTextViewFont;
+//    self.countDownTextView.centerTextOnEachRedrawCycle = NO;
+    
     [self setLabelsText];
+}
+
+-(void)viewDidLayoutSubviews
+{
+    self.cancelButton.containingVC = self;
+    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancelButton];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self setLabelsColor:[FloundsViewConstants getDefaultTextColor]];
+    
+    if (self.snoozeCount == 0)
+    {
+        self.welcomeLabel.text = INITIAL_WELCOME_LABEL;
+        self.launchLabel.text = INITIAL_LAUNCH_COUNTDOWN_LABEL;
+    }
+    else
+    {
+        NSMutableAttributedString *ordinalAttString = [self ordinalAttributedStringForInteger:self.snoozeCount];
+        
+        NSAttributedString *snoozeCountAttString = [[NSAttributedString alloc] initWithString:SNOOZE_COUNT_LABEL];
+        [ordinalAttString appendAttributedString:snoozeCountAttString];
+        
+        self.welcomeLabel.attributedText = ordinalAttString;
+        
+        self.launchLabel.text = NON_INITIAL_LAUNCH_COUNTDOWN_LABEL;
+    }
+    
+    NSString *difficultyLevel = [NSString localizedStringWithFormat:@" %lu", (unsigned long)self.tryItFloundsModel.difficultyLevel];
+    self.difficultyLabel.text = [TRY_IT_DIFFICULTY_LEVEL_LABEL stringByAppendingString:difficultyLevel];
+    
+    NSString *numOfStartingShapes = [NSString localizedStringWithFormat:@" %lu", (unsigned long)self.tryItFloundsModel.currNumberOfShapes];
+    self.startingShapesLabel.text = [TRY_IT_STARTING_SHAPES_LABEL stringByAppendingString:numOfStartingShapes];
+    
+    if (!self.countDownTimer)
+    {
+        self.countDownLabel.text = [NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue];
+//        [self.countDownTextView setDisplayText:[NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue]];
+        self.countDownTimer = [NSTimer timerWithTimeInterval:0.9
+                                                      target:self
+                                                    selector:@selector(updateCountdownDisplayFromTimer:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:self.countDownTimer forMode:NSDefaultRunLoopMode];
+    }
+    
+    [self.view layoutIfNeeded];
 }
 
 -(void)setLabelsText
 {
-    INITIAL_WELCOME_LABEL = NSLocalizedString(@"We are going to try your settings", nil);
-    SNOOZE_COUNT_LABEL = NSLocalizedString(@" snooze, next Flounds will have:", nil);
+    INITIAL_WELCOME_LABEL = NSLocalizedString(@"Trying your settings", nil);
+    SNOOZE_COUNT_LABEL = NSLocalizedString(@" Snooze", nil);
     
     INITIAL_LAUNCH_COUNTDOWN_LABEL = NSLocalizedString(@"Launching in...", nil);
     NON_INITIAL_LAUNCH_COUNTDOWN_LABEL = NSLocalizedString(@"Launching again in...", nil);
     
-    TRY_IT_DIFFICULTY_LEVEL_LABEL = NSLocalizedString(@"Difficulty level at: ", nil);
+    TRY_IT_DIFFICULTY_LEVEL_LABEL = NSLocalizedString(@"Difficulty level: ", nil);
     
     TRY_IT_STARTING_SHAPES_LABEL = NSLocalizedString(@"Shapes in next Flounds: ", nil);
 }
@@ -101,61 +153,13 @@ static NSString *TRY_IT_STARTING_SHAPES_LABEL;
     return returnAttString;
 }
 
--(void)viewDidLayoutSubviews
+-(void)setLabelsColor:(UIColor *)labelColor
 {
-    self.cancelButton.containingVC = self;
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancelButton];
-}
-
-const NSInteger TIMER_START_VALUE = 3;
-
-const NSInteger TIMER_FIRE_VALUE = -1;
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    //>>>
-//    NSLog(@"TryItFloundsSplashVC - viewWillAppear");
-    //<<<
-    
-    //doing setup in viewWillAppear instead of viewWillLayoutSubviews due to bug
-    if (self.snoozeCount == 0)
-    {
-        self.welcomeLabel.text = INITIAL_WELCOME_LABEL;
-        self.launchLabel.text = INITIAL_LAUNCH_COUNTDOWN_LABEL;
-    }
-    else
-    {
-        NSMutableAttributedString *ordinalAttString = [self ordinalAttributedStringForInteger:self.snoozeCount];
-        
-        NSAttributedString *snoozeCountAttString = [[NSAttributedString alloc] initWithString:SNOOZE_COUNT_LABEL];
-        [ordinalAttString appendAttributedString:snoozeCountAttString];
-        
-        self.welcomeLabel.attributedText = ordinalAttString;
-        
-        self.launchLabel.text = NON_INITIAL_LAUNCH_COUNTDOWN_LABEL;
-    }
-    
-    NSString *difficultyLevel = [NSString localizedStringWithFormat:@" %lu", (unsigned long)self.tryItFloundsModel.difficultyLevel];
-    self.difficultyLabel.text = [TRY_IT_DIFFICULTY_LEVEL_LABEL stringByAppendingString:difficultyLevel];
-    
-    NSString *numOfStartingShapes = [NSString localizedStringWithFormat:@" %lu", (unsigned long)self.tryItFloundsModel.currNumberOfShapes];
-    self.startingShapesLabel.text = [TRY_IT_STARTING_SHAPES_LABEL stringByAppendingString:numOfStartingShapes];
-    
-    if (!self.countDownTimer)
-    {
-        self.countDownLabel.text = [NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue];
-        //    self.countDownLabel.text = [NSString stringWithFormat:@"%d", self.countdownValue];
-        self.countDownTimer = [NSTimer timerWithTimeInterval:0.9
-                                                      target:self
-                                                    selector:@selector(updateCountdownDisplayFromTimer:)
-                                                    userInfo:nil
-                                                     repeats:YES];
-        
-        [[NSRunLoop currentRunLoop] addTimer:self.countDownTimer forMode:NSDefaultRunLoopMode];
-    }
-    
-    [self.view layoutIfNeeded];
+    self.welcomeLabel.textColor = labelColor;
+    self.difficultyLabel.textColor = labelColor;
+    self.startingShapesLabel.textColor = labelColor;
+    self.launchLabel.textColor = labelColor;
+    self.countDownLabel.textColor = labelColor;
 }
 
 //-(void)viewDidAppear:(BOOL)animated
@@ -179,26 +183,48 @@ const NSInteger TIMER_FIRE_VALUE = -1;
 //        NSLog(@"updateCountdownDisplayFromTimer - SEGUE!");
         //<<<
         [timer invalidate];
-        [self performSegueWithIdentifier:@"TryFlounds" sender:self];
+        if (self.snoozeCount == 0)
+        {
+            [self performSegueWithIdentifier:@"AbortNotice" sender:self];
+        }
+        else
+        {
+            [self performSegueWithIdentifier:@"TryFlounds" sender:self];
+        }
     }
     else if (self.countdownValue >= TIMER_FIRE_VALUE)
     {
         self.countDownLabel.text = [NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue];
-//        self.countDownLabel.text = [NSString stringWithFormat:@"%d", self.countdownValue];
-        [self.view setNeedsDisplay];
+//        [self.countDownTextView setDisplayText:[NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue]];
+//        [self.countDownTextView setNeedsDisplay];
     }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"TryFlounds"])
+    if (self.snoozeCount == 0)
     {
-        if ([segue.destinationViewController isKindOfClass:[PatternMakerVC class]])
+        if ([segue.identifier isEqualToString:@"AbortNotice"])
         {
-            PatternMakerVC *tryItPatternMaker = (PatternMakerVC *)segue.destinationViewController;
-            tryItPatternMaker.patternMakerDelegate = self;
-            tryItPatternMaker.abortAvailable = YES;
-            tryItPatternMaker.floundsModel = self.tryItFloundsModel;
+            if ([segue.destinationViewController isKindOfClass:[AbortNoticeVC class]])
+            {
+                AbortNoticeVC *abortNoticeVC = (AbortNoticeVC *)segue.destinationViewController;
+                abortNoticeVC.tryItFloundsModel = self.tryItFloundsModel;
+                abortNoticeVC.patternMakerDelegate = self;
+            }
+        }
+    }
+    else
+    {
+        if ([segue.identifier isEqualToString:@"TryFlounds"])
+        {
+            if ([segue.destinationViewController isKindOfClass:[PatternMakerVC class]])
+            {
+                PatternMakerVC *tryItPatternMaker = (PatternMakerVC *)segue.destinationViewController;
+                tryItPatternMaker.floundsModel = self.tryItFloundsModel;
+                tryItPatternMaker.patternMakerDelegate = self;
+                tryItPatternMaker.abortAvailable = YES;
+            }
         }
     }
 }
@@ -224,7 +250,6 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     self.countdownValue = TIMER_START_VALUE;
     [self.tryItFloundsModel incrementDifficultyAndGetNewSequence];
     [self.view setNeedsDisplay];
-//    [self.view layoutIfNeeded];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 

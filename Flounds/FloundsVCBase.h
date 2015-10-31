@@ -31,4 +31,8 @@
 
 -(void)animateNonSelectedTableViewCells:(UITableView *)tableView;
 
+-(NSArray *)getVisibleNonSelectedCellsFor:(UITableView *)tableView;
+
+-(void)removeAnimationsFromPresentingVC;
+
 @end

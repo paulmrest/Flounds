@@ -19,6 +19,7 @@
                                             withDrawingRect:(CGRect)rect
                                                   toApplyTo:(NSUInteger)layerCopies;
 
++(CABasicAnimation *)slideAnimation;
 
 +(CAAnimation *)shakeAnimationForContainingRect:(CGRect)rect;
 

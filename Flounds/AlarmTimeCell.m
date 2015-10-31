@@ -8,8 +8,10 @@
 
 #import "AlarmTimeCell.h"
 
-@interface AlarmTimeCell ()
+NSString *ADD_ALARM_TIME_TEXT;
 
+
+@interface AlarmTimeCell ()
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -17,6 +19,16 @@
 
 
 @implementation AlarmTimeCell
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        ADD_ALARM_TIME_TEXT = NSLocalizedString(@"Add alarm time...", nil);
+    }
+    return self;
+}
 
 
 -(void)setAlarmTimeDate:(NSDate *)alarmTimeDate
@@ -28,7 +40,7 @@
     }
     else
     {
-        self.cellText.text = @"Add alarm time...";
+        self.cellText.text = ADD_ALARM_TIME_TEXT;
     }
 }
 
@@ -63,6 +75,7 @@
 -(IBAction)flipActiveState:(UISwitch *)sender
 {
     [self.alarmClockModel flipAlarmActiveState:self.alarmTimeDate];
+    [self.deactivateSnoozeDelegate deactivateSnoozeStateForAlarmTime:self.alarmTimeDate];
     self.active = self.activeSwitch.isOn;
     [self updateCellDisplay];
 }
@@ -88,11 +101,26 @@
 {
     if (self.active)
     {
-        self.cellText.alpha = 1.0;
+        self.cellText.alpha = 1.0f;
+        for (CALayer *oneSublayer in self.layer.sublayers)
+        {
+            if ([oneSublayer isKindOfClass:[FloundsShapeLayer class]])
+            {
+                oneSublayer.opacity = 1.0f;
+            }
+        }
     }
     else
     {
-        self.cellText.alpha = 0.5;
+        self.cellText.alpha = 0.5f;
+        for (CALayer *oneSublayer in self.layer.sublayers)
+        {
+            if ([oneSublayer isKindOfClass:[FloundsShapeLayer class]])
+            {
+                oneSublayer.opacity = 0.5f;
+            }
+        }
+
     }
     [self setNeedsDisplay];
 }

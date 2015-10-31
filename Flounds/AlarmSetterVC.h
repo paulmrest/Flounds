@@ -9,27 +9,38 @@
 #import <UIKit/UIKit.h>
 
 #import "AlarmClockModel.h"
+#import "AlarmSoundManager.h"
 #import "SetSnoozeDelegate.h"
-#import "SnoozeSetterVC.h"
 
-#import "VerticallyAlignedTextView.h"
+#import "SnoozeSetterVC.h"
+#import "AlarmSoundSetterVC.h"
+#import "SetAlarmSoundProtocol.h"
+
+#import "FloundsDatePickerView.h"
+
 #import "VerticallyCenteredTextView.h"
 
 #import "FloundsVCBase.h"
 
 
-@interface AlarmSetterVC : FloundsVCBase <UIGestureRecognizerDelegate, UIPickerViewDelegate, SetSnoozeDelegate>
+@interface AlarmSetterVC : FloundsVCBase <UIGestureRecognizerDelegate, UIPickerViewDelegate, SetSnoozeDelegate, SetAlarmSoundProtocol>
 
 @property (strong, nonatomic) AlarmClockModel *alarmClockModel;
 
+@property (nonatomic, strong) AlarmSoundManager *soundManager;
+
 @property (nonatomic, weak) IBOutlet UIDatePicker *timeSelector;
 
+@property (nonatomic, weak) IBOutlet FloundsDatePickerView *floundsTimeSelector;
 
-@property (weak, nonatomic) IBOutlet VerticallyAlignedTextView *snoozeTextView;
 
 @property (weak, nonatomic) IBOutlet VerticallyCenteredTextView *snoozeTextContainerView;
 
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *snoozeTapRecognizer;
+
+@property (weak, nonatomic) IBOutlet VerticallyCenteredTextView *alarmSoundTextView;
+
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *alarmSoundTapRecognizer;
 
 
 @property (weak, nonatomic) IBOutlet FloundsButton *alarmSetButton;
@@ -38,9 +49,20 @@
 
 @property (weak, nonatomic) IBOutlet FloundsButton *cancelButton;
 
+#pragma SetSnoozeDelegate
+@property (nonatomic) NSUInteger initialSnoozeMinutes;
+
+@property (nonatomic) NSUInteger currSnoozeMinutes;
+
+#pragma SetAlarmSoundProtocol
+@property (nonatomic, strong) NSString *initialAlarmSound;
+
+@property (nonatomic, strong) NSString *currAlarmSound;
+
+
 
 -(void)setAlarmTimeDate:(NSDate *)alarmTimeDate;
 
--(void)setCurrSnoozeMinutes:(NSUInteger)snoozeMinutes;
+//-(void)setSnoozeMinutes:(NSUInteger)snoozeMinutes;
 
 @end

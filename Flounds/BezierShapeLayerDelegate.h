@@ -9,9 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "FloundsViewConstants.h"
+
 #import "BezierShapeLayer.h"
 #import "BezierShape.h"
 
 @interface BezierShapeLayerDelegate : NSObject
+
+@property (nonatomic, strong) UIColor *strokeColor;
 
 @end

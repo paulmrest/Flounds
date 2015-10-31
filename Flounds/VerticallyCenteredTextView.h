@@ -10,6 +10,9 @@
 
 #import "FloundsViewConstants.h"
 
+#import "CAAnimationFactory.h"
+#import "FloundsUserInteractionSegueProtocol.h"
+
 @interface VerticallyCenteredTextView : UIView
 
 @property (nonatomic, strong) NSString *displayText;
@@ -19,5 +22,10 @@
 @property (nonatomic, strong) UIColor *fontColor; //defaults to black if not otherwise set
 
 @property (nonatomic) BOOL centerTextOnEachRedrawCycle;
+
+@property (nonatomic, strong) UIViewController<FloundsUserInteractionSegueProtocol> *containingVC;
+
+-(void)animateForSegueWithID:(NSString *)segueID
+                  fromSender:(id)sender;
 
 @end

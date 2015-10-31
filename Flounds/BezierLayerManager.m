@@ -29,8 +29,6 @@ const NSUInteger CALAYER_KEY_LENGTH = 8;
 //[self.animationKeysInOrder count] > 0
 @property (nonatomic, strong) NSMutableArray *layerAnimationKeyTracker;
 
-@property (nonatomic, strong) BezierShapeLayerDelegate *shapeLayerDelegate;
-
 
 @property (nonatomic, strong) NSMutableDictionary *animationClustersAndKeys;
 
@@ -73,10 +71,10 @@ const NSUInteger CALAYER_KEY_LENGTH = 8;
                 
                 BezierShapeLayer *newBaseLayer = [BezierShapeLayer layer];
                 newBaseLayer.bezierShape = oneShape;
+                newBaseLayer.strokeColor = oneShape.strokeColor;
                 newBaseLayer.frame = oneShape.confiningRect;
                 newBaseLayer.shapeID = oneShape.shapeID;
                 newBaseLayer.copyID = 0;
-//                newBaseLayer.delegate = self.shapeLayerDelegate;
                 
                 NSString *baseLayerStringKey = [self getLayerKeyOfLength:CALAYER_KEY_LENGTH];
                 newBaseLayer.layerAnimationKey = baseLayerStringKey;
@@ -89,10 +87,10 @@ const NSUInteger CALAYER_KEY_LENGTH = 8;
                 {
                     BezierShapeLayer *newLayerCopy = [BezierShapeLayer layer];
                     newLayerCopy.bezierShape = oneShape;
+                    newLayerCopy.strokeColor = oneShape.strokeColor;
                     newLayerCopy.frame = oneShape.confiningRect;
                     newLayerCopy.shapeID = oneShape.shapeID;
                     newLayerCopy.copyID = i + 1;
-//                    newLayerCopy.delegate = self.shapeLayerDelegate;
                     
                     NSString *newLayerCopyStringKey = [self getLayerKeyOfLength:CALAYER_KEY_LENGTH];
                     newLayerCopy.layerAnimationKey = newLayerCopyStringKey;
@@ -111,15 +109,6 @@ const NSUInteger CALAYER_KEY_LENGTH = 8;
         [self baseShapeLayers];
     }
     return self;
-}
-
--(BezierShapeLayerDelegate *)shapeLayerDelegate
-{
-    if (!_shapeLayerDelegate)
-    {
-        _shapeLayerDelegate = [[BezierShapeLayerDelegate alloc] init];
-    }
-    return _shapeLayerDelegate;
 }
 
 -(NSMutableArray *)layerAnimationKeyTracker

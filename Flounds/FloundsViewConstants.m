@@ -51,7 +51,7 @@ const CGFloat DEFAULT_BORDER_THICKNESS = 2.0f;
 
 +(UIColor *)getDefaultBorderColor
 {
-    return [UIColor blackColor];
+    return [UIColor whiteColor];
 }
 
 +(CGFloat)getDefaultBorderThickness
@@ -61,12 +61,22 @@ const CGFloat DEFAULT_BORDER_THICKNESS = 2.0f;
 
 +(UIColor *)getDefaultBackgroundColor
 {
+    return [UIColor blackColor];
+}
+
++(UIColor *)getDefaultButtonBackgroundColor
+{
+    return [UIColor clearColor];
+}
+
++(UIColor *)getDefaultTextColor
+{
     return [UIColor whiteColor];
 }
 
-+(UIColor *)getdefaultTextColor
++(UIColor *)getDefaultShapeStrokeColor
 {
-    return [UIColor blackColor];
+    return [UIColor whiteColor];
 }
 
 @end

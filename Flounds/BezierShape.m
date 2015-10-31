@@ -30,6 +30,7 @@ const CGFloat DRAWING_PADDING_FACTOR = 0.05;
     self.confiningRect = rect;
     [self setupDrawingRect];
     [self drawBezierPathWithinSquareOfSide:self.drawingRect.size.height];
+    self.strokeColor = [FloundsViewConstants getDefaultShapeStrokeColor];
     return self;
 }
 
@@ -117,22 +118,7 @@ const CGFloat DRAWING_PADDING_FACTOR = 0.05;
     return CGPointMake(xPointOnCircleAtRaidan, yPointOnCircleAtRadian);
 }
 
-//-(CGPoint)pointOnCircleWithin:(CGRect)rect
-//                     atRadian:(CGFloat)radian
-//{
-//    CGFloat xCircleCenter = rect.origin.x + rect.size.width / 2;
-//    CGFloat yCircleCenter = rect.origin.y + rect.size.height / 2;
-//    
-//    CGFloat radius = rect.size.width / 2;
-//    
-//    CGFloat xPointOnCircleAtRadian = xCircleCenter + (radius * cosf(radian));
-//    CGFloat yPointOnCircleAtRadian = yCircleCenter + (radius * sinf(radian));
-//    
-//    return CGPointMake(xPointOnCircleAtRadian, yPointOnCircleAtRadian);
-//}
-
 #pragma NSCopying
-
 -(id)copyWithZone:(NSZone *)zone
 {
     id copyOfSelf = [[[self class] alloc] init];

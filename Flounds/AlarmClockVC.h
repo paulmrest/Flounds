@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "ClockViewText.h"
+
 #import "AlarmTimeCell.h"
+#import "DeactivateSnoozeProtocol.h"
+
 #import "AlarmSetterVC.h"
 #import "AlarmClockModel.h"
 
@@ -28,7 +31,7 @@
 
 #import "FloundsAppearanceUtility.h"
 
-@interface AlarmClockVC : FloundsVCBase <UITableViewDataSource, UITableViewDelegate, ModalPatternMakerDelegate>
+@interface AlarmClockVC : FloundsVCBase <UITableViewDataSource, UITableViewDelegate, ModalPatternMakerDelegate, DeactivateSnoozeProtocol>
 
 @property (weak, nonatomic) IBOutlet ClockViewText *clockView;
 
@@ -45,6 +48,8 @@
 
 @property (nonatomic, weak) IBOutlet PatternMakerVC *patternMakerVC;
 
+
+-(void)deactivateSnoozeStateForAlarmTime:(NSDate *)alarmDate;
 
 -(void)saveAlarmingAndFloundsState;
 

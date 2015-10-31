@@ -47,8 +47,8 @@ const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.cannotDismissSelf = NO;
     self.abortAvailable = NO;
+    self.cannotDismissSelf = NO;
     
     if ([[self.floundsModel getCurrSequence] count] == self.floundsModel.currNumberOfShapes)
     {
@@ -97,12 +97,8 @@ const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
 
 -(void)viewDidLayoutSubviews
 {
-    [super viewDidLayoutSubviews];
     if ([self.shapes count] == 0)
     {
-        //>>>
-//        NSLog(@"PatternMakerVC - viewDidLayoutSubviews");
-        //<<<
         [self generateShapes];
         self.shapeView.currMatchingSequence = [self.floundsModel getCurrSequence];
         [self.shapeView setShapesToDisplay:[NSArray arrayWithArray:self.shapes]];
@@ -114,6 +110,7 @@ const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self.presentingVC removeAnimationsFromPresentingVC];
     [self.shapeView presentShapes];
 }
 
@@ -353,6 +350,9 @@ NSUInteger pointsChecked = 0;
 
 -(NSInteger)shapeTapOccursIn:(CGPoint)tapPoint
 {
+//    CGAffineTransform translationToScreenPosition;
+//    CGPathRef translatedToScreenPositionPath;
+    
     for (BezierShape *oneShape in self.shapes)
     {
         CGAffineTransform translationToScreenPosition = CGAffineTransformMakeTranslation(oneShape.drawingRect.origin.x,
@@ -363,8 +363,10 @@ NSUInteger pointsChecked = 0;
         
         if (CGPathContainsPoint(translatedToScreenPositionPath, NULL, tapPoint, FALSE))
         {
+            CFRelease(translatedToScreenPositionPath);
             return oneShape.shapeID;
         }
+        CFRelease(translatedToScreenPositionPath);
     }
     return -1;
 }

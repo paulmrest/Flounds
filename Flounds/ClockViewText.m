@@ -29,8 +29,7 @@ const CGFloat CLOCK_DISPLAY_NON24HOUR_PERIOD_SPACE_FACTOR = 0.35f;
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        self.dateFormatter = self.alarmClockModel.dateFormatter;
-        self.non24HourDrawingPointsSet = NO;
+        [self initHelperClockView];
     }
     return self;
 }
@@ -40,10 +39,16 @@ const CGFloat CLOCK_DISPLAY_NON24HOUR_PERIOD_SPACE_FACTOR = 0.35f;
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.dateFormatter = self.alarmClockModel.dateFormatter;
-        self.non24HourDrawingPointsSet = NO;
+        [self initHelperClockView];
     }
     return self;
+}
+
+-(void)initHelperClockView
+{
+    self.centerTextOnEachRedrawCycle = NO;
+    self.dateFormatter = self.alarmClockModel.dateFormatter;
+    self.non24HourDrawingPointsSet = NO;
 }
 
 -(void)setAlarmClockModel:(AlarmClockModel *)alarmClockModel

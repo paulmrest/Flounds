@@ -49,6 +49,7 @@ const NSUInteger LAYER_COPIES_FOR_ANIMATION = 3;
 {
     for (BezierShapeLayer *oneShapeLayer in [self.layerManager shapeLayersAndCopiesForDisplay])
     {
+        self.shapeLayerDelegate.strokeColor = oneShapeLayer.strokeColor;
         oneShapeLayer.delegate = self.shapeLayerDelegate;
         [self.layer addSublayer:oneShapeLayer];
     }
@@ -182,6 +183,7 @@ const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
         
         [animationClusters addObject:animCluster];
         
+        CFRelease(pathForAnimation);
     }
     
     [self.layerManager queueAnimationClusters:animationClusters

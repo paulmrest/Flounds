@@ -8,11 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+#import "AlarmSound.h"
+
 @interface AlarmSoundManager : NSObject
 
--(NSURL *)currAlarmURL;
+-(id)initWithAvailableSounds;
 
--(NSArray *)namesOfAvailableAlarmSounds;
+-(NSString *)getDefaultAlarmSoundName;
+
+-(BOOL)setDefaultAlarmFromDisplayName:(NSString *)alarmDisplayName;
+
+-(NSURL *)getCurrentlySelectedAlarmURL;
+
+-(NSURL *)getAlarmURLForDisplayName:(NSString *)alarmDisplayName;
+
+-(NSArray *)getAlarmSoundNames;
 
 -(BOOL)selectAlarm:(NSUInteger)indexOfAlarm;
 

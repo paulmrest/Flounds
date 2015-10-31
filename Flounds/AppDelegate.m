@@ -8,13 +8,17 @@
 
 #import "AppDelegate.h"
 
+
 @interface AppDelegate ()
 
 @property (nonatomic, strong) AlarmClockVC *alarmClockVC;
 
 @end
 
+
 @implementation AppDelegate
+
+NSString *kFirstTimeLaunchKey = @"firstTimeLaunch";
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

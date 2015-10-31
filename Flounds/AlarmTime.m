@@ -24,8 +24,21 @@
 @implementation AlarmTime
 
 -(id)initAlarmTime:(NSDate *)alarmTimeDate
+ withSnoozeMinutes:(NSUInteger)snoozeMinutes
+          asActive:(BOOL)active
+    withAlarmSound:(NSString *)alarmSound
+
+{
+    return [self initAlarmTime:alarmTimeDate
+             withSnoozeMinutes:[NSNumber numberWithInteger:snoozeMinutes]
+              withActiveStatus:[NSNumber numberWithBool:active]
+            withAlarmSoundName:alarmSound];
+}
+
+-(id)initAlarmTime:(NSDate *)alarmTimeDate
  withSnoozeMinutes:(NSNumber *)snoozeMinutes
   withActiveStatus:(NSNumber *)active
+withAlarmSoundName:(NSString *)alarmSoundName
 {
     if (self = [super init])
     {
@@ -33,33 +46,27 @@
         self.snoozeTimePrivate = snoozeMinutes;
         self.snoozeMinutesPublic = [snoozeMinutes integerValue];
         self.active = active;
+        self.alarmSoundDisplayName = alarmSoundName;
     }
     return self;
 }
 
--(id)initAlarmTime:(NSDate *)alarmTimeDate
- withSnoozeMinutes:(NSUInteger)snoozeMinutes
-          asActive:(BOOL)active
-{
-    return [self initAlarmTime:alarmTimeDate
-             withSnoozeMinutes:[NSNumber numberWithInteger:snoozeMinutes]
-              withActiveStatus:[NSNumber numberWithBool:active]];
-}
-
-
 NSString *kAlarmTimeKey = @"AlarmTime";
 NSString *kAlarmSnoozeKey = @"SnoozeMinutes";
 NSString *kActiveKey = @"Active";
+NSString *kAlarmSoundDisplayNameKey = @"AlarmSoundName";
 
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
     NSDate *alarmTime = [aDecoder decodeObjectForKey:kAlarmTimeKey];
     NSNumber *snoozeMinutes = [aDecoder decodeObjectForKey:kAlarmSnoozeKey];
     NSNumber *activeAlarm = [aDecoder decodeObjectForKey:kActiveKey];
+    NSString *alarmSoundDisplayName = [aDecoder decodeObjectForKey:kAlarmSoundDisplayNameKey];
     
     return [self initAlarmTime:alarmTime
              withSnoozeMinutes:snoozeMinutes
-              withActiveStatus:activeAlarm];
+              withActiveStatus:activeAlarm
+            withAlarmSoundName:alarmSoundDisplayName];
 }
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -67,6 +74,7 @@ NSString *kActiveKey = @"Active";
     [aCoder encodeObject:_alarmTimeDate forKey:kAlarmTimeKey];
     [aCoder encodeObject:_snoozeTimePrivate forKey:kAlarmSnoozeKey];
     [aCoder encodeObject:_active forKey:kActiveKey];
+    [aCoder encodeObject:_alarmSoundDisplayName forKey:kAlarmSoundDisplayNameKey];
 }
 
 -(void)setAlarmTime:(NSDate *)alarmTime
@@ -113,8 +121,8 @@ NSString *kActiveKey = @"Active";
     NSTimeInterval timeIntervalBetweenCompareAndSelf = [self.alarmTimeDate timeIntervalSinceDate:compareTimeHoursMinutesSecondsNanosecondsOnly];
     
     //>>>
-    NSLog(@"AlarmTime - timeMatchesAlarmTimeToTheSecond...");
-    NSLog(@"timeIntervalBetweenCompareAndSelf: %f", timeIntervalBetweenCompareAndSelf);
+//    NSLog(@"AlarmTime - timeMatchesAlarmTimeToTheSecond...");
+//    NSLog(@"timeIntervalBetweenCompareAndSelf: %f", timeIntervalBetweenCompareAndSelf);
     //<<<
     
     if (timeIntervalBetweenCompareAndSelf <= 0.0 && timeIntervalBetweenCompareAndSelf >= -3.0)

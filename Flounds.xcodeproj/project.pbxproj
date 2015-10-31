@@ -7,40 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C10C79DA1BD57DD00063E2A1 /* Zen Buddhist Temple Bell-SoundBible.com-331362457.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79CE1BD57DD00063E2A1 /* Zen Buddhist Temple Bell-SoundBible.com-331362457.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79DB1BD57DD00063E2A1 /* gentex_cammander_3_code_3_horn-Brandon-938131891.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79CF1BD57DD00063E2A1 /* gentex_cammander_3_code_3_horn-Brandon-938131891.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79DC1BD57DD00063E2A1 /* Japanese Temple Bell Small-SoundBible.com-113624364.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D01BD57DD00063E2A1 /* Japanese Temple Bell Small-SoundBible.com-113624364.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79DD1BD57DD00063E2A1 /* Temple Bell Huge-SoundBible.com-695883450.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D11BD57DD00063E2A1 /* Temple Bell Huge-SoundBible.com-695883450.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79DE1BD57DD00063E2A1 /* Ship_Brass_Bell-Mike_Koenig-1458750630.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D21BD57DD00063E2A1 /* Ship_Brass_Bell-Mike_Koenig-1458750630.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79DF1BD57DD00063E2A1 /* railroad_crossing_bell-Brylon_Terry-1551570865.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D31BD57DD00063E2A1 /* railroad_crossing_bell-Brylon_Terry-1551570865.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79E01BD57DD00063E2A1 /* US Navy - 726 Class Submarine - General Alarm.WAV in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D41BD57DD00063E2A1 /* US Navy - 726 Class Submarine - General Alarm.WAV */; settings = {ASSET_TAGS = (); }; };
-		C10C79E11BD57DD00063E2A1 /* NASA - Shuttle and ISS - General Alarm.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D51BD57DD00063E2A1 /* NASA - Shuttle and ISS - General Alarm.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79E21BD57DD00063E2A1 /* US Navy - Surface Ship - Flight Crash Alarm.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D61BD57DD00063E2A1 /* US Navy - Surface Ship - Flight Crash Alarm.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79E31BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm (Old).wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D71BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm (Old).wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79E41BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D81BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm.wav */; settings = {ASSET_TAGS = (); }; };
-		C10C79E51BD57DD00063E2A1 /* 198841__bone666138__analog-alarm-clock.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10C79D91BD57DD00063E2A1 /* 198841__bone666138__analog-alarm-clock.wav */; settings = {ASSET_TAGS = (); }; };
 		C12767DF1B2D2B7E003ED4ED /* OctagonBezierShape.m in Sources */ = {isa = PBXBuildFile; fileRef = C12767DE1B2D2B7E003ED4ED /* OctagonBezierShape.m */; };
 		C12767E31B2D4BBA003ED4ED /* HexagonBezierShape.m in Sources */ = {isa = PBXBuildFile; fileRef = C12767E21B2D4BBA003ED4ED /* HexagonBezierShape.m */; };
 		C12767E91B2D4CE1003ED4ED /* HeptagonBezierShape.m in Sources */ = {isa = PBXBuildFile; fileRef = C12767E81B2D4CE1003ED4ED /* HeptagonBezierShape.m */; };
 		C138351C1BC5EE8900BDB658 /* VerticallyCenteredTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = C138351B1BC5EE8900BDB658 /* VerticallyCenteredTextView.m */; settings = {ASSET_TAGS = (); }; };
-		C14C57001B3F7AFD005E72EE /* Black Tick Mark 30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = C14C56FF1B3F7AFD005E72EE /* Black Tick Mark 30x30.png */; };
-		C14C57021B3F98E9005E72EE /* White Tick Mark 30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = C14C57011B3F98E9005E72EE /* White Tick Mark 30x30.png */; };
+		C14F7B011BE463CA00308CE5 /* AlarmSoundInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C14F7B001BE463CA00308CE5 /* AlarmSoundInfoVC.m */; settings = {ASSET_TAGS = (); }; };
+		C14F7B041BE4861600308CE5 /* PlayStopSoundButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C14F7B031BE4861600308CE5 /* PlayStopSoundButton.m */; settings = {ASSET_TAGS = (); }; };
 		C15A59DB1B4DCC4C00266E13 /* FloundsButtonDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C15A59DA1B4DCC4C00266E13 /* FloundsButtonDelegate.m */; };
+		C177C63C1BE2EE4300660526 /* DefaultSoundTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C177C63B1BE2EE4300660526 /* DefaultSoundTVCell.m */; settings = {ASSET_TAGS = (); }; };
 		C17936FD1BBC766F00800325 /* FloundsViewConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C17936FC1BBC766F00800325 /* FloundsViewConstants.m */; settings = {ASSET_TAGS = (); }; };
 		C17937001BBC7C0A00800325 /* FloundsTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C17936FF1BBC7C0A00800325 /* FloundsTVCell.m */; settings = {ASSET_TAGS = (); }; };
 		C17937031BBC814000800325 /* BaseFloundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C17937021BBC814000800325 /* BaseFloundsView.m */; settings = {ASSET_TAGS = (); }; };
 		C17937091BC0824E00800325 /* FloundsShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C17937081BC0824E00800325 /* FloundsShapeLayer.m */; settings = {ASSET_TAGS = (); }; };
 		C179370C1BC097E100800325 /* FloundsAppearanceUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C179370B1BC097E100800325 /* FloundsAppearanceUtility.m */; settings = {ASSET_TAGS = (); }; };
 		C17D23E01B716862005CE89A /* FloundsButtonSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = C17D23DF1B716862005CE89A /* FloundsButtonSegue.m */; };
+		C193DA9E1BD9F0DE002C0DD1 /* AlarmSound.m in Sources */ = {isa = PBXBuildFile; fileRef = C193DA9D1BD9F0DE002C0DD1 /* AlarmSound.m */; settings = {ASSET_TAGS = (); }; };
+		C19DDC091BE1B3C000839A6D /* 20 nmi.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDBFD1BE1B3C000839A6D /* 20 nmi.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0A1BE1B3C000839A6D /* Analog.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDBFE1BE1B3C000839A6D /* Analog.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0B1BE1B3C000839A6D /* Bell - Brass.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDBFF1BE1B3C000839A6D /* Bell - Brass.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0C1BE1B3C000839A6D /* Bell - Huge.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC001BE1B3C000839A6D /* Bell - Huge.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0D1BE1B3C000839A6D /* Bell - Small.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC011BE1B3C000839A6D /* Bell - Small.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0E1BE1B3C000839A6D /* Bell - Zen.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC021BE1B3C000839A6D /* Bell - Zen.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC0F1BE1B3C000839A6D /* Blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC031BE1B3C000839A6D /* Blip.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC101BE1B3C000839A6D /* Dubya.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC041BE1B3C000839A6D /* Dubya.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC111BE1B3C000839A6D /* Gentex.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC051BE1B3C000839A6D /* Gentex.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC121BE1B3C000839A6D /* Gosh Darn.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC061BE1B3C000839A6D /* Gosh Darn.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC131BE1B3C000839A6D /* Penny Death.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC071BE1B3C000839A6D /* Penny Death.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC141BE1B3C000839A6D /* Tin Can.wav in Resources */ = {isa = PBXBuildFile; fileRef = C19DDC081BE1B3C000839A6D /* Tin Can.wav */; settings = {ASSET_TAGS = (); }; };
+		C19DDC171BE1C06B00839A6D /* AbortNoticeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C19DDC161BE1C06B00839A6D /* AbortNoticeVC.m */; settings = {ASSET_TAGS = (); }; };
+		C19DDC1A1BE2A89B00839A6D /* AbortNoticeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C19DDC191BE2A89B00839A6D /* AbortNoticeLabel.m */; settings = {ASSET_TAGS = (); }; };
 		C1A59A4F1BB05B6400BD4DF3 /* Flounds To-Do.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C1A59A4E1BB05B6400BD4DF3 /* Flounds To-Do.rtf */; };
 		C1A678561B95400500785560 /* FloundsVCBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A678551B95400400785560 /* FloundsVCBase.m */; };
 		C1B98D331B51DD7D00201FAD /* FloundsButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B98D321B51DD7D00201FAD /* FloundsButtonView.m */; };
 		C1B98D361B51E02900201FAD /* FloundsButtonControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B98D351B51E02900201FAD /* FloundsButtonControlView.m */; };
 		C1B98D701B51FCA700201FAD /* FloundsButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B98D6F1B51FCA700201FAD /* FloundsButton.m */; };
-		C1B98D741B542B2000201FAD /* SetAlarmButton50x50.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B98D731B542B2000201FAD /* SetAlarmButton50x50.png */; };
-		C1C28F5B1BD1D853009B0F99 /* AlarmSoundChooserVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C28F5A1BD1D853009B0F99 /* AlarmSoundChooserVC.m */; settings = {ASSET_TAGS = (); }; };
+		C1C28F5B1BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C28F5A1BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.m */; settings = {ASSET_TAGS = (); }; };
 		C1C28F5E1BD32835009B0F99 /* FloundsDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C28F5D1BD32835009B0F99 /* FloundsDatePickerView.m */; settings = {ASSET_TAGS = (); }; };
 		C1ED486B1BC987B10040786D /* SettingsButtonContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ED486A1BC987B10040786D /* SettingsButtonContainer.m */; settings = {ASSET_TAGS = (); }; };
+		C1F0C3861BE2CFF7001C6FBC /* WhiteTickMark.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C3851BE2CFF7001C6FBC /* WhiteTickMark.png */; settings = {ASSET_TAGS = (); }; };
+		C1F0C3881BE2D099001C6FBC /* WhiteTickMark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C3871BE2D099001C6FBC /* WhiteTickMark@2x.png */; settings = {ASSET_TAGS = (); }; };
+		C1F0C38B1BE2D34A001C6FBC /* FloundsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C3891BE2D34A001C6FBC /* FloundsIcon.png */; settings = {ASSET_TAGS = (); }; };
+		C1F0C38C1BE2D34A001C6FBC /* FloundsIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C38A1BE2D34A001C6FBC /* FloundsIcon@2x.png */; settings = {ASSET_TAGS = (); }; };
+		C1F0C38E1BE2D52D001C6FBC /* Artwork.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C38D1BE2D52D001C6FBC /* Artwork.xcassets */; settings = {ASSET_TAGS = (); }; };
+		C1F0C3901BE2DA3B001C6FBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1F0C38F1BE2DA3B001C6FBC /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
+		C1F46F111BDEA771005E52E8 /* AlarmSoundSetterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F46F101BDEA771005E52E8 /* AlarmSoundSetterVC.m */; settings = {ASSET_TAGS = (); }; };
+		C1F46F141BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F46F131BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.m */; settings = {ASSET_TAGS = (); }; };
 		DF0217CF19E36967002BF4D3 /* NSDateUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = DF0217CE19E36966002BF4D3 /* NSDateUtility.m */; };
 		DF0217D319EC9306002BF4D3 /* SquareBezierShape.m in Sources */ = {isa = PBXBuildFile; fileRef = DF0217D219EC9304002BF4D3 /* SquareBezierShape.m */; };
 		DF0217D619EC9607002BF4D3 /* BezierShapeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = DF0217D519EC9605002BF4D3 /* BezierShapeFactory.m */; };
@@ -58,7 +69,6 @@
 		DF7187C31AE8478E0088CBBE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DF7927A31AE8409F005E64EA /* Default-568h@2x.png */; };
 		DF7187C41AE8498D0088CBBE /* Flounds Icon v1 114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = DF2C0FEB1AE3254300293D54 /* Flounds Icon v1 114x114.png */; };
 		DF78E4631A7552DC000C7611 /* CAAnimationFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = DF78E4621A7552DC000C7611 /* CAAnimationFactory.m */; };
-		DF9421641A0AC857001CFCA1 /* VerticallyAlignedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF9421631A0AC857001CFCA1 /* VerticallyAlignedTextView.m */; };
 		DF94216A1A0AD78A001CFCA1 /* SnoozeSetterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DF9421691A0AD789001CFCA1 /* SnoozeSetterVC.m */; };
 		DFB3CCA119FCA0D50084F01C /* ClockViewText.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB3CCA019FCA0D50084F01C /* ClockViewText.m */; };
 		DFB3CCA419FEB0E40084F01C /* DifficultySettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DFB3CCA319FEB0E40084F01C /* DifficultySettingsVC.m */; };
@@ -93,18 +103,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C10C79CE1BD57DD00063E2A1 /* Zen Buddhist Temple Bell-SoundBible.com-331362457.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Zen Buddhist Temple Bell-SoundBible.com-331362457.wav"; sourceTree = "<group>"; };
-		C10C79CF1BD57DD00063E2A1 /* gentex_cammander_3_code_3_horn-Brandon-938131891.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "gentex_cammander_3_code_3_horn-Brandon-938131891.wav"; sourceTree = "<group>"; };
-		C10C79D01BD57DD00063E2A1 /* Japanese Temple Bell Small-SoundBible.com-113624364.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Japanese Temple Bell Small-SoundBible.com-113624364.wav"; sourceTree = "<group>"; };
-		C10C79D11BD57DD00063E2A1 /* Temple Bell Huge-SoundBible.com-695883450.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Temple Bell Huge-SoundBible.com-695883450.wav"; sourceTree = "<group>"; };
-		C10C79D21BD57DD00063E2A1 /* Ship_Brass_Bell-Mike_Koenig-1458750630.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ship_Brass_Bell-Mike_Koenig-1458750630.wav"; sourceTree = "<group>"; };
-		C10C79D31BD57DD00063E2A1 /* railroad_crossing_bell-Brylon_Terry-1551570865.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "railroad_crossing_bell-Brylon_Terry-1551570865.wav"; sourceTree = "<group>"; };
-		C10C79D41BD57DD00063E2A1 /* US Navy - 726 Class Submarine - General Alarm.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "US Navy - 726 Class Submarine - General Alarm.WAV"; sourceTree = "<group>"; };
-		C10C79D51BD57DD00063E2A1 /* NASA - Shuttle and ISS - General Alarm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "NASA - Shuttle and ISS - General Alarm.wav"; sourceTree = "<group>"; };
-		C10C79D61BD57DD00063E2A1 /* US Navy - Surface Ship - Flight Crash Alarm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "US Navy - Surface Ship - Flight Crash Alarm.wav"; sourceTree = "<group>"; };
-		C10C79D71BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm (Old).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "US Navy - Surface Ship - General Alarm (Old).wav"; sourceTree = "<group>"; };
-		C10C79D81BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "US Navy - Surface Ship - General Alarm.wav"; sourceTree = "<group>"; };
-		C10C79D91BD57DD00063E2A1 /* 198841__bone666138__analog-alarm-clock.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "198841__bone666138__analog-alarm-clock.wav"; sourceTree = "<group>"; };
 		C12767DD1B2D2B7E003ED4ED /* OctagonBezierShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctagonBezierShape.h; sourceTree = "<group>"; };
 		C12767DE1B2D2B7E003ED4ED /* OctagonBezierShape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OctagonBezierShape.m; sourceTree = "<group>"; };
 		C12767E11B2D4BBA003ED4ED /* HexagonBezierShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexagonBezierShape.h; sourceTree = "<group>"; };
@@ -113,11 +111,16 @@
 		C12767E81B2D4CE1003ED4ED /* HeptagonBezierShape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeptagonBezierShape.m; sourceTree = "<group>"; };
 		C138351A1BC5EE8900BDB658 /* VerticallyCenteredTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextView.h; sourceTree = "<group>"; };
 		C138351B1BC5EE8900BDB658 /* VerticallyCenteredTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextView.m; sourceTree = "<group>"; };
-		C14C56FF1B3F7AFD005E72EE /* Black Tick Mark 30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Black Tick Mark 30x30.png"; path = "Artwork/Black Tick Mark 30x30.png"; sourceTree = "<group>"; };
-		C14C57011B3F98E9005E72EE /* White Tick Mark 30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "White Tick Mark 30x30.png"; path = "Artwork/White Tick Mark 30x30.png"; sourceTree = "<group>"; };
 		C14C57031B3FA24F005E72EE /* SliderUpdateSuperViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderUpdateSuperViewDelegate.h; sourceTree = "<group>"; };
+		C14F7AFF1BE463C900308CE5 /* AlarmSoundInfoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmSoundInfoVC.h; sourceTree = "<group>"; };
+		C14F7B001BE463CA00308CE5 /* AlarmSoundInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmSoundInfoVC.m; sourceTree = "<group>"; };
+		C14F7B021BE4861500308CE5 /* PlayStopSoundButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayStopSoundButton.h; sourceTree = "<group>"; };
+		C14F7B031BE4861600308CE5 /* PlayStopSoundButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayStopSoundButton.m; sourceTree = "<group>"; };
+		C14F7B051BE486C800308CE5 /* PlayStopSoundProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayStopSoundProtocol.h; sourceTree = "<group>"; };
 		C15A59D91B4DCC4C00266E13 /* FloundsButtonDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsButtonDelegate.h; sourceTree = "<group>"; };
 		C15A59DA1B4DCC4C00266E13 /* FloundsButtonDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsButtonDelegate.m; sourceTree = "<group>"; };
+		C177C63A1BE2EE4300660526 /* DefaultSoundTVCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultSoundTVCell.h; sourceTree = "<group>"; };
+		C177C63B1BE2EE4300660526 /* DefaultSoundTVCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultSoundTVCell.m; sourceTree = "<group>"; };
 		C17936FB1BBC766F00800325 /* FloundsViewConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsViewConstants.h; sourceTree = "<group>"; };
 		C17936FC1BBC766F00800325 /* FloundsViewConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsViewConstants.m; sourceTree = "<group>"; };
 		C17936FE1BBC7C0A00800325 /* FloundsTVCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsTVCell.h; sourceTree = "<group>"; };
@@ -131,6 +134,24 @@
 		C17D23DD1B5EE490005CE89A /* DismissContainingVCDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DismissContainingVCDelegate.h; sourceTree = "<group>"; };
 		C17D23DE1B716862005CE89A /* FloundsButtonSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsButtonSegue.h; sourceTree = "<group>"; };
 		C17D23DF1B716862005CE89A /* FloundsButtonSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsButtonSegue.m; sourceTree = "<group>"; };
+		C193DA9C1BD9F0DE002C0DD1 /* AlarmSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmSound.h; sourceTree = "<group>"; };
+		C193DA9D1BD9F0DE002C0DD1 /* AlarmSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmSound.m; sourceTree = "<group>"; };
+		C19DDBFD1BE1B3C000839A6D /* 20 nmi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "20 nmi.wav"; sourceTree = "<group>"; };
+		C19DDBFE1BE1B3C000839A6D /* Analog.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Analog.wav; sourceTree = "<group>"; };
+		C19DDBFF1BE1B3C000839A6D /* Bell - Brass.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bell - Brass.wav"; sourceTree = "<group>"; };
+		C19DDC001BE1B3C000839A6D /* Bell - Huge.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bell - Huge.wav"; sourceTree = "<group>"; };
+		C19DDC011BE1B3C000839A6D /* Bell - Small.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bell - Small.wav"; sourceTree = "<group>"; };
+		C19DDC021BE1B3C000839A6D /* Bell - Zen.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Bell - Zen.wav"; sourceTree = "<group>"; };
+		C19DDC031BE1B3C000839A6D /* Blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Blip.wav; sourceTree = "<group>"; };
+		C19DDC041BE1B3C000839A6D /* Dubya.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Dubya.wav; sourceTree = "<group>"; };
+		C19DDC051BE1B3C000839A6D /* Gentex.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Gentex.wav; sourceTree = "<group>"; };
+		C19DDC061BE1B3C000839A6D /* Gosh Darn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Gosh Darn.wav"; sourceTree = "<group>"; };
+		C19DDC071BE1B3C000839A6D /* Penny Death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Penny Death.wav"; sourceTree = "<group>"; };
+		C19DDC081BE1B3C000839A6D /* Tin Can.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Tin Can.wav"; sourceTree = "<group>"; };
+		C19DDC151BE1C06B00839A6D /* AbortNoticeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbortNoticeVC.h; sourceTree = "<group>"; };
+		C19DDC161BE1C06B00839A6D /* AbortNoticeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbortNoticeVC.m; sourceTree = "<group>"; };
+		C19DDC181BE2A89B00839A6D /* AbortNoticeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbortNoticeLabel.h; sourceTree = "<group>"; };
+		C19DDC191BE2A89B00839A6D /* AbortNoticeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbortNoticeLabel.m; sourceTree = "<group>"; };
 		C1A59A4E1BB05B6400BD4DF3 /* Flounds To-Do.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "Flounds To-Do.rtf"; sourceTree = "<group>"; };
 		C1A678531B8A1B8D00785560 /* FloundsButtonUnwindProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloundsButtonUnwindProtocol.h; sourceTree = "<group>"; };
 		C1A678541B95400400785560 /* FloundsVCBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsVCBase.h; sourceTree = "<group>"; };
@@ -141,14 +162,25 @@
 		C1B98D351B51E02900201FAD /* FloundsButtonControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsButtonControlView.m; sourceTree = "<group>"; };
 		C1B98D6E1B51FCA700201FAD /* FloundsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsButton.h; sourceTree = "<group>"; };
 		C1B98D6F1B51FCA700201FAD /* FloundsButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsButton.m; sourceTree = "<group>"; };
-		C1B98D731B542B2000201FAD /* SetAlarmButton50x50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SetAlarmButton50x50.png; path = Artwork/SetAlarmButton50x50.png; sourceTree = "<group>"; };
-		C1C28F591BD1D853009B0F99 /* AlarmSoundChooserVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmSoundChooserVC.h; sourceTree = "<group>"; };
-		C1C28F5A1BD1D853009B0F99 /* AlarmSoundChooserVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmSoundChooserVC.m; sourceTree = "<group>"; };
+		C1C28F591BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmSoundDefaultChooserVC.h; sourceTree = "<group>"; };
+		C1C28F5A1BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmSoundDefaultChooserVC.m; sourceTree = "<group>"; };
 		C1C28F5C1BD32835009B0F99 /* FloundsDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsDatePickerView.h; sourceTree = "<group>"; };
 		C1C28F5D1BD32835009B0F99 /* FloundsDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsDatePickerView.m; sourceTree = "<group>"; };
 		C1E89E981BC9DE7E00FA26A8 /* FloundsUserInteractionSegueProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloundsUserInteractionSegueProtocol.h; sourceTree = "<group>"; };
 		C1ED48691BC987B10040786D /* SettingsButtonContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButtonContainer.h; sourceTree = "<group>"; };
 		C1ED486A1BC987B10040786D /* SettingsButtonContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsButtonContainer.m; sourceTree = "<group>"; };
+		C1F0C3851BE2CFF7001C6FBC /* WhiteTickMark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteTickMark.png; path = Artwork/WhiteTickMark.png; sourceTree = "<group>"; };
+		C1F0C3871BE2D099001C6FBC /* WhiteTickMark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteTickMark@2x.png"; path = "Artwork/WhiteTickMark@2x.png"; sourceTree = "<group>"; };
+		C1F0C3891BE2D34A001C6FBC /* FloundsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FloundsIcon.png; path = Artwork/FloundsIcon.png; sourceTree = "<group>"; };
+		C1F0C38A1BE2D34A001C6FBC /* FloundsIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FloundsIcon@2x.png"; path = "Artwork/FloundsIcon@2x.png"; sourceTree = "<group>"; };
+		C1F0C38D1BE2D52D001C6FBC /* Artwork.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Artwork.xcassets; sourceTree = "<group>"; };
+		C1F0C38F1BE2DA3B001C6FBC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C1F46F0E1BDE9C15005E52E8 /* DeactivateSnoozeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeactivateSnoozeProtocol.h; sourceTree = "<group>"; };
+		C1F46F0F1BDEA771005E52E8 /* AlarmSoundSetterVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmSoundSetterVC.h; sourceTree = "<group>"; };
+		C1F46F101BDEA771005E52E8 /* AlarmSoundSetterVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmSoundSetterVC.m; sourceTree = "<group>"; };
+		C1F46F121BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloundsAlarmSoundChooserVCBase.h; sourceTree = "<group>"; };
+		C1F46F131BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloundsAlarmSoundChooserVCBase.m; sourceTree = "<group>"; };
+		C1F46F151BE040EB005E52E8 /* SetAlarmSoundProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetAlarmSoundProtocol.h; sourceTree = "<group>"; };
 		DF0217CD19E36965002BF4D3 /* NSDateUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDateUtility.h; sourceTree = "<group>"; };
 		DF0217CE19E36966002BF4D3 /* NSDateUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateUtility.m; sourceTree = "<group>"; };
 		DF0217D019E88C8F002BF4D3 /* ModalPatternMakerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModalPatternMakerDelegate.h; sourceTree = "<group>"; };
@@ -176,15 +208,12 @@
 		DF20F2E9198D6C7400583719 /* AlarmTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmTime.h; sourceTree = "<group>"; };
 		DF20F2EA198D6C7400583719 /* AlarmTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmTime.m; sourceTree = "<group>"; };
 		DF2C0FEB1AE3254300293D54 /* Flounds Icon v1 114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flounds Icon v1 114x114.png"; sourceTree = SOURCE_ROOT; };
-		DF2C0FED1AE3260800293D54 /* Flounds Icon v1 57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flounds Icon v1 57x57.png"; sourceTree = SOURCE_ROOT; };
 		DF4C72161A71ADCD0061DA24 /* CAAnimationCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAnimationCluster.h; sourceTree = "<group>"; };
 		DF4C72171A71ADCD0061DA24 /* CAAnimationCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAAnimationCluster.m; sourceTree = "<group>"; };
 		DF78E4611A7552DC000C7611 /* CAAnimationFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAnimationFactory.h; sourceTree = "<group>"; };
 		DF78E4621A7552DC000C7611 /* CAAnimationFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAAnimationFactory.m; sourceTree = "<group>"; };
 		DF78E4641A76E606000C7611 /* AnimationQueueFinishDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationQueueFinishDelegate.h; sourceTree = "<group>"; };
 		DF7927A31AE8409F005E64EA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		DF9421621A0AC856001CFCA1 /* VerticallyAlignedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyAlignedTextView.h; sourceTree = "<group>"; };
-		DF9421631A0AC857001CFCA1 /* VerticallyAlignedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyAlignedTextView.m; sourceTree = "<group>"; };
 		DF9421681A0AD789001CFCA1 /* SnoozeSetterVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnoozeSetterVC.h; sourceTree = "<group>"; };
 		DF9421691A0AD789001CFCA1 /* SnoozeSetterVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnoozeSetterVC.m; sourceTree = "<group>"; };
 		DF94216C1A0C1E54001CFCA1 /* SetSnoozeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetSnoozeDelegate.h; sourceTree = "<group>"; };
@@ -291,6 +320,13 @@
 			name = "Bezier Shapes";
 			sourceTree = "<group>";
 		};
+		C19DDBFC1BE1A2DE00839A6D /* Splash Screen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Splash Screen";
+			sourceTree = "<group>";
+		};
 		C1E89E961BC9DC3200FA26A8 /* Flounds Appearance Discard */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +362,8 @@
 				C1A678551B95400400785560 /* FloundsVCBase.m */,
 				C17936FE1BBC7C0A00800325 /* FloundsTVCell.h */,
 				C17936FF1BBC7C0A00800325 /* FloundsTVCell.m */,
+				C1F46F121BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.h */,
+				C1F46F131BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.m */,
 				C1E89E961BC9DC3200FA26A8 /* Flounds Appearance Discard */,
 			);
 			name = "Flounds Appearance";
@@ -342,6 +380,7 @@
 				DF0217CE19E36966002BF4D3 /* NSDateUtility.m */,
 				DFEEB521195667910001B4B7 /* AlarmClockVC.h */,
 				DFEEB522195667910001B4B7 /* AlarmClockVC.m */,
+				C1F46F0E1BDE9C15005E52E8 /* DeactivateSnoozeProtocol.h */,
 				DFB3CC9F19FCA0D40084F01C /* ClockViewText.h */,
 				DFB3CCA019FCA0D50084F01C /* ClockViewText.m */,
 				C1ED48691BC987B10040786D /* SettingsButtonContainer.h */,
@@ -352,13 +391,14 @@
 				DFE59B5A19687EB300C3952B /* AlarmSetterVC.m */,
 				C1C28F5C1BD32835009B0F99 /* FloundsDatePickerView.h */,
 				C1C28F5D1BD32835009B0F99 /* FloundsDatePickerView.m */,
-				DF9421621A0AC856001CFCA1 /* VerticallyAlignedTextView.h */,
-				DF9421631A0AC857001CFCA1 /* VerticallyAlignedTextView.m */,
 				C138351A1BC5EE8900BDB658 /* VerticallyCenteredTextView.h */,
 				C138351B1BC5EE8900BDB658 /* VerticallyCenteredTextView.m */,
 				DF94216C1A0C1E54001CFCA1 /* SetSnoozeDelegate.h */,
 				DF9421681A0AD789001CFCA1 /* SnoozeSetterVC.h */,
 				DF9421691A0AD789001CFCA1 /* SnoozeSetterVC.m */,
+				C1F46F151BE040EB005E52E8 /* SetAlarmSoundProtocol.h */,
+				C1F46F0F1BDEA771005E52E8 /* AlarmSoundSetterVC.h */,
+				C1F46F101BDEA771005E52E8 /* AlarmSoundSetterVC.m */,
 			);
 			name = Clock;
 			sourceTree = "<group>";
@@ -407,18 +447,20 @@
 			children = (
 				DF1796871A1BECEE00E1BF3B /* AlarmSoundManager.h */,
 				DF1796881A1BECEE00E1BF3B /* AlarmSoundManager.m */,
-				C10C79CE1BD57DD00063E2A1 /* Zen Buddhist Temple Bell-SoundBible.com-331362457.wav */,
-				C10C79CF1BD57DD00063E2A1 /* gentex_cammander_3_code_3_horn-Brandon-938131891.wav */,
-				C10C79D01BD57DD00063E2A1 /* Japanese Temple Bell Small-SoundBible.com-113624364.wav */,
-				C10C79D11BD57DD00063E2A1 /* Temple Bell Huge-SoundBible.com-695883450.wav */,
-				C10C79D21BD57DD00063E2A1 /* Ship_Brass_Bell-Mike_Koenig-1458750630.wav */,
-				C10C79D31BD57DD00063E2A1 /* railroad_crossing_bell-Brylon_Terry-1551570865.wav */,
-				C10C79D41BD57DD00063E2A1 /* US Navy - 726 Class Submarine - General Alarm.WAV */,
-				C10C79D51BD57DD00063E2A1 /* NASA - Shuttle and ISS - General Alarm.wav */,
-				C10C79D61BD57DD00063E2A1 /* US Navy - Surface Ship - Flight Crash Alarm.wav */,
-				C10C79D71BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm (Old).wav */,
-				C10C79D81BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm.wav */,
-				C10C79D91BD57DD00063E2A1 /* 198841__bone666138__analog-alarm-clock.wav */,
+				C193DA9C1BD9F0DE002C0DD1 /* AlarmSound.h */,
+				C193DA9D1BD9F0DE002C0DD1 /* AlarmSound.m */,
+				C19DDBFD1BE1B3C000839A6D /* 20 nmi.wav */,
+				C19DDBFE1BE1B3C000839A6D /* Analog.wav */,
+				C19DDBFF1BE1B3C000839A6D /* Bell - Brass.wav */,
+				C19DDC001BE1B3C000839A6D /* Bell - Huge.wav */,
+				C19DDC011BE1B3C000839A6D /* Bell - Small.wav */,
+				C19DDC021BE1B3C000839A6D /* Bell - Zen.wav */,
+				C19DDC031BE1B3C000839A6D /* Blip.wav */,
+				C19DDC041BE1B3C000839A6D /* Dubya.wav */,
+				C19DDC051BE1B3C000839A6D /* Gentex.wav */,
+				C19DDC061BE1B3C000839A6D /* Gosh Darn.wav */,
+				C19DDC071BE1B3C000839A6D /* Penny Death.wav */,
+				C19DDC081BE1B3C000839A6D /* Tin Can.wav */,
 			);
 			name = "Alarm Sounds";
 			sourceTree = "<group>";
@@ -442,8 +484,19 @@
 				DFDDD6021AD073FD00E3DC6D /* UnwindFromTryItFloundsDelegate.h */,
 				DFF0C0E01A9A29A600370D56 /* TryFloundsSplashVC.h */,
 				DFF0C0E11A9A29A600370D56 /* TryFloundsSplashVC.m */,
-				C1C28F591BD1D853009B0F99 /* AlarmSoundChooserVC.h */,
-				C1C28F5A1BD1D853009B0F99 /* AlarmSoundChooserVC.m */,
+				C19DDC151BE1C06B00839A6D /* AbortNoticeVC.h */,
+				C19DDC161BE1C06B00839A6D /* AbortNoticeVC.m */,
+				C19DDC181BE2A89B00839A6D /* AbortNoticeLabel.h */,
+				C19DDC191BE2A89B00839A6D /* AbortNoticeLabel.m */,
+				C1C28F591BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.h */,
+				C1C28F5A1BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.m */,
+				C177C63A1BE2EE4300660526 /* DefaultSoundTVCell.h */,
+				C177C63B1BE2EE4300660526 /* DefaultSoundTVCell.m */,
+				C14F7AFF1BE463C900308CE5 /* AlarmSoundInfoVC.h */,
+				C14F7B001BE463CA00308CE5 /* AlarmSoundInfoVC.m */,
+				C14F7B051BE486C800308CE5 /* PlayStopSoundProtocol.h */,
+				C14F7B021BE4861500308CE5 /* PlayStopSoundButton.h */,
+				C14F7B031BE4861600308CE5 /* PlayStopSoundButton.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -451,10 +504,10 @@
 		DF2C0FEF1AE3298700293D54 /* Artwork */ = {
 			isa = PBXGroup;
 			children = (
-				C14C57011B3F98E9005E72EE /* White Tick Mark 30x30.png */,
-				C1B98D731B542B2000201FAD /* SetAlarmButton50x50.png */,
-				C14C56FF1B3F7AFD005E72EE /* Black Tick Mark 30x30.png */,
-				DF2C0FED1AE3260800293D54 /* Flounds Icon v1 57x57.png */,
+				C1F0C3851BE2CFF7001C6FBC /* WhiteTickMark.png */,
+				C1F0C3871BE2D099001C6FBC /* WhiteTickMark@2x.png */,
+				C1F0C3891BE2D34A001C6FBC /* FloundsIcon.png */,
+				C1F0C38A1BE2D34A001C6FBC /* FloundsIcon@2x.png */,
 				DF2C0FEB1AE3254300293D54 /* Flounds Icon v1 114x114.png */,
 			);
 			name = Artwork;
@@ -499,8 +552,11 @@
 			children = (
 				DFC466E51926B8EE00A793AF /* AppDelegate.h */,
 				DFC466E61926B8EE00A793AF /* AppDelegate.m */,
+				C1F0C38D1BE2D52D001C6FBC /* Artwork.xcassets */,
+				C1F0C38F1BE2DA3B001C6FBC /* LaunchScreen.storyboard */,
 				DFC466F31926B91D00A793AF /* iPhone.Storyboard */,
 				C1E89E971BC9DDF400FA26A8 /* Flounds Appearance */,
+				C19DDBFC1BE1A2DE00839A6D /* Splash Screen */,
 				DF0217CB19D8D6D4002BF4D3 /* Clock */,
 				DF0217CC19D8D737002BF4D3 /* Pattern Snooze */,
 				DF20776819FA36A3003032A5 /* Settings */,
@@ -593,26 +649,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFC466E11926B8EE00A793AF /* InfoPlist.strings in Resources */,
-				C14C57021B3F98E9005E72EE /* White Tick Mark 30x30.png in Resources */,
-				C10C79E41BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm.wav in Resources */,
 				DFC466F41926B91D00A793AF /* iPhone.Storyboard in Resources */,
-				C10C79E01BD57DD00063E2A1 /* US Navy - 726 Class Submarine - General Alarm.WAV in Resources */,
-				C10C79DA1BD57DD00063E2A1 /* Zen Buddhist Temple Bell-SoundBible.com-331362457.wav in Resources */,
+				C1F0C3861BE2CFF7001C6FBC /* WhiteTickMark.png in Resources */,
+				C19DDC0B1BE1B3C000839A6D /* Bell - Brass.wav in Resources */,
+				C19DDC141BE1B3C000839A6D /* Tin Can.wav in Resources */,
 				C1A59A4F1BB05B6400BD4DF3 /* Flounds To-Do.rtf in Resources */,
-				C10C79DE1BD57DD00063E2A1 /* Ship_Brass_Bell-Mike_Koenig-1458750630.wav in Resources */,
-				C10C79E31BD57DD00063E2A1 /* US Navy - Surface Ship - General Alarm (Old).wav in Resources */,
+				C19DDC101BE1B3C000839A6D /* Dubya.wav in Resources */,
+				C19DDC0D1BE1B3C000839A6D /* Bell - Small.wav in Resources */,
 				DF20776719F9A03E003032A5 /* engine-153649_640.png in Resources */,
-				C1B98D741B542B2000201FAD /* SetAlarmButton50x50.png in Resources */,
-				C10C79DD1BD57DD00063E2A1 /* Temple Bell Huge-SoundBible.com-695883450.wav in Resources */,
-				C10C79E21BD57DD00063E2A1 /* US Navy - Surface Ship - Flight Crash Alarm.wav in Resources */,
-				C14C57001B3F7AFD005E72EE /* Black Tick Mark 30x30.png in Resources */,
-				C10C79DB1BD57DD00063E2A1 /* gentex_cammander_3_code_3_horn-Brandon-938131891.wav in Resources */,
-				C10C79DF1BD57DD00063E2A1 /* railroad_crossing_bell-Brylon_Terry-1551570865.wav in Resources */,
-				C10C79DC1BD57DD00063E2A1 /* Japanese Temple Bell Small-SoundBible.com-113624364.wav in Resources */,
+				C1F0C3881BE2D099001C6FBC /* WhiteTickMark@2x.png in Resources */,
+				C1F0C38B1BE2D34A001C6FBC /* FloundsIcon.png in Resources */,
 				DF7187C31AE8478E0088CBBE /* Default-568h@2x.png in Resources */,
-				C10C79E11BD57DD00063E2A1 /* NASA - Shuttle and ISS - General Alarm.wav in Resources */,
-				C10C79E51BD57DD00063E2A1 /* 198841__bone666138__analog-alarm-clock.wav in Resources */,
+				C19DDC131BE1B3C000839A6D /* Penny Death.wav in Resources */,
+				C1F0C38E1BE2D52D001C6FBC /* Artwork.xcassets in Resources */,
+				C19DDC121BE1B3C000839A6D /* Gosh Darn.wav in Resources */,
+				C19DDC091BE1B3C000839A6D /* 20 nmi.wav in Resources */,
+				C1F0C38C1BE2D34A001C6FBC /* FloundsIcon@2x.png in Resources */,
+				C19DDC0F1BE1B3C000839A6D /* Blip.wav in Resources */,
+				C1F0C3901BE2DA3B001C6FBC /* LaunchScreen.storyboard in Resources */,
+				C19DDC0A1BE1B3C000839A6D /* Analog.wav in Resources */,
 				DF7187C41AE8498D0088CBBE /* Flounds Icon v1 114x114.png in Resources */,
+				C19DDC0E1BE1B3C000839A6D /* Bell - Zen.wav in Resources */,
+				C19DDC0C1BE1B3C000839A6D /* Bell - Huge.wav in Resources */,
+				C19DDC111BE1B3C000839A6D /* Gentex.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,6 +682,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C14F7B011BE463CA00308CE5 /* AlarmSoundInfoVC.m in Sources */,
 				C1B98D331B51DD7D00201FAD /* FloundsButtonView.m in Sources */,
 				C17D23E01B716862005CE89A /* FloundsButtonSegue.m in Sources */,
 				C1C28F5E1BD32835009B0F99 /* FloundsDatePickerView.m in Sources */,
@@ -630,6 +690,7 @@
 				C12767E31B2D4BBA003ED4ED /* HexagonBezierShape.m in Sources */,
 				DFC466E71926B8EE00A793AF /* AppDelegate.m in Sources */,
 				DFC466F71926BBF300A793AF /* PatternMakerVC.m in Sources */,
+				C19DDC171BE1C06B00839A6D /* AbortNoticeVC.m in Sources */,
 				C1B98D701B51FCA700201FAD /* FloundsButton.m in Sources */,
 				DFC466FD1927EBDD00A793AF /* BezierShape.m in Sources */,
 				DFC467001927F2FB00A793AF /* CircleBezierShape.m in Sources */,
@@ -639,6 +700,7 @@
 				DFC467151930862900A793AF /* BezierShapeLayerDelegate.m in Sources */,
 				C12767DF1B2D2B7E003ED4ED /* OctagonBezierShape.m in Sources */,
 				C179370C1BC097E100800325 /* FloundsAppearanceUtility.m in Sources */,
+				C19DDC1A1BE2A89B00839A6D /* AbortNoticeLabel.m in Sources */,
 				DFEEB518193D54460001B4B7 /* GridLayer.m in Sources */,
 				C15A59DB1B4DCC4C00266E13 /* FloundsButtonDelegate.m in Sources */,
 				DFEEB51B193D554A0001B4B7 /* GridLayerDelegate.m in Sources */,
@@ -663,9 +725,10 @@
 				DFB3CCA419FEB0E40084F01C /* DifficultySettingsVC.m in Sources */,
 				C1A678561B95400500785560 /* FloundsVCBase.m in Sources */,
 				DFB3CCA81A03745F0084F01C /* SettingBaseVC.m in Sources */,
+				C177C63C1BE2EE4300660526 /* DefaultSoundTVCell.m in Sources */,
 				C17936FD1BBC766F00800325 /* FloundsViewConstants.m in Sources */,
-				C1C28F5B1BD1D853009B0F99 /* AlarmSoundChooserVC.m in Sources */,
-				DF9421641A0AC857001CFCA1 /* VerticallyAlignedTextView.m in Sources */,
+				C1C28F5B1BD1D853009B0F99 /* AlarmSoundDefaultChooserVC.m in Sources */,
+				C14F7B041BE4861600308CE5 /* PlayStopSoundButton.m in Sources */,
 				DF94216A1A0AD78A001CFCA1 /* SnoozeSetterVC.m in Sources */,
 				DF1796891A1BECEE00E1BF3B /* AlarmSoundManager.m in Sources */,
 				DFDF718B1A23D07300689944 /* EllipseBezierShape.m in Sources */,
@@ -675,6 +738,9 @@
 				DF78E4631A7552DC000C7611 /* CAAnimationFactory.m in Sources */,
 				DF0632CF1A817F6E00DE2AD2 /* SnapTickSlider.m in Sources */,
 				DFF0C0E21A9A29A600370D56 /* TryFloundsSplashVC.m in Sources */,
+				C1F46F141BDEAA63005E52E8 /* FloundsAlarmSoundChooserVCBase.m in Sources */,
+				C193DA9E1BD9F0DE002C0DD1 /* AlarmSound.m in Sources */,
+				C1F46F111BDEA771005E52E8 /* AlarmSoundSetterVC.m in Sources */,
 				C1B98D361B51E02900201FAD /* FloundsButtonControlView.m in Sources */,
 				C1ED486B1BC987B10040786D /* SettingsButtonContainer.m in Sources */,
 			);
@@ -756,6 +822,7 @@
 		DFC466F11926B8EE00A793AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -774,6 +841,7 @@
 		DFC466F21926B8EE00A793AF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

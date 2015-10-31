@@ -21,7 +21,7 @@
         oneSubview.backgroundColor = self.defaultBackgroundColor;
     }
     
-    self.defaultUIColor = [FloundsViewConstants getdefaultTextColor];
+    self.defaultUIColor = [FloundsViewConstants getDefaultTextColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -39,6 +39,14 @@
 //    {
 //    
 //    }
+}
+
+-(void)removeAnimationsFromPresentingVC
+{
+    for (UIView *oneSubview in self.view.subviews)
+    {
+        [oneSubview.layer removeAllAnimations];
+    }
 }
 
 
@@ -59,6 +67,11 @@
 
 -(void)animateNonSelectedTableViewCells:(UITableView *)tableView
 {
+    [[self getVisibleNonSelectedCellsFor:tableView] makeObjectsPerformSelector:@selector(animateCellForNonSelection)];
+}
+
+-(NSArray *)getVisibleNonSelectedCellsFor:(UITableView *)tableView
+{
     NSMutableArray *visibleUnselectedCells = [[NSMutableArray alloc] initWithCapacity:[tableView.visibleCells count]];
     for (UITableViewCell *oneTVCell in tableView.visibleCells)
     {
@@ -68,7 +81,7 @@
             [visibleUnselectedCells addObject:oneFloundsTVCell];
         }
     }
-    [visibleUnselectedCells makeObjectsPerformSelector:@selector(animateCellForNonSelection)];
+    return [NSArray arrayWithArray:visibleUnselectedCells];
 }
 
 @end

@@ -8,9 +8,10 @@
 
 #import "SettingsVC.h"
 
-NSString *SETTINGS_TV_TAG_SNOOZE_VALUE = @"Snooze";
-NSString *SETTINGS_TV_TAG_DIFFICULTY_VALUE = @"Difficulty";
-NSString *SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE = @"Display time in:";
+NSString *SETTINGS_TV_TAG_DIFFICULTY_VALUE;
+NSString *SETTINGS_TV_TAG_SNOOZE_VALUE;
+NSString *SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE;
+NSString *SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE;
 
 //>>>
 NSString *DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE = @"Snooze in: ";
@@ -18,6 +19,7 @@ NSString *DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE = @"Snooze in: ";
 
 NSString *SEGUE_ID_SNOOZE = @"SetDefaultSnooze";
 NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
+NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
 
 @interface SettingsVC ()
 
@@ -25,7 +27,17 @@ NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
 
 @end
 
+
 @implementation SettingsVC
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    SETTINGS_TV_TAG_DIFFICULTY_VALUE = NSLocalizedString(@"Difficulty", nil);
+    SETTINGS_TV_TAG_SNOOZE_VALUE = NSLocalizedString(@"Default Snooze", nil);
+    SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE = NSLocalizedString(@"Default Alarm Sound", nil);
+    SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE = NSLocalizedString(@"Display time in:", nil);
+}
 
 -(void)viewDidLayoutSubviews
 {
@@ -33,21 +45,16 @@ NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
     self.doneButton.containingVC = self;
 }
 
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.presentingVC removeAnimationsFromPresentingVC];
-}
-
 -(NSDictionary *)tableViewSettingsTags
 {
     if (!_tableViewSettingsTags)
     {
-        _tableViewSettingsTags = @{@0 : SETTINGS_TV_TAG_SNOOZE_VALUE,
-                                   @1 : SETTINGS_TV_TAG_DIFFICULTY_VALUE,
-                                   @2 : SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE,
+        _tableViewSettingsTags = @{@0 : SETTINGS_TV_TAG_DIFFICULTY_VALUE,
+                                   @1 : SETTINGS_TV_TAG_SNOOZE_VALUE,
+                                   @2 : SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE,
+                                   @3 : SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE,
                                    //>>>
-                                   @3 : DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE
+                                   @4 : DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE
                                    //<<<
                                    };
     }
@@ -67,6 +74,7 @@ NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
 
 -(void)removeAnimationsFromPresentingVC
 {
+    [super removeAnimationsFromPresentingVC];
     for (UITableViewCell *oneTVCell in self.settingsTV.visibleCells)
     {
         [oneTVCell.layer removeAllAnimations];
@@ -144,7 +152,6 @@ numberOfRowsInSection:(NSInteger)section
             [self.alarmClockModel setShowTimeIn24HourFormat:!self.alarmClockModel.showTimeIn24HourFormat];
             [self.settingsTV reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
         }
-        
         //>>>
         else if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE])
         {
@@ -159,9 +166,13 @@ numberOfRowsInSection:(NSInteger)section
             {
                 [floundsTVCell animateCellForSelectionToPerformSegue:SEGUE_ID_SNOOZE];
             }
-            if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:SETTINGS_TV_TAG_DIFFICULTY_VALUE])
+            else if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:SETTINGS_TV_TAG_DIFFICULTY_VALUE])
             {
                 [floundsTVCell animateCellForSelectionToPerformSegue:SEGUE_ID_DIFFICULTY];
+            }
+            else if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE])
+            {
+                [floundsTVCell animateCellForSelectionToPerformSegue:SEGUE_ID_ALARM_SOUNDS];
             }
             [self animateNonSelectedTableViewCells:tableView];
         }
@@ -189,6 +200,16 @@ numberOfRowsInSection:(NSInteger)section
             difficultySettingsVC.alarmClockModel = self.alarmClockModel;
             difficultySettingsVC.floundsModel = self.floundsModel;
             difficultySettingsVC.presentingVC = self;
+        }
+    }
+    if ([segue.identifier isEqualToString:SEGUE_ID_ALARM_SOUNDS])
+    {
+        if ([segue.destinationViewController isKindOfClass:[AlarmSoundDefaultChooserVC class]])
+        {
+            AlarmSoundDefaultChooserVC *alarmSoundDefaultChooserVC = (AlarmSoundDefaultChooserVC *)segue.destinationViewController;
+//            alarmSoundDefaultChooserVC.alarmClockModel = self.alarmClockModel;
+            alarmSoundDefaultChooserVC.soundManager = self.soundManager;
+            alarmSoundDefaultChooserVC.presentingVC = self;
         }
     }
     //>>>

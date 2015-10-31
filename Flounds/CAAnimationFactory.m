@@ -10,6 +10,15 @@
 
 @implementation CAAnimationFactory
 
++(CABasicAnimation *)slideAnimation
+{
+    CABasicAnimation *slideAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    slideAnimation.duration = 0.1f;
+    slideAnimation.fillMode = kCAFillModeForwards;
+    slideAnimation.removedOnCompletion = NO;
+    return slideAnimation;
+}
+
 CFTimeInterval pulseAndFadeAnimationDuration = 0.5f;
 
 +(CAAnimation *)pulseAndFadeInAnimation
@@ -150,6 +159,8 @@ const CGFloat MOVE_TO_OR_AWAY_FORM_EDGES_SCALE_ANIMATION_EDGE_VALUE = 0.1f;
     moveShapesToEdgeAnimationGroup.fillMode = kCAFillModeForwards;
     moveShapesToEdgeAnimationGroup.removedOnCompletion = NO;
     
+    CFRelease(pathForTranslation);
+    
     return moveShapesToEdgeAnimationGroup;
 }
 
@@ -184,6 +195,8 @@ const CGFloat MOVE_TO_OR_AWAY_FORM_EDGES_SCALE_ANIMATION_EDGE_VALUE = 0.1f;
     moveShapesAwayFromEdgeAnimationGroup.fillMode = kCAFillModeForwards;
     moveShapesAwayFromEdgeAnimationGroup.removedOnCompletion = YES;
     
+    CFRelease(pathForTranslation);
+    
     return moveShapesAwayFromEdgeAnimationGroup;
 }
 
@@ -199,8 +212,7 @@ forALineThatPassesThroughCenterOfOuterFrameAndInnerFrame:(CGRect)innerFrame
     CGFloat xDistBetweenCenters = centerOfOuterFrame.x - centerOfInnerFrame.x;
     
     
-    CGFloat lineSlope;
-    CGPoint returnPoint;
+    CGFloat lineSlope = 0.0f;
     if (xDistBetweenCenters == 0.0 && yDistBetweenCenters == 0.0) //if innerFrame is centered exactly on outerFrame, pick a random slope value between -20.0 and 20.0
     {
         CGFloat unSignedSlope = (float)arc4random_uniform(20);
@@ -221,11 +233,11 @@ forALineThatPassesThroughCenterOfOuterFrameAndInnerFrame:(CGRect)innerFrame
         CGFloat xValue = centerOfOuterFrame.x;
         if (yDistBetweenCenters >= 0.0) //center of innerFrame has a lower y value than center of outerFrame
         {
-            returnPoint = CGPointMake(xValue, 0.0);
+            return CGPointMake(xValue, 0.0);
         }
         else //center of innerFrame has a greater y value than center of outerFrame
         {
-            returnPoint = CGPointMake(xValue, outerFrame.size.height);
+            return CGPointMake(xValue, outerFrame.size.height);
         }
     }
     if (fabs(lineSlope) == 1.0)
@@ -233,11 +245,11 @@ forALineThatPassesThroughCenterOfOuterFrameAndInnerFrame:(CGRect)innerFrame
         CGFloat yValue = centerOfOuterFrame.y;
         if (xDistBetweenCenters >= 0.0)
         {
-            returnPoint = CGPointMake(0.0, yValue);
+            return CGPointMake(0.0, yValue);
         }
         else
         {
-            returnPoint = CGPointMake(outerFrame.size.width, 0.0);
+            return CGPointMake(outerFrame.size.width, 0.0);
         }
     }
     else
@@ -258,9 +270,9 @@ forALineThatPassesThroughCenterOfOuterFrameAndInnerFrame:(CGRect)innerFrame
         {
             yValue = yValueWithExtremeX;
         }
-        returnPoint = CGPointMake(xValue, yValue);
+        return CGPointMake(xValue, yValue);
     }
-    return returnPoint;
+    return CGPointZero;
 }
 
 @end

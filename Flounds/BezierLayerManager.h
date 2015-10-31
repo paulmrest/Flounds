@@ -11,7 +11,6 @@
 
 #import "BezierShape.h"
 #import "BezierShapeLayer.h"
-#import "BezierShapeLayerDelegate.h"
 #import "AnimationQueueFinishDelegate.h"
 
 #import "CAAnimationCluster.h"

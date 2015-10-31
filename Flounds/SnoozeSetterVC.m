@@ -6,6 +6,14 @@
 //  Copyright (c) 2014 Paul Rest. All rights reserved.
 //
 
+NSString *SNOOZE_PICKER_MINUTE_SINGULAR;
+
+NSString *SNOOZE_PICKER_MINUTES_PLURAL;
+
+NSString *SET_SNOOZE_BUTTON_TITLE;
+
+NSString *CANCEL_BUTTON_TITLE;
+
 #import "SnoozeSetterVC.h"
 
 @interface SnoozeSetterVC ()
@@ -22,6 +30,12 @@
 {
     [super viewDidLoad];
     self.currSnoozeMinutes = self.initSnoozeMinutes;
+    
+    SNOOZE_PICKER_MINUTE_SINGULAR = NSLocalizedString(@"Minute", nil);
+    SNOOZE_PICKER_MINUTES_PLURAL = NSLocalizedString(@"Minutes", nil);
+    
+    SET_SNOOZE_BUTTON_TITLE = NSLocalizedString(@"Set Snooze", nil);
+    CANCEL_BUTTON_TITLE = NSLocalizedString(@"Cancel", nil);
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -40,11 +54,13 @@
     
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.snoozePicker];
     
-    self.setSnooze.containingVC = self;
-    self.cancel.containingVC = self;
-
+    [self.setSnooze setTitle:SET_SNOOZE_BUTTON_TITLE forState:UIControlStateNormal];
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.setSnooze];
+    self.setSnooze.containingVC = self;
+
+    [self.cancel setTitle:CANCEL_BUTTON_TITLE forState:UIControlStateNormal];
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancel];
+    self.cancel.containingVC = self;
 }
 
 -(void)setInitSnoozeMinutes:(NSUInteger)snoozeMinutes
@@ -61,7 +77,7 @@
     {
         FloundsButton *floundsSetSnoozeButton = (FloundsButton *)sender;
         self.unwindActivatingButton = floundsSetSnoozeButton;
-        [self.setSnoozeDelegate setCurrSnoozeMinutes:self.currSnoozeMinutes];
+        [self.setSnoozeDelegate setSnoozeMinutes:self.currSnoozeMinutes];
         [floundsSetSnoozeButton animateForPushDismissCurrView];
     }
 }
@@ -116,14 +132,23 @@ numberOfRowsInComponent:(NSInteger)component
             attributedTitleForRow:(NSInteger)row
                      forComponent:(NSInteger)component
 {
-    NSString *minuteString = row == 0 ? @"Minute" : @"Minutes";
+    NSString *minuteString = row == 0 ? SNOOZE_PICKER_MINUTE_SINGULAR : SNOOZE_PICKER_MINUTES_PLURAL;
     NSString *finalString = [NSString stringWithFormat:@"%lu %@", (long)row + 1, minuteString];
+
     NSMutableAttributedString *attrbStringTitleRow = [[NSMutableAttributedString alloc] initWithString:finalString];
+    NSMutableDictionary *attStringAttributes = [[NSMutableDictionary alloc] init];
+
     NSMutableParagraphStyle *paragrapStyle = [[NSMutableParagraphStyle alloc] init];
     paragrapStyle.alignment = NSTextAlignmentCenter;
-    [attrbStringTitleRow addAttribute:NSParagraphStyleAttributeName
-                                value:paragrapStyle
-                                range:NSMakeRange(0, [finalString length])];
+    
+    [attStringAttributes setObject:paragrapStyle forKey:NSParagraphStyleAttributeName];
+    
+    [attStringAttributes setObject:[FloundsViewConstants getDefaultFont] forKey:NSFontAttributeName];
+    
+    [attStringAttributes setObject:[FloundsViewConstants getDefaultTextColor] forKey:NSForegroundColorAttributeName];
+    
+    [attrbStringTitleRow addAttributes:attStringAttributes
+                                 range:NSMakeRange(0, [finalString length])];
     return attrbStringTitleRow;
 }
 

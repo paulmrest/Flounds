@@ -24,6 +24,10 @@
 
 +(UIColor *)getDefaultBackgroundColor;
 
-+(UIColor *)getdefaultTextColor;
++(UIColor *)getDefaultButtonBackgroundColor;
+
++(UIColor *)getDefaultTextColor;
+
++(UIColor *)getDefaultShapeStrokeColor;
 
 @end

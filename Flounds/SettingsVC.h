@@ -16,6 +16,7 @@
 //<<<
 #import "SnoozeDefaultPickerVC.h"
 #import "DifficultySettingsVC.h"
+#import "AlarmSoundDefaultChooserVC.h"
 
 #import "AlarmClockModel.h"
 
@@ -36,5 +37,7 @@
 @property (strong, nonatomic) AlarmClockModel *alarmClockModel;
 
 @property (nonatomic, strong) FloundsModel *floundsModel;
+
+@property (nonatomic, strong) AlarmSoundManager *soundManager;
 
 @end

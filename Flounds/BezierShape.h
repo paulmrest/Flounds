@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "FloundsViewConstants.h"
+
 #define ARC4RANDOM_MAX 0x100000000
 
 const double IPHONE_SHAPE_SIZE_RATIO;

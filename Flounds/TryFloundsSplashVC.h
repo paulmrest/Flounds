@@ -15,6 +15,9 @@
 
 #import "FloundsModel.h"
 #import "PatternMakerVC.h"
+#import "AbortNoticeVC.h"
+
+#import "VerticallyCenteredTextView.h"
 
 #import "UnwindFromTryItFloundsDelegate.h"
 
@@ -29,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *launchLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *countDownLabel;
+
+@property (nonatomic, weak) IBOutlet VerticallyCenteredTextView *countDownTextView;
 
 @property (weak, nonatomic) IBOutlet FloundsButton *cancelButton;
 

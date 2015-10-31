@@ -52,11 +52,30 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
         [self defaultSnoozeInterval];
         
         //>>>
-        self.debuggingSnoozeInSeconds = NO;
+        [self getDebuggingSnoozeInSecondsFromDisk];
         //<<<
     }
     return self;
 }
+
+//>>>
+NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
+
+-(void)getDebuggingSnoozeInSecondsFromDisk
+{
+    self.debuggingSnoozeInSeconds = [[NSUserDefaults standardUserDefaults] boolForKey:kDebuggingSnoozeInSecondsKey];
+}
+
+-(void)setDebuggingSnoozeInSeconds:(BOOL)debuggingSnoozeInSeconds
+{
+    if (_debuggingSnoozeInSeconds != debuggingSnoozeInSeconds)
+    {
+        _debuggingSnoozeInSeconds = debuggingSnoozeInSeconds;
+        [[NSUserDefaults standardUserDefaults] setBool:_debuggingSnoozeInSeconds forKey:kDebuggingSnoozeInSecondsKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+//<<<
 
 -(NSDateFormatter *)dateFormatter
 {
@@ -221,6 +240,31 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
     return _defaultSoundingAlarmURL;
 }
 
+-(NSString *)getAlarmSoundForAlarmTime:(NSDate *)alarmTimeDate
+{
+    for (AlarmTime *oneAlarmTime in self.storedAlarmTimes)
+    {
+        if ([oneAlarmTime timeMatchesAlarmTimeToTheSecond:alarmTimeDate])
+        {
+            return oneAlarmTime.alarmSoundDisplayName;
+        }
+    }
+    return nil;
+}
+
+-(void)setAlarmSoundForAlarmTime:(NSDate *)alarmTimeDate
+                    toAlarmSound:(NSString *)alarmSoundName
+{
+    for (AlarmTime *oneAlarmTime in self.storedAlarmTimes)
+    {
+        if ([oneAlarmTime timeMatchesAlarmTimeToTheSecond:alarmTimeDate])
+        {
+            oneAlarmTime.alarmSoundDisplayName = alarmSoundName;
+            [self saveStoredAlarmTimesToDisk];
+        }
+    }
+}
+
 -(BOOL)saveCurrentlySoundingAlarmToDisk
 {
     return [NSKeyedArchiver archiveRootObject:self.soundingAlarm toFile:self.defaultSoundingAlarmURL.path];
@@ -274,11 +318,6 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
     return self.defaultSnoozeTimeMinutes;
 }
 
--(NSDate *)alarmTimeForSoundingAlarm
-{
-    return nil;
-}
-
 -(NSTimeInterval)snoozeIntervalForSoundingAlarm
 {
     if (self.soundingAlarm)
@@ -305,6 +344,16 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
 -(BOOL)alarmCurrentlySounding
 {
     return self.soundingAlarm ? YES : NO;
+}
+
+-(NSString *)getAlarmSoundForSoundingAlarm
+{
+    return [self.soundingAlarm.alarmSoundDisplayName copy];
+}
+
+-(NSDate *)getCurrentlySoundingAlarm
+{
+    return [self.soundingAlarm.alarmTimeDate copy];
 }
 
 -(void)endCurrentSoundingAlarm
@@ -366,6 +415,7 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
 
 -(BOOL)addAlarmTime:(NSDate *)alarmTimeDate
          withSnooze:(NSUInteger)snooze
+     withAlarmSound:(NSString *)alarmSound
 {
     if (alarmTimeDate)
     {
@@ -373,7 +423,8 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
         {
             AlarmTime *newAlarmTime = [[AlarmTime alloc] initAlarmTime:alarmTimeDate
                                                      withSnoozeMinutes:snooze
-                                                              asActive:YES];
+                                                              asActive:YES
+                                                        withAlarmSound:alarmSound];
             [self.storedAlarmTimes addObject:newAlarmTime];
             [self saveStoredAlarmTimesToDisk];
 //            [self updateSystemNotifications];
@@ -413,6 +464,7 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
 -(BOOL)modifyAlarmTime:(NSDate *)oldAlarmTimeDate
       newAlarmTimeDate:(NSDate *)newAlarmTimeDate
 newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
+     newAlarmTimeSound:(NSString *)newAlarmSound
 {
     //>>>
 //    NSLog(@"AlarmClockModel - modifyAlarmTime...");
@@ -434,11 +486,14 @@ newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
             if (newAlarmTimeDate)
             {
                 if (![self alarmTimeAlreadyPresent:newAlarmTimeDate] ||
-                    (newAlarmSnoozeMinutes != oldAlarmTime.snoozeMinutesPublic))
+                    (newAlarmSnoozeMinutes != oldAlarmTime.snoozeMinutesPublic) ||
+                    ![newAlarmSound isEqualToString:oldAlarmTime.alarmSoundDisplayName])
                 {
                     AlarmTime *newAlarmTime = [[AlarmTime alloc] initAlarmTime:newAlarmTimeDate
                                                              withSnoozeMinutes:newAlarmSnoozeMinutes
-                                                                      asActive:[oldAlarmTime isActive]];
+                                                                      asActive:[oldAlarmTime isActive]
+                                                                withAlarmSound:newAlarmSound];
+                    
                     [self.storedAlarmTimes replaceObjectAtIndex:[self.storedAlarmTimes indexOfObject:oldAlarmTime]
                                                      withObject:newAlarmTime];
                     if ([self saveStoredAlarmTimesToDisk])

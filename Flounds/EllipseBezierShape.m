@@ -26,12 +26,10 @@
     translateAndRotate = CGAffineTransformRotate(translateAndRotate, ((CGFloat)arc4random() / ARC4RANDOM_MAX) * (2.0 * M_PI));
     translateAndRotate = CGAffineTransformTranslate(translateAndRotate, -boundingRectCenter.x, -boundingRectCenter.y);
     
-    UIBezierPath *rotatedOvalPath = [UIBezierPath bezierPathWithCGPath:
-                                     CGPathCreateCopyByTransformingPath(unrotatedOvalPath.CGPath, &translateAndRotate)];
+    CGPathRef rotatedCGPath = CGPathCreateCopyByTransformingPath(unrotatedOvalPath.CGPath, &translateAndRotate);
+    UIBezierPath *rotatedOvalPath = [UIBezierPath bezierPathWithCGPath:rotatedCGPath];
     
-    //>>>
-//    [rotatedOvalPath appendPath:[UIBezierPath bezierPathWithRect:newRectWithIndent]];
-    //<<<
+    CFRelease(rotatedCGPath);
     
     self.path = rotatedOvalPath;
 }

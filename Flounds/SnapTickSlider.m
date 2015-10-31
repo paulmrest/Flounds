@@ -8,6 +8,12 @@
 
 #import "SnapTickSlider.h"
 
+
+@interface SnapTickSlider ()
+
+@end
+
+
 @implementation SnapTickSlider
 
 -(id)initWithCoder:(NSCoder *)aDecoder
@@ -15,22 +21,35 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self setThumbImage:[UIImage imageNamed:@"Black Tick Mark 30x30.png"] forState:UIControlStateNormal];        
+        [self initHelper];
     }
     return self;
+}
+
+-(void)initHelper
+{
+    [self setThumbImage:[UIImage imageNamed:@"WhiteTickMark"] forState:UIControlStateNormal];
+    [self setThumbImage:[UIImage imageNamed:@"WhiteTickMark"] forState:UIControlStateHighlighted];
+    
+    [self setMinimumTrackTintColor:[FloundsViewConstants getDefaultTextColor]];
+    [self setMaximumTrackTintColor:[FloundsViewConstants getDefaultTextColor]];
 }
 
 -(void)endTrackingWithTouch:(UITouch *)touch
                   withEvent:(UIEvent *)event
 {
-    [super endTrackingWithTouch:touch withEvent:event];
-    if (self.value != floorf(self.value))
+    if (self.value > floorf(self.value) ||
+        self.value < ceilf(self.value) ||
+        self.value == self.minimumValue ||
+        self.value == self.maximumValue)
     {
         CGFloat roundedFloat = (float)roundf(self.value);
         [self setValue:roundedFloat animated:YES];
         
-        [self.updateSuperView updateView];
+        [self.updateSuperView updateSuperViewWithValue:roundedFloat
+                                        forSliderKeyID:self.sliderKeyID];
     }
+    [super endTrackingWithTouch:touch withEvent:event];
 }
 
 -(void)drawRect:(CGRect)rect
@@ -50,6 +69,7 @@
         [tickPath addLineToPoint:CGPointMake(xTickMarkPosition, yTickMarkEndingPosition)];
         xTickMarkPosition += distBetweenTicks;
     }
+    [[FloundsViewConstants getDefaultTextColor] setStroke];
     [tickPath stroke];
 }
 

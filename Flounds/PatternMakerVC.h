@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "FloundsUserInteractionSegueProtocol.h"
+
 #import "FloundsModel.h"
 
 #import "ShapeView.h"
@@ -23,6 +25,8 @@
 @property (nonatomic, weak) IBOutlet ShapeView *shapeView;
 
 @property (nonatomic, weak) id<ModalPatternMakerDelegate> patternMakerDelegate;
+
+@property (nonatomic, weak) id<FloundsUserInteractionSegueProtocol> presentingVC;
 
 @property (nonatomic, strong) FloundsModel *floundsModel;
 

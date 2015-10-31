@@ -8,6 +8,7 @@
 
 @protocol SliderUpdateSuperViewDelegate <NSObject>
 
--(void)updateView;
+-(void)updateSuperViewWithValue:(CGFloat)sliderValue
+                 forSliderKeyID:(NSString *)sliderID;
 
 @end

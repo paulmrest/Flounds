@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+#import "FloundsViewConstants.h"
+
 #import "AlarmClockModel.h"
 
-@interface FloundsDatePickerView : UIPickerView <UIPickerViewDelegate, UIPickerViewDataSource>
 
-@property (nonatomic, strong) AlarmClockModel *alarmClockModel;
+extern NSString *FLOUNDS_DATE_PICKER_VALUE_CHANGED_NOTIFICATION;
+
+
+@interface FloundsDatePickerView : UIPickerView <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) NSDate *currSelectedTime;
 
@@ -23,5 +27,9 @@
 @property (nonatomic, strong) UIColor *fontColor;
 
 @property (nonatomic, strong) UIColor *backgroundColor;
+
+
+-(void)setDisplayedTime:(NSDate *)displayTimeDate
+               animated:(BOOL)animated;
 
 @end

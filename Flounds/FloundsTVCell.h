@@ -6,6 +6,10 @@
 //  Copyright © 2015 Paul Rest. All rights reserved.
 //
 
+#import "FloundsShapeLayer.h"
+
+#import "CAAnimationFactory.h"
+
 @interface FloundsTVCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *cellText;
@@ -15,5 +19,9 @@
 -(void)animateCellForSelectionToPerformSegue:(NSString *)identifier;
 
 -(void)animateCellForNonSelection;
+
+-(void)animateCellForSelectionWithoutSegue;
+
+-(void)animateCellForNonSelectionWithoutSegue;
 
 @end

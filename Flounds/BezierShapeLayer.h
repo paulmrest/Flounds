@@ -16,6 +16,8 @@ NSString *LAYER_ANIMATION_KEY_KEY;
 
 @property (nonatomic, strong) BezierShape *bezierShape;
 
+@property (nonatomic, strong) UIColor *strokeColor;
+
 @property (nonatomic) NSUInteger copyID;
 
 @property (nonatomic) NSUInteger shapeID;

@@ -12,7 +12,7 @@
 
 -(void)animateCellForSelectionToPerformSegue:(NSString *)identifier
 {
-    CABasicAnimation *slideRightAnimation = [self slideAnimation];
+    CABasicAnimation *slideRightAnimation = [CAAnimationFactory slideAnimation];
     slideRightAnimation.toValue = [NSNumber numberWithDouble:self.frame.size.width];
     
     [CATransaction begin];
@@ -25,19 +25,38 @@
 
 -(void)animateCellForNonSelection
 {
-    CABasicAnimation *slideLeftAnimation = [self slideAnimation];
+    CABasicAnimation *slideLeftAnimation = [CAAnimationFactory slideAnimation];
     slideLeftAnimation.toValue = [NSNumber numberWithDouble:-self.frame.size.width];
     
     [self.layer addAnimation:slideLeftAnimation forKey:nil];
 }
 
--(CABasicAnimation *)slideAnimation
+-(void)animateCellForSelectionWithoutSegue
 {
-    CABasicAnimation *slideAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    slideAnimation.duration = 0.1f;
-    slideAnimation.fillMode = kCAFillModeForwards;
-    slideAnimation.removedOnCompletion = NO;
-    return slideAnimation;
+    CABasicAnimation *slideRightAnimation = [CAAnimationFactory slideAnimation];
+    slideRightAnimation.toValue = [NSNumber numberWithDouble:self.frame.size.width];
+//    slideRightAnimation.delegate = self;
+    
+    [self.layer addAnimation:slideRightAnimation forKey:nil];
+}
+
+-(void)animateCellForNonSelectionWithoutSegue
+{
+    
+}
+
+//-(CABasicAnimation *)slideAnimation
+//{
+//    CABasicAnimation *slideAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+//    slideAnimation.duration = 0.1f;
+//    slideAnimation.fillMode = kCAFillModeForwards;
+//    slideAnimation.removedOnCompletion = NO;
+//    return slideAnimation;
+//}
+
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    
 }
 
 @end

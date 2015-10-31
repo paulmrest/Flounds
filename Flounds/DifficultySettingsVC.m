@@ -8,9 +8,13 @@
 
 #import "DifficultySettingsVC.h"
 
-static NSString *STARTING_SHAPES_LABEL = @"Starting shapes: ";
+NSString *STARTING_SHAPES_SLIDER_ID = @"StartingShapes";
 
-static NSString *DIFFICULTY_LEVEL_LABEL = @"Difficulty level: ";
+NSString *DIFFICULTY_LEVEL_SLIDER_ID = @"DifficultyLevel";
+
+static NSString *STARTING_SHAPES_LABEL;
+
+static NSString *DIFFICULTY_LEVEL_LABEL;
 
 @interface DifficultySettingsVC ()
 
@@ -36,12 +40,17 @@ static NSString *DIFFICULTY_LEVEL_LABEL = @"Difficulty level: ";
 {
     [super viewDidLoad];
     
+    STARTING_SHAPES_LABEL = NSLocalizedString(@"Starting shapes: ", nil);
+    DIFFICULTY_LEVEL_LABEL = NSLocalizedString(@"Difficulty level: ", nil);
+    
     self.initStartingShapes = self.floundsModel.numberOfStartingShapes;
     self.currStartingShapes = self.initStartingShapes;
+    self.startShapesLabel.textColor = [FloundsViewConstants getDefaultTextColor];
     self.startShapesLabel.text = [STARTING_SHAPES_LABEL stringByAppendingFormat:@"%ld", (long)self.currStartingShapes];
     
     self.initDifficultyLevel = self.floundsModel.difficultyLevel;
     self.currDifficultyLevel = self.initDifficultyLevel;
+    self.levelLabel.textColor = [FloundsViewConstants getDefaultTextColor];
     self.levelLabel.text = [DIFFICULTY_LEVEL_LABEL stringByAppendingFormat:@"%ld", (long)self.currDifficultyLevel];
 }
 
@@ -56,41 +65,15 @@ static NSString *DIFFICULTY_LEVEL_LABEL = @"Difficulty level: ";
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.tryAndCancelTrialButton];
     
     [self.startingShapesSlider setValue:self.currStartingShapes animated:YES];
+    self.startingShapesSlider.sliderKeyID = STARTING_SHAPES_SLIDER_ID;
     [self.difficultyLevelSlider setValue:self.currDifficultyLevel animated:YES];
+    self.difficultyLevelSlider.sliderKeyID = DIFFICULTY_LEVEL_SLIDER_ID;
     
     self.startingShapesSlider.updateSuperView = self;
     self.difficultyLevelSlider.updateSuperView = self;
     
     [self updateView];
     [self.view layoutIfNeeded];
-}
-
--(IBAction)startingShapesSliderValueChange:(SnapTickSlider *)sender
-{
-    NSInteger startingShapesSliderValue = roundf(sender.value);
-    if (startingShapesSliderValue != self.currStartingShapes)
-    {
-        self.startShapesLabel.text = [STARTING_SHAPES_LABEL stringByAppendingFormat:@"%ld", (long)startingShapesSliderValue];
-        //>>>
-//        NSLog(@"DifficultySettingsVC - startingShapesSliderValueChange:");
-//        NSLog(@"self.startShapes.text: %@", self.startShapesLabel.text);
-        //<<<
-        self.currStartingShapes = startingShapesSliderValue;
-    }
-}
-
--(IBAction)difficultyLevelSliderValueChange:(SnapTickSlider *)sender
-{
-    NSInteger difficultySliderValue = roundf(sender.value);
-    if (difficultySliderValue != self.currDifficultyLevel)
-    {
-        self.levelLabel.text = [DIFFICULTY_LEVEL_LABEL stringByAppendingFormat:@"%ld", (long)difficultySliderValue];
-        //>>>
-//        NSLog(@"DifficultySettingsVC - difficultyLevelSliderValueChange:");
-//        NSLog(@"self.levelLabel.text: %@", self.levelLabel.text);
-        //<<<
-        self.currDifficultyLevel = difficultySliderValue;
-    }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -113,18 +96,16 @@ static NSString *DIFFICULTY_LEVEL_LABEL = @"Difficulty level: ";
 
 - (IBAction)setAndUnwind:(id)sender
 {
-    NSInteger startingShapesValue = roundf(self.startingShapesSlider.value);
     BOOL numOfStartingShapesSaved = YES;
-    if (self.initStartingShapes != startingShapesValue)
+    if (self.initStartingShapes != self.currStartingShapes)
     {
-        numOfStartingShapesSaved = [self.floundsModel setNumberOfStartingShapesFromSettings:startingShapesValue];
+        numOfStartingShapesSaved = [self.floundsModel setNumberOfStartingShapesFromSettings:self.currStartingShapes];
     }
     
-    NSInteger difficultyValue = roundf(self.difficultyLevelSlider.value);
     BOOL startingDifficultyLevelSaved = YES;
-    if (self.initDifficultyLevel != difficultyValue)
+    if (self.initDifficultyLevel != self.currDifficultyLevel)
     {
-        startingDifficultyLevelSaved = [self.floundsModel setDifficultyLevelFromSettings:difficultyValue];
+        startingDifficultyLevelSaved = [self.floundsModel setDifficultyLevelFromSettings:self.currDifficultyLevel];
     }
     
     if (numOfStartingShapesSaved && startingDifficultyLevelSaved)
@@ -138,24 +119,47 @@ static NSString *DIFFICULTY_LEVEL_LABEL = @"Difficulty level: ";
     }
     else
     {
-        //>>>
-        if (!numOfStartingShapesSaved)
-        {
-            NSLog(@"FloundsModel was not able to save new startingShapesValue");
-        }
-        else
-        {
-            NSLog(@"FloundsModel was not able to save new difficultyValue");
-        }
-        //<<<
+        NSLog(@"DifficultySettingsVC - setAndUnwind...");
+        NSLog(@"self.floundsModel was unable to save either starting shapes or difficulty level");
+    }
+}
+
+-(void)updateSuperViewWithValue:(CGFloat)sliderValue
+                 forSliderKeyID:(NSString *)sliderID
+{
+    if ([sliderID isEqualToString:STARTING_SHAPES_SLIDER_ID])
+    {
+        [self startingShapesSliderValueChange:sliderValue];
+    }
+    else if ([sliderID isEqualToString:DIFFICULTY_LEVEL_SLIDER_ID])
+    {
+        [self difficultyLevelSliderValueChange:sliderValue];
+    }
+    [self updateView];
+}
+
+-(void)startingShapesSliderValueChange:(CGFloat)sliderValue
+{
+    NSInteger startingShapesSliderValue = roundf(sliderValue);
+    if (startingShapesSliderValue != self.currStartingShapes)
+    {
+        self.startShapesLabel.text = [STARTING_SHAPES_LABEL stringByAppendingFormat:@"%ld", (long)startingShapesSliderValue];
+        self.currStartingShapes = startingShapesSliderValue;
+    }
+}
+
+-(void)difficultyLevelSliderValueChange:(CGFloat)sliderValue
+{
+    NSInteger difficultySliderValue = roundf(sliderValue);
+    if (difficultySliderValue != self.currDifficultyLevel)
+    {
+        self.levelLabel.text = [DIFFICULTY_LEVEL_LABEL stringByAppendingFormat:@"%ld", (long)difficultySliderValue];
+        self.currDifficultyLevel = difficultySliderValue;
     }
 }
 
 -(void)updateView
 {
-    //>>>
-//    NSLog(@"DifficultySettingVC - updateView");
-    //<<<
     if (self.currDifficultyLevel != self.floundsModel.difficultyLevel ||
         self.currStartingShapes != self.floundsModel.numberOfStartingShapes)
     {

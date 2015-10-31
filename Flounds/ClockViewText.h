@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VerticallyAlignedTextView.h"
+
 #import "VerticallyCenteredTextView.h"
 
 #import "AlarmClockModel.h"

@@ -21,9 +21,16 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        self.dismissContainingVCOnPush = NO;
+        [self initHelper];
     }
     return self;
+}
+
+-(void)initHelper
+{
+    self.dismissContainingVCOnPush = NO;
+    
+    [self setTitleColor:[FloundsViewConstants getDefaultTextColor] forState:UIControlStateNormal];
 }
 
 -(void)setContainingVC:(UIViewController *)containingVC

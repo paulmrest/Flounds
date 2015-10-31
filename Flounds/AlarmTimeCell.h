@@ -12,9 +12,13 @@
 
 #import "FloundsTVCell.h"
 
+#import "DeactivateSnoozeProtocol.h"
+
 @interface AlarmTimeCell : FloundsTVCell
 
 @property (nonatomic, strong) AlarmClockModel *alarmClockModel;
+
+@property (nonatomic, strong) id<DeactivateSnoozeProtocol> deactivateSnoozeDelegate;
 
 @property (nonatomic, strong) NSDate *alarmTimeDate;
 

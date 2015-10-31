@@ -10,8 +10,13 @@
 
 @protocol SetSnoozeDelegate <NSObject>
 
+@property (nonatomic) NSUInteger initialSnoozeMinutes;
+
+@property (nonatomic) NSUInteger currSnoozeMinutes;
+
+
 -(void)unwindToAlarmSetter;
 
--(void)setCurrSnoozeMinutes:(NSUInteger)snoozeMinutes;
+-(void)setSnoozeMinutes:(NSUInteger)snoozeMinutes;
 
 @end

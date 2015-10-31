@@ -14,10 +14,14 @@ const CGFloat SHAPE_LAYER_EDGE_SPACING_FACTOR = 0.05;
 
 @implementation BezierShapeLayerDelegate
 
-//-(void)displayLayer:(CALayer *)layer
-//{
-//    NSLog(@"displayLayer...");
-//}
+-(UIColor *)strokeColor
+{
+    if (!_strokeColor)
+    {
+        _strokeColor = [FloundsViewConstants getDefaultShapeStrokeColor];
+    }
+    return _strokeColor;
+}
 
 -(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
@@ -35,105 +39,11 @@ const CGFloat SHAPE_LAYER_EDGE_SPACING_FACTOR = 0.05;
         CGPathRef translatedPath = CGPathCreateCopyByTransformingPath(shapeLayer.bezierShape.path.CGPath, &translate);
                 
         CGContextSetLineWidth(ctx, 2.0);
-        CGContextSetStrokeColorWithColor(ctx, [UIColor blueColor].CGColor);
+        CGContextSetStrokeColorWithColor(ctx, self.strokeColor.CGColor);
         CGContextAddPath(ctx, translatedPath);
         CGContextStrokePath(ctx);
         
-        //Draws each shape's shapeID on the shape
-        //>>>
-//        UIGraphicsPushContext(ctx);
-//        NSString *shapeIDString = [NSString stringWithFormat:@"%lu", (unsigned long)shapeLayer.shapeID];
-//        
-//        NSDictionary *textAttributes = [NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:11.0] forKey:NSFontAttributeName];
-//        
-//        NSAttributedString *shapeIDAttString = [[NSAttributedString alloc] initWithString:shapeIDString attributes:textAttributes];
-//        
-//        CGPoint shapeIDDrawPoint = CGPointMake((shapeLayer.bounds.size.width / 2.0f) - (shapeIDAttString.size.width / 2.0f),
-//                                               (shapeLayer.bounds.size.height / 2.0f) - (shapeIDAttString.size.height / 2.0f));
-//        
-//        [shapeIDAttString drawAtPoint:shapeIDDrawPoint];
-//        
-//        UIGraphicsPopContext();
-        
-        //<<<
-    }
-}
-
--(void)drawLayerTest:(CALayer *)layer inContext:(CGContextRef)ctx
-{
-    UIBezierPath *finalBezierPath = [[UIBezierPath alloc] init];
-    
-    UIBezierPath *upperLeftCorner = [[UIBezierPath alloc] init];
-    [upperLeftCorner addArcWithCenter:layer.bounds.origin
-                               radius:6.0
-                           startAngle:0.0
-                             endAngle:M_PI / 2
-                            clockwise:YES];
-    [finalBezierPath appendPath:upperLeftCorner];
-    
-    UIBezierPath *upperRightCorner = [[UIBezierPath alloc] init];
-    [upperRightCorner addArcWithCenter:CGPointMake(layer.bounds.size.width, layer.bounds.origin.y)
-                                radius:6.0
-                            startAngle:M_PI / 2.0
-                              endAngle:M_PI
-                             clockwise:YES];
-    [finalBezierPath appendPath:upperRightCorner];
-
-    UIBezierPath *lowerRightCorner = [[UIBezierPath alloc] init];
-    [lowerRightCorner addArcWithCenter:CGPointMake(layer.bounds.size.width, layer.bounds.size.height)
-                                radius:6.0
-                            startAngle:M_PI
-                              endAngle:3.0/2.0 * M_PI
-                             clockwise:YES];
-    [finalBezierPath appendPath:lowerRightCorner];
-    
-    UIBezierPath *lowerLeftCorner = [[UIBezierPath alloc] init];
-    [lowerLeftCorner addArcWithCenter:CGPointMake(layer.bounds.origin.x, layer.bounds.size.height)
-                               radius:6.0
-                           startAngle:3.0/2.0 * M_PI
-                             endAngle:2 * M_PI
-                            clockwise:YES];
-    [finalBezierPath appendPath:lowerLeftCorner];
-    
-    UIBezierPath *outerRectPath = [UIBezierPath bezierPathWithRect:layer.bounds];
-    [finalBezierPath appendPath:outerRectPath];
-    
-    UIBezierPath *horizontalLine = [[UIBezierPath alloc] init];
-    [horizontalLine moveToPoint:CGPointMake(layer.bounds.origin.x, layer.bounds.size.height / 2)];
-    [horizontalLine addLineToPoint:CGPointMake(layer.bounds.size.width, layer.bounds.size.height / 2)];
-    [finalBezierPath appendPath:horizontalLine];
-    
-    UIBezierPath *verticalLine = [[UIBezierPath alloc] init];
-    [verticalLine moveToPoint:CGPointMake(layer.bounds.size.width / 2, layer.bounds.origin.y)];
-    [verticalLine addLineToPoint:CGPointMake(layer.bounds.size.width / 2, layer.bounds.size.height)];
-    [finalBezierPath appendPath:verticalLine];
-
-    CGContextSetLineWidth(ctx, 2.0);
-    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
-    CGContextAddPath(ctx, finalBezierPath.CGPath);
-    CGContextStrokePath(ctx);
-
-    
-    if ([layer isKindOfClass:[BezierShapeLayer class]])
-    {
-        BezierShapeLayer *shapeLayer = (BezierShapeLayer *)layer;
-        
-        CGRect pathDrawingBox = shapeLayer.bezierShape.drawingRect;
-        
-        CGFloat xTranslation = (shapeLayer.bounds.size.width - pathDrawingBox.size.width) / 2;
-        CGFloat yTranslation = (shapeLayer.bounds.size.height - pathDrawingBox.size.width) / 2;
-        
-        CGAffineTransform translate = CGAffineTransformMakeTranslation(xTranslation, yTranslation);
-        
-        CGPathRef translatedPath = CGPathCreateCopyByTransformingPath(shapeLayer.bezierShape.path.CGPath, &translate);
-        UIBezierPath *translatedBezierPath = [UIBezierPath bezierPathWithCGPath:translatedPath];
-        
-        [finalBezierPath appendPath:translatedBezierPath];
-        
-        CGContextSetLineWidth(ctx, 2.0);
-        CGContextSetStrokeColorWithColor(ctx, [UIColor blueColor].CGColor);
-        CGContextAddPath(ctx, translatedPath);
-        CGContextStrokePath(ctx);
+        CFRelease(translatedPath);
     }
 }
 

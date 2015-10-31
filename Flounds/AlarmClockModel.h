@@ -35,6 +35,10 @@ extern const NSUInteger SINGLE_PICKERVIEW_COMPONENT;
 
 -(BOOL)checkAlarmTimes;
 
+-(void)setAlarmSoundForAlarmTime:(NSDate *)alarmTimeDate
+                    toAlarmSound:(NSString *)alarmSoundName;
+
+
 
 -(NSDate *)alarmTimeAtIndex:(NSUInteger)index;
 
@@ -49,6 +53,12 @@ extern const NSUInteger SINGLE_PICKERVIEW_COMPONENT;
 
 -(BOOL)alarmCurrentlySounding;
 
+-(NSDate *)getCurrentlySoundingAlarm;
+
+-(NSString *)getAlarmSoundForSoundingAlarm;
+
+-(NSString *)getAlarmSoundForAlarmTime:(NSDate *)alarmTimeDate;
+
 -(BOOL)saveCurrentlySoundingAlarmToDisk;
 
 -(BOOL)setCurrentlySoundingAlarmFromDisk;
@@ -56,8 +66,6 @@ extern const NSUInteger SINGLE_PICKERVIEW_COMPONENT;
 -(BOOL)clearCurrentlySoundingAlarmFromDisk;
 
 -(void)endCurrentSoundingAlarm;
-
--(NSDate *)alarmTimeForSoundingAlarm;
 
 
 -(NSTimeInterval)snoozeIntervalForSoundingAlarm;
@@ -70,12 +78,14 @@ extern const NSUInteger SINGLE_PICKERVIEW_COMPONENT;
 
 
 -(BOOL)addAlarmTime:(NSDate *)alarmTimeDate
-         withSnooze:(NSUInteger)snooze;
+         withSnooze:(NSUInteger)snooze
+     withAlarmSound:(NSString *)alarmSound;
 
 -(BOOL)removeAlarmTime:(NSDate *)alarmTime;
 
 -(BOOL)modifyAlarmTime:(NSDate *)oldAlarmTimeDate
       newAlarmTimeDate:(NSDate *)newAlarmTimeDate
-newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes;
+newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
+     newAlarmTimeSound:(NSString *)alarmSound;
 
 @end

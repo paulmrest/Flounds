@@ -11,9 +11,19 @@ NSString *MODIFY_ALARM_BUTTON_STRING;
 NSString *DELETE_ALARM_BUTTON_STRING;
 NSString *CANCEL_BUTTON_STRING;
 
-NSString *SNOOZE_DISPLAY_STRING;
+NSString *BASE_SNOOZE_DISPLAY_STRING;
+NSString *MINUTE_SINGULAR_STRING;
+NSString *MINUTE_PLURAL_STRING;
 
-NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
+NSString *BASE_ALARM_SOUND_DISPLAY_STRING;
+
+NSString *UNSAVED_CHANGES_ALERT_TITLE_STRING;
+NSString *UNSAVED_CHANGES_ALERT_BODY_STRING;
+NSString *UNSAVED_CHANGES_ALERT_YES_BUTTON_STRING;
+NSString *UNSAVED_CHANGES_ALERT_NO_BUTTON_STRING;
+
+NSString *SNOOZE_SETTER_SEGUE_ID = @"SetOneSnoozeSegue";
+NSString *ALARM_SOUND_SETTER_SEGUE_ID = @"SetOneAlarmSoundSegue";
 
 #import "AlarmSetterVC.h"
 
@@ -22,10 +32,6 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
 @property (nonatomic, strong) NSDate *alarmTimeDate;
 
 @property (nonatomic, strong) NSDate *currTimeSelectorDate;
-
-@property (nonatomic) NSUInteger initSnoozeMinutes;
-
-@property (nonatomic) NSUInteger currSnoozeMinutes;
 
 //@property (weak, nonatomic) IBOutlet UITextView *snoozeTextView;
 
@@ -38,33 +44,41 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
 
 -(void)viewDidLoad
 {
-    [super viewDidLoad];    
-    
-    self.initSnoozeMinutes = self.alarmTimeDate ?
-                             [self.alarmClockModel snoozeTimeMinutesForDate:self.alarmTimeDate] :
-                             [self.alarmClockModel getDefaultSnoozeMinutes];
+    [super viewDidLoad];
     
     self.unsavedChanges = NO;
     
+    self.initialSnoozeMinutes = self.alarmTimeDate ?
+                             [self.alarmClockModel snoozeTimeMinutesForDate:self.alarmTimeDate] :
+                             [self.alarmClockModel getDefaultSnoozeMinutes];
+    self.currSnoozeMinutes = self.initialSnoozeMinutes;
+    
     self.snoozeTextContainerView.displayFont = [FloundsViewConstants getDefaultFont];
-    self.currSnoozeMinutes = self.initSnoozeMinutes; //upon instantiation initSnoozeMinutes == currSnoozeMinutes
+    
+    self.initialAlarmSound = self.alarmTimeDate ?
+                            [self.alarmClockModel getAlarmSoundForAlarmTime:self.alarmTimeDate] :
+                            [self.soundManager getDefaultAlarmSoundName];
+
+    self.currAlarmSound = self.initialAlarmSound;
+    
+    self.alarmSoundTextView.displayFont = [FloundsViewConstants getDefaultFont];
     
     [self.snoozeTapRecognizer addTarget:self
                                  action:@selector(handleSnoozeTap)];
     
-    self.timeSelector.datePickerMode = UIDatePickerModeTime;    
-    if (self.alarmClockModel.showTimeIn24HourFormat)
-    {
-        NSLocale *timeSelectorLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"NL"];
-        [self.timeSelector setLocale:timeSelectorLocale];
-    }
-    [self.timeSelector addTarget:self
-                          action:@selector(timeSelectorStateChange:)
-                forControlEvents:UIControlEventValueChanged];
+    [self.alarmSoundTapRecognizer addTarget:self
+                                     action:@selector(handleAlarmSoundTap)];
     
-    [self.alarmSetButton setTitleColor:[FloundsViewConstants getdefaultTextColor] forState:UIControlStateNormal];
-    [self.deleteAlarmButton setTitleColor:[FloundsViewConstants getdefaultTextColor] forState:UIControlStateNormal];
-    [self.cancelButton setTitleColor:[FloundsViewConstants getdefaultTextColor] forState:UIControlStateNormal];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(floundsTimeSelectorStateChange:)
+                                                 name:FLOUNDS_DATE_PICKER_VALUE_CHANGED_NOTIFICATION
+                                               object:self.floundsTimeSelector];
+    
+    [self setDisplayStrings];
+    
+    [self.alarmSetButton setTitleColor:[FloundsViewConstants getDefaultTextColor] forState:UIControlStateNormal];
+    [self.deleteAlarmButton setTitleColor:[FloundsViewConstants getDefaultTextColor] forState:UIControlStateNormal];
+    [self.cancelButton setTitleColor:[FloundsViewConstants getDefaultTextColor] forState:UIControlStateNormal];
 }
 
 
@@ -76,9 +90,14 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
 
 -(void)layoutFloundsAppearance
 {
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.timeSelector];
+    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.floundsTimeSelector];
     
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.snoozeTextContainerView];
+    self.snoozeTextContainerView.containingVC = self;
+    
+    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.alarmSoundTextView];
+
+    [self.deleteAlarmButton setTitle:DELETE_ALARM_BUTTON_STRING forState:UIControlStateNormal];
     
     self.alarmSetButton.containingVC = self;
     self.deleteAlarmButton.containingVC = self;
@@ -91,22 +110,34 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
     self.unwindActivatingButton = nil;
 }
 
--(void)setButtonsText
+-(void)setDisplayStrings
 {
     ADD_ALARM_BUTTON_STRING = NSLocalizedString(@"Set", nil);
     MODIFY_ALARM_BUTTON_STRING = NSLocalizedString(@"Modify", nil);
     DELETE_ALARM_BUTTON_STRING = NSLocalizedString(@"Delete", nil);
     CANCEL_BUTTON_STRING = NSLocalizedString(@"Cancel", nil);
+    
+    BASE_SNOOZE_DISPLAY_STRING = NSLocalizedString(@"Current snooze: ", nil);
+    MINUTE_SINGULAR_STRING = NSLocalizedString(@"Minute", nil);
+    MINUTE_PLURAL_STRING = NSLocalizedString(@"Minutes", nil);
+    
+    BASE_ALARM_SOUND_DISPLAY_STRING = NSLocalizedString(@"Current sound: ", nil);
+    
+    UNSAVED_CHANGES_ALERT_TITLE_STRING = NSLocalizedString(@"Unsaved Changes", nil);
+    UNSAVED_CHANGES_ALERT_BODY_STRING = NSLocalizedString(@"Still cancel?", nil);
+    UNSAVED_CHANGES_ALERT_YES_BUTTON_STRING = NSLocalizedString(@"Yes", nil);
+    UNSAVED_CHANGES_ALERT_NO_BUTTON_STRING = NSLocalizedString(@"No", nil);
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    [self setButtonsText];
-
+    [self.floundsTimeSelector setShowTimeIn24HourFormat:self.alarmClockModel.showTimeIn24HourFormat];
+    
     [self updateView];
     [self updateSnoozeDisplay];
+    [self updateAlarmSoundDisplay];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -115,13 +146,13 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
     
     if (self.currTimeSelectorDate)
     {
-        [self.timeSelector setDate:self.currTimeSelectorDate animated:YES];
+        [self.floundsTimeSelector setDisplayedTime:self.currTimeSelectorDate animated:YES];
     }
     else
     {
-        NSDate *currDate = [NSDate date];
-        [self.timeSelector setDate:(self.alarmTimeDate ? self.alarmTimeDate : currDate) animated:YES];
-        self.currTimeSelectorDate = currDate;
+        NSDate *dateToSet = self.alarmTimeDate ? self.alarmTimeDate : [NSDate date];
+        [self.floundsTimeSelector setDisplayedTime:dateToSet animated:YES];
+        self.currTimeSelectorDate = dateToSet;
     }
     
 }
@@ -131,7 +162,8 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void)setCurrSnoozeMinutes:(NSUInteger)snoozeMinutes
+#pragma SetSnoozeDelegate
+-(void)setSnoozeMinutes:(NSUInteger)snoozeMinutes
 {
     if (snoozeMinutes != _currSnoozeMinutes)
     {
@@ -142,26 +174,51 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
             
             if (self.alarmTimeDate)
             {
-                self.unsavedChanges = _currSnoozeMinutes != self.initSnoozeMinutes ? YES : NO;
+                self.unsavedChanges = _currSnoozeMinutes != self.initialSnoozeMinutes ? YES : NO;
             }
         }
-    }    
+    }
 }
 
--(void)setSnoozeMinutes:(NSUInteger)snoozeMinutes
+#pragma SetAlarmSoundProtocol
+-(void)setAlarmSound:(NSString *)currAlarmSound
 {
+    if (![_currAlarmSound isEqualToString:currAlarmSound])
+    {
+        _currAlarmSound = currAlarmSound;
+        [self updateAlarmSoundDisplay];
+        
+        if (self.alarmTimeDate)
+        {
+            self.unsavedChanges = ![_currAlarmSound isEqualToString:self.initialAlarmSound] ? YES : NO;
+        }
+    }
 }
 
 -(void)updateSnoozeDisplay
 {
-    NSString *snoozeDisplayText = [NSString stringWithFormat:@"Current snooze is: %lu minute", (unsigned long)self.currSnoozeMinutes];
-    if (self.currSnoozeMinutes > 1)
+    NSString *snoozeDisplayText = nil;
+    snoozeDisplayText = [BASE_ALARM_SOUND_DISPLAY_STRING stringByAppendingString:[NSString stringWithFormat:@"%lu ", self.currSnoozeMinutes]];
+    if (self.currSnoozeMinutes == 1)
     {
-        snoozeDisplayText = [snoozeDisplayText stringByAppendingString:@"s"];
+        snoozeDisplayText = [snoozeDisplayText stringByAppendingString:MINUTE_SINGULAR_STRING];
+    }
+    else
+    {
+        snoozeDisplayText = [snoozeDisplayText stringByAppendingString:MINUTE_PLURAL_STRING];
     }
     
     self.snoozeTextContainerView.displayText = snoozeDisplayText;
     [self.snoozeTextContainerView setNeedsDisplay];
+}
+
+
+-(void)updateAlarmSoundDisplay
+{
+    NSString *alarmSoundDisplayText = [BASE_ALARM_SOUND_DISPLAY_STRING stringByAppendingString:self.currAlarmSound];
+    
+    self.alarmSoundTextView.displayText = alarmSoundDisplayText;
+    [self.alarmSoundTextView setNeedsDisplay];
 }
 
 -(void)setAlarmTimeDate:(NSDate *)alarmTimeDate
@@ -174,15 +231,14 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
 //Note: changes to the actual alarmTimeDate from the embedded UIPickerView are handled but another method: timeSelectorStateChange
 -(void)updateView
 {
-    [self.deleteAlarmButton setTitle:DELETE_ALARM_BUTTON_STRING forState:UIControlStateNormal];
-    
     if (self.alarmTimeDate) //if VC was inited with an alarmTimeDate already set from the parent VC
     {
         [self enableButtonWithAlphaShift:self.deleteAlarmButton];
         [self.alarmSetButton setTitle:MODIFY_ALARM_BUTTON_STRING forState:UIControlStateNormal];
         
         //if the snooze time has been changed from its initial state we enable the Set/Modify button, otherwise we disable it
-        if (self.currSnoozeMinutes != self.initSnoozeMinutes)
+        if (self.currSnoozeMinutes != self.initialSnoozeMinutes ||
+            ![self.currAlarmSound isEqualToString:self.initialAlarmSound])
         {
             [self enableButtonWithAlphaShift:self.alarmSetButton];
         }
@@ -218,6 +274,24 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
     }
 }
 
+-(void)floundsTimeSelectorStateChange:(NSNotification *)notification
+{
+    self.currTimeSelectorDate = self.floundsTimeSelector.currSelectedTime;
+    if (self.alarmTimeDate)
+    {
+        if (![self.alarmTimeDate isEqualToDate:self.currTimeSelectorDate])
+        {
+            [self enableButtonWithAlphaShift:self.alarmSetButton];
+            self.unsavedChanges = YES;
+        }
+        else
+        {
+            [self disableButtonWithAlphaShift:self.alarmSetButton];
+            self.unsavedChanges = NO;
+        }
+    }
+}
+
 -(void)enableButtonWithAlphaShift:(UIButton *)button
 {
     button.enabled = YES;
@@ -232,15 +306,17 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
 
 -(void)handleSnoozeTap
 {
-    //>>>
-    NSLog(@"AlarmSetterVC - handleSnoozeTap...");
-    //<<<
-    [self performSegueWithIdentifier:SEGUE_TO_SNOOZE_SETTER_ID sender:self];
+    [self.snoozeTextContainerView animateForSegueWithID:SNOOZE_SETTER_SEGUE_ID fromSender:self];
+}
+
+-(void)handleAlarmSoundTap
+{
+    [self.alarmSoundTextView animateForSegueWithID:ALARM_SOUND_SETTER_SEGUE_ID fromSender:self];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:SEGUE_TO_SNOOZE_SETTER_ID])
+    if ([segue.identifier isEqualToString:SNOOZE_SETTER_SEGUE_ID])
     {
         if ([segue.destinationViewController isKindOfClass:[SnoozeSetterVC class]])
         {
@@ -248,18 +324,23 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
             snoozeSetter.alarmClockModel = self.alarmClockModel;
             [snoozeSetter setInitSnoozeMinutes:self.currSnoozeMinutes];
             
+            snoozeSetter.presentingVC = self;
             snoozeSetter.setSnoozeDelegate = self;
         }
     }
+    else if ([segue.identifier isEqualToString:ALARM_SOUND_SETTER_SEGUE_ID])
+    {
+        if ([segue.destinationViewController isKindOfClass:[AlarmSoundSetterVC class]])
+        {
+            AlarmSoundSetterVC *soundSetter = (AlarmSoundSetterVC *)segue.destinationViewController;
+            [soundSetter setInitialAlarmSound:self.currAlarmSound];
+            
+            soundSetter.setAlarmSoundDelegate = self;
+            soundSetter.soundManager = self.soundManager;
+            soundSetter.presentingVC = self;
+        }
+    }
 }
-
-//-(void)setAlarmTime:(NSDate *)alarmTimeDate
-//{
-//    if (alarmTimeDate)
-//    {
-//        _alarmTimeDate = alarmTimeDate;
-//    }
-//}
 
 -(IBAction)addOrModifyAlarmTime:(id)sender
 {
@@ -280,31 +361,26 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
     }
 }
 
--(void)displayDuplicateTimeAlert
-{
-    UIAlertView *dupTimeAlert = [[UIAlertView alloc] initWithTitle:@"Duplicate Time"
-                                                           message:@"You are attempting to add an alert time that is already present"
-                                                          delegate:nil
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles: nil];
-    [dupTimeAlert show];
-}
-
 -(BOOL)addAlarmTime
 {
-    self.alarmTimeDate = self.timeSelector.date;
+    self.alarmTimeDate = self.floundsTimeSelector.currSelectedTime;
+    
     return [self.alarmClockModel addAlarmTime:self.alarmTimeDate
-                                   withSnooze:self.currSnoozeMinutes];
+                                   withSnooze:self.currSnoozeMinutes
+                               withAlarmSound:self.currAlarmSound];
     }
 
 -(BOOL)modifyAlarmTime
 {
     NSDate *oldAlarmTime = self.alarmTimeDate;
-    NSDate *newAlarmTime = self.timeSelector.date;
+    
+    NSDate *newAlarmTime = self.floundsTimeSelector.currSelectedTime;
+    
     self.alarmTimeDate = newAlarmTime;
     return [self.alarmClockModel modifyAlarmTime:oldAlarmTime
                                 newAlarmTimeDate:newAlarmTime
-                       newAlarmTimeSnoozeMinutes:self.currSnoozeMinutes];
+                       newAlarmTimeSnoozeMinutes:self.currSnoozeMinutes
+                               newAlarmTimeSound:self.currAlarmSound];
 }
 
 
@@ -320,10 +396,8 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
         }
         else
         {
-            //>>>
             NSLog(@"AlarmSetterVC - deleteAlarmTime...");
-            NSLog(@"model unable to delete alarm time for some reason");
-            //<<<
+            NSLog(@"delete alarm time from self.alarmClockModel failed");
         }
     }
 }
@@ -335,16 +409,16 @@ NSString *SEGUE_TO_SNOOZE_SETTER_ID = @"SetOneSnooze";
         FloundsButton *floundsCancelButton = (FloundsButton *)sender;
         if (self.unsavedChanges)
         {
-            UIAlertController *unsavedChangesAlert = [UIAlertController alertControllerWithTitle:@"Unsaved Changes"
-                                                                                         message:@"Alarm time has has unsaved changes. Still cancel?"
+            UIAlertController *unsavedChangesAlert = [UIAlertController alertControllerWithTitle:UNSAVED_CHANGES_ALERT_TITLE_STRING
+                                                                                         message:UNSAVED_CHANGES_ALERT_BODY_STRING
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes"
+            UIAlertAction *yesAction = [UIAlertAction actionWithTitle:UNSAVED_CHANGES_ALERT_YES_BUTTON_STRING
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction *action) {
                                                                  self.unsavedChanges = NO;
                                                                  [self cancel:sender];
                                                              }];
-            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No"
+            UIAlertAction *noAction = [UIAlertAction actionWithTitle:UNSAVED_CHANGES_ALERT_NO_BUTTON_STRING
                                                               style:UIAlertActionStyleCancel
                                                             handler:NULL];
             [unsavedChangesAlert addAction:noAction];
