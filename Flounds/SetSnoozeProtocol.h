@@ -1,5 +1,5 @@
 //
-//  SetSnoozeDelegate.h
+//  SetSnoozeProtocol.h
 //  Flounds
 //
 //  Created by Paul Rest on 11/6/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol SetSnoozeDelegate <NSObject>
+@protocol SetSnoozeProtocol <NSObject>
 
 @property (nonatomic) NSUInteger initialSnoozeMinutes;
 

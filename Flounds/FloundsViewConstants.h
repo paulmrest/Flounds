@@ -10,11 +10,28 @@
 
 @interface FloundsViewConstants : NSObject
 
++(CGFloat)getTableViewCellHeightSizingFactor;
+
+
 +(CGFloat)getOuterRoundedRectPaddingFactor;
 
 +(CGFloat)getOuterRoundedRectCornerRadiiFactor;
 
+
 +(CGFloat)getFramePaddingFactor;
+
++(NSString *)getDefaultFontFamilyName;
+
++(CGFloat)getFullWidthFloundsButtonWidthSizingFactor;
+
++(CGFloat)getAllFloundsButtonHeightSizingFactor;
+
++(CGFloat)getnonFullWidthFloundsButtonAndTVCellFontSizeFactor;
+
++(CGFloat)getFontFramePaddingFactor;
+
++(CGFloat)getFloundsButtonFontFramePaddingFactor;
+
 
 +(UIFont *)getDefaultFont;
 

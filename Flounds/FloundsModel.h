@@ -22,8 +22,6 @@
 -(id)initWithSystemDefaults;
 
 
-//-(void)incrementDifficultyLevel;
-
 -(NSArray *)incrementDifficultyAndGetNewSequence;
 
 -(void)setNewSequenceForSnoozeCount:(NSUInteger)snoozeCount;
@@ -38,7 +36,6 @@
 
 -(NSArray *)getCurrSequence;
 
-//-(NSArray *)clearCurrentAndGetNewMatchingSequence;
 
 -(BOOL)checkForMatchGiven:(NSArray *)userSequence;
 

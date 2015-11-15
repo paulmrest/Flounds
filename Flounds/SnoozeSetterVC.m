@@ -16,6 +16,7 @@ NSString *CANCEL_BUTTON_TITLE;
 
 #import "SnoozeSetterVC.h"
 
+
 @interface SnoozeSetterVC ()
 
 @property (nonatomic) NSUInteger initSnoozeMinutes;
@@ -24,12 +25,19 @@ NSString *CANCEL_BUTTON_TITLE;
 
 @end
 
+
 @implementation SnoozeSetterVC
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     self.currSnoozeMinutes = self.initSnoozeMinutes;
+    
+    self.setSnooze.containingVC = self;
+    self.cancel.containingVC = self;
+    
+    self.setSnooze.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
+    self.cancel.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
     
     SNOOZE_PICKER_MINUTE_SINGULAR = NSLocalizedString(@"Minute", nil);
     SNOOZE_PICKER_MINUTES_PLURAL = NSLocalizedString(@"Minutes", nil);
@@ -41,6 +49,10 @@ NSString *CANCEL_BUTTON_TITLE;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.snoozePicker selectRow:self.initSnoozeMinutes - 1
+                     inComponent:SINGLE_PICKERVIEW_COMPONENT
+                        animated:YES];
     [self updateView];
 }
 
@@ -48,19 +60,10 @@ NSString *CANCEL_BUTTON_TITLE;
 {
     [super viewDidLayoutSubviews];
     
-    [self.snoozePicker selectRow:self.initSnoozeMinutes - 1
-                     inComponent:SINGLE_PICKERVIEW_COMPONENT
-                        animated:YES];
-    
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.snoozePicker];
     
     [self.setSnooze setTitle:SET_SNOOZE_BUTTON_TITLE forState:UIControlStateNormal];
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.setSnooze];
-    self.setSnooze.containingVC = self;
-
     [self.cancel setTitle:CANCEL_BUTTON_TITLE forState:UIControlStateNormal];
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancel];
-    self.cancel.containingVC = self;
 }
 
 -(void)setInitSnoozeMinutes:(NSUInteger)snoozeMinutes
@@ -128,28 +131,36 @@ numberOfRowsInComponent:(NSInteger)component
     return MAX_SNOOZE_MINUTES - MIN_SNOOZE_MINUTES;
 }
 
--(NSAttributedString *)pickerView:(UIPickerView *)pickerView
-            attributedTitleForRow:(NSInteger)row
-                     forComponent:(NSInteger)component
+#pragma UIPickerViewDelegate
+-(UIView *)pickerView:(UIPickerView *)pickerView
+           viewForRow:(NSInteger)row
+         forComponent:(NSInteger)component
+          reusingView:(UIView *)view
 {
     NSString *minuteString = row == 0 ? SNOOZE_PICKER_MINUTE_SINGULAR : SNOOZE_PICKER_MINUTES_PLURAL;
     NSString *finalString = [NSString stringWithFormat:@"%lu %@", (long)row + 1, minuteString];
-
-    NSMutableAttributedString *attrbStringTitleRow = [[NSMutableAttributedString alloc] initWithString:finalString];
+    
+    NSMutableAttributedString *returnLabelAttString = [[NSMutableAttributedString alloc] initWithString:finalString];
     NSMutableDictionary *attStringAttributes = [[NSMutableDictionary alloc] init];
-
+    
     NSMutableParagraphStyle *paragrapStyle = [[NSMutableParagraphStyle alloc] init];
     paragrapStyle.alignment = NSTextAlignmentCenter;
     
     [attStringAttributes setObject:paragrapStyle forKey:NSParagraphStyleAttributeName];
     
-    [attStringAttributes setObject:[FloundsViewConstants getDefaultFont] forKey:NSFontAttributeName];
+    [attStringAttributes setObject:self.nonFullWidthFloundsButtonAndTVCellFont forKey:NSFontAttributeName];
     
-    [attStringAttributes setObject:[FloundsViewConstants getDefaultTextColor] forKey:NSForegroundColorAttributeName];
+    [attStringAttributes setObject:self.defaultUIColor forKey:NSForegroundColorAttributeName];
     
-    [attrbStringTitleRow addAttributes:attStringAttributes
+    [returnLabelAttString addAttributes:attStringAttributes
                                  range:NSMakeRange(0, [finalString length])];
-    return attrbStringTitleRow;
+    
+    UILabel *returnLabel = [[UILabel alloc] initWithFrame:view.frame];
+    
+    returnLabel.attributedText = returnLabelAttString;
+    returnLabel.textAlignment = NSTextAlignmentCenter;
+    
+    return returnLabel;
 }
 
 -(void)pickerView:(UIPickerView *)pickerView
@@ -159,5 +170,6 @@ numberOfRowsInComponent:(NSInteger)component
     self.currSnoozeMinutes = row + 1;
     [self updateView];
 }
+
 
 @end

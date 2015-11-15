@@ -141,35 +141,4 @@ NSString *LAYER_ANIMATION_KEY_KEY = @"layerAnimationKeyKey";
     [super addAnimation:anim forKey:key];
 }
 
-//>>>
-//self.animationSequence code
-//<<<
-//-(void)addAnimation:(CAAnimation *)anim forKey:(NSString *)key
-//{
-//    anim.delegate = self;
-//    if (self.queuedForAnimation)
-//    {
-//        [self.animationSequence addObject:anim];
-//    }
-//    else
-//    {
-//        self.queuedForAnimation = YES;
-//        [super addAnimation:anim forKey:key];
-//    }
-//}
-//
-//-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
-//{
-//    if (flag)
-//    {
-//        self.queuedForAnimation = NO;
-//        if ([self.animationSequence count] > 0)
-//        {
-//            CAAnimation *nextAnimation = [self.animationSequence lastObject];
-//            [self.animationSequence removeLastObject];
-//            [self addAnimation:nextAnimation forKey:nil];
-//        }
-//    }
-//}
-
 @end

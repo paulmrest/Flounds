@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "FloundsViewConstants.h"
+#import "FloundsAppearanceUtility.h"
 
 #import "CAAnimationFactory.h"
 #import "FloundsUserInteractionSegueProtocol.h"
@@ -23,6 +24,11 @@
 
 @property (nonatomic) BOOL centerTextOnEachRedrawCycle;
 
+@property (nonatomic) BOOL checkFontSizeOnEachRedrawCycle;
+
+@property (nonatomic) BOOL drawFloundsBorder;
+
+//is this used for anything?
 @property (nonatomic, strong) UIViewController<FloundsUserInteractionSegueProtocol> *containingVC;
 
 -(void)animateForSegueWithID:(NSString *)segueID

@@ -16,4 +16,8 @@
 
 @property (nonatomic) BOOL currentlyPlayingSound;
 
+@property (nonatomic) CGFloat soundPlayDuration;
+
+-(void)animateButtonTogglePlayStop;
+
 @end

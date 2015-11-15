@@ -19,6 +19,12 @@
                                             withDrawingRect:(CGRect)rect
                                                   toApplyTo:(NSUInteger)layerCopies;
 
++(CAAnimationCluster *)bounceShapeTowardsPoint:(CGPoint)point
+                                 withShapeFrame:(CGRect)shapeFrame
+                                andShapeBounds:(CGRect)shapeBounds
+                               withLayerCopies:(NSUInteger)layerCopies
+                                    andShapeID:(NSUInteger)shapeID;
+
 +(CABasicAnimation *)slideAnimation;
 
 +(CAAnimation *)shakeAnimationForContainingRect:(CGRect)rect;

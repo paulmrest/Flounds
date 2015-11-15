@@ -35,28 +35,32 @@
 {
     CABasicAnimation *slideRightAnimation = [CAAnimationFactory slideAnimation];
     slideRightAnimation.toValue = [NSNumber numberWithDouble:self.frame.size.width];
-//    slideRightAnimation.delegate = self;
     
     [self.layer addAnimation:slideRightAnimation forKey:nil];
 }
 
--(void)animateCellForNonSelectionWithoutSegue
+-(void)setActive:(BOOL)active
 {
-    
+    _active = active;
 }
 
-//-(CABasicAnimation *)slideAnimation
-//{
-//    CABasicAnimation *slideAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-//    slideAnimation.duration = 0.1f;
-//    slideAnimation.fillMode = kCAFillModeForwards;
-//    slideAnimation.removedOnCompletion = NO;
-//    return slideAnimation;
-//}
 
--(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+
+-(void)drawRect:(CGRect)rect
 {
+    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.contentView];
     
+    if (self.active)
+    {
+        self.cellText.alpha = 1.0f;
+        self.layer.opacity = 1.0f;
+    }
+    else
+    {
+        self.cellText.alpha = 0.5f;
+        self.layer.opacity = 0.5f;
+    }
 }
+
 
 @end

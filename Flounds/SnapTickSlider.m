@@ -9,11 +9,6 @@
 #import "SnapTickSlider.h"
 
 
-@interface SnapTickSlider ()
-
-@end
-
-
 @implementation SnapTickSlider
 
 -(id)initWithCoder:(NSCoder *)aDecoder
@@ -21,12 +16,12 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self initHelper];
+        [self initHelperSnapTickSlider];
     }
     return self;
 }
 
--(void)initHelper
+-(void)initHelperSnapTickSlider
 {
     [self setThumbImage:[UIImage imageNamed:@"WhiteTickMark"] forState:UIControlStateNormal];
     [self setThumbImage:[UIImage imageNamed:@"WhiteTickMark"] forState:UIControlStateHighlighted];
@@ -44,7 +39,7 @@
         self.value == self.maximumValue)
     {
         CGFloat roundedFloat = (float)roundf(self.value);
-        [self setValue:roundedFloat animated:YES];
+//        [self setValue:roundedFloat animated:YES];
         
         [self.updateSuperView updateSuperViewWithValue:roundedFloat
                                         forSliderKeyID:self.sliderKeyID];
@@ -70,6 +65,7 @@
         xTickMarkPosition += distBetweenTicks;
     }
     [[FloundsViewConstants getDefaultTextColor] setStroke];
+    tickPath.lineWidth = [FloundsViewConstants getDefaultBorderThickness];
     [tickPath stroke];
 }
 

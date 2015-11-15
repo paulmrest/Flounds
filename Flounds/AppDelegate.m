@@ -22,38 +22,17 @@ NSString *kFirstTimeLaunchKey = @"firstTimeLaunch";
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-
     UIViewController *rootVC = self.window.rootViewController;
     if ([rootVC isKindOfClass:[AlarmClockVC class]])
     {
         AlarmClockVC *alarmClockVC = (AlarmClockVC *)rootVC;
         self.alarmClockVC = alarmClockVC;
     }
-    
-//    if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey])
-//    {
-//        UIViewController *rootVC = self.window.rootViewController;
-//        if ([rootVC isKindOfClass:[AlarmClockVC class]])
-//        {
-//            //>>>
-//            NSLog(@"AppDelegate - application: didFinishLaunchingWithOptions...");
-//            NSLog(@"configuring alarmClockVC");
-//            //<<<
-//            AlarmClockVC *alarmClockVC = (AlarmClockVC *)rootVC;
-//            alarmClockVC.applicationLaunchingFromSoundingAlarm = YES;
-//        }
-//    }
-    
     return YES;
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    //>>>
-    NSLog(@"AppDelegate - application: didRecieveLocalNotification...");
-    NSLog(@"notifiction is NN? %@", notification ? @"YES" : @"NO");
-    //<<<
     
 }
 

@@ -14,8 +14,6 @@ NSString *SNOOZE_PICKER_MINUTES_PLURAL;
 
 NSString *SET_SNOOZE_BUTTON_TITLE;
 
-NSString *CANCEL_BUTTON_TITLE;
-
 @interface SnoozeDefaultPickerVC ()
 
 @property (nonatomic) NSUInteger currSnoozeMinutes;
@@ -33,7 +31,8 @@ NSString *CANCEL_BUTTON_TITLE;
     SNOOZE_PICKER_MINUTES_PLURAL = NSLocalizedString(@"Minutes", nil);
     
     SET_SNOOZE_BUTTON_TITLE = NSLocalizedString(@"Set Default Snooze", nil);
-    CANCEL_BUTTON_TITLE = NSLocalizedString(@"Cancel", nil);
+    
+    self.setSnooze.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
 }
 
 -(void)viewDidLayoutSubviews
@@ -47,7 +46,6 @@ NSString *CANCEL_BUTTON_TITLE;
     self.currSnoozeMinutes = [self.snoozePicker selectedRowInComponent:SINGLE_PICKERVIEW_COMPONENT] + 1;
     
     [self.setSnooze setTitle:SET_SNOOZE_BUTTON_TITLE forState:UIControlStateNormal];
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.setSnooze];
     self.setSnooze.containingVC = self;
     
     [self.cancelButton setTitle:CANCEL_BUTTON_TITLE forState:UIControlStateNormal];
@@ -63,18 +61,7 @@ NSString *CANCEL_BUTTON_TITLE;
             self.unwindActivatingButton = floundsSetSnoozeButton;
             [floundsSetSnoozeButton animateForPushDismissCurrView];
         }
-        else
-        {
-            //>>>
-            NSLog(@"SnoozePickerVC - setSnooze... model's set snooze returned NO");
-            //<<<
-        }
     }
-}
-
--(IBAction)cancelAndReturn:(UIButton *)sender
-{
-    [self.unwindToSettingsTVCDelegate unwindToSettingsTV];
 }
 
 #pragma UIPickerView
@@ -89,14 +76,16 @@ numberOfRowsInComponent:(NSInteger)component
     return MAX_SNOOZE_MINUTES - MIN_SNOOZE_MINUTES;
 }
 
--(NSAttributedString *)pickerView:(UIPickerView *)pickerView
-            attributedTitleForRow:(NSInteger)row
-                     forComponent:(NSInteger)component
+#pragma UIPickerViewDelegate
+-(UIView *)pickerView:(UIPickerView *)pickerView
+           viewForRow:(NSInteger)row
+         forComponent:(NSInteger)component
+          reusingView:(UIView *)view
 {
     NSString *minuteString = row == 0 ? SNOOZE_PICKER_MINUTE_SINGULAR : SNOOZE_PICKER_MINUTES_PLURAL;
     NSString *finalString = [NSString stringWithFormat:@"%lu %@", (long)row + 1, minuteString];
     
-    NSMutableAttributedString *attrbStringTitleRow = [[NSMutableAttributedString alloc] initWithString:finalString];
+    NSMutableAttributedString *returnLabelAttString = [[NSMutableAttributedString alloc] initWithString:finalString];
     NSMutableDictionary *attStringAttributes = [[NSMutableDictionary alloc] init];
     
     NSMutableParagraphStyle *paragrapStyle = [[NSMutableParagraphStyle alloc] init];
@@ -104,13 +93,19 @@ numberOfRowsInComponent:(NSInteger)component
     
     [attStringAttributes setObject:paragrapStyle forKey:NSParagraphStyleAttributeName];
     
-    [attStringAttributes setObject:[FloundsViewConstants getDefaultFont] forKey:NSFontAttributeName];
+    [attStringAttributes setObject:self.nonFullWidthFloundsButtonAndTVCellFont forKey:NSFontAttributeName];
     
-    [attStringAttributes setObject:[FloundsViewConstants getDefaultTextColor] forKey:NSForegroundColorAttributeName];
+    [attStringAttributes setObject:self.defaultUIColor forKey:NSForegroundColorAttributeName];
     
-    [attrbStringTitleRow addAttributes:attStringAttributes
-                                 range:NSMakeRange(0, [finalString length])];
-    return attrbStringTitleRow;
+    [returnLabelAttString addAttributes:attStringAttributes
+                                  range:NSMakeRange(0, [finalString length])];
+    
+    UILabel *returnLabel = [[UILabel alloc] initWithFrame:view.frame];
+    
+    returnLabel.attributedText = returnLabelAttString;
+    returnLabel.textAlignment = NSTextAlignmentCenter;
+    
+    return returnLabel;
 }
 
 -(void)pickerView:(UIPickerView *)pickerView

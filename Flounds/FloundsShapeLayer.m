@@ -61,11 +61,11 @@
         
         CGFloat largerAxis = (layer.bounds.size.width < layer.bounds.size.height ? layer.bounds.size.height : layer.bounds.size.width);
         
-        CGFloat horizontalAxisOuterRectPadding = layer.bounds.size.width / [FloundsViewConstants getOuterRoundedRectPaddingFactor];
-        CGFloat verticalAxisOuterRectPadding = layer.bounds.size.height / [FloundsViewConstants getOuterRoundedRectPaddingFactor];
+        CGFloat horizontalAxisOuterRectPadding = layer.bounds.size.width * [FloundsViewConstants getOuterRoundedRectPaddingFactor];
+        CGFloat verticalAxisOuterRectPadding = layer.bounds.size.height * [FloundsViewConstants getOuterRoundedRectPaddingFactor];
         
-        CGSize outerRoundedRectCornerRadiiSize = CGSizeMake(largerAxis / [FloundsViewConstants getOuterRoundedRectCornerRadiiFactor],
-                                                            largerAxis / [FloundsViewConstants getOuterRoundedRectCornerRadiiFactor]);
+        CGSize outerRoundedRectCornerRadiiSize = CGSizeMake(largerAxis * [FloundsViewConstants getOuterRoundedRectCornerRadiiFactor],
+                                                            largerAxis * [FloundsViewConstants getOuterRoundedRectCornerRadiiFactor]);
         
         CGRect outerRoundedRectRect = CGRectMake(layer.bounds.origin.x + (horizontalAxisOuterRectPadding / 2.0),
                                                  layer.bounds.origin.y + (verticalAxisOuterRectPadding / 2.0),

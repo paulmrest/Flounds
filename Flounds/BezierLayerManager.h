@@ -11,7 +11,7 @@
 
 #import "BezierShape.h"
 #import "BezierShapeLayer.h"
-#import "AnimationQueueFinishDelegate.h"
+#import "AnimationQueueFinishProtocol.h"
 
 #import "CAAnimationCluster.h"
 
@@ -25,7 +25,7 @@ NSString *SEGREGATED_LAYER_COPY_ANIMATION;
 
 @property (nonatomic) NSUInteger layerCopiesNeeded;
 
-@property (nonatomic, weak) id<AnimationQueueFinishDelegate> animationQueueFinishDelegate;
+@property (nonatomic, weak) id<AnimationQueueFinishProtocol> animationQueueFinishDelegate;
 
 @property (nonatomic) BOOL removeDelegateSublayersOnAnimationQueueCompletion;
 

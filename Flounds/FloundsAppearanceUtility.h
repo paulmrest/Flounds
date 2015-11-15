@@ -25,4 +25,15 @@
                 withBorderColor:(UIColor *)color
             withBorderThickness:(CGFloat)thickness;
 
++(UIFont *)getFloundsFontForBounds:(CGRect)boundingRect
+                   givenSampleText:(NSString *)sampleText
+                  forBorderedSpace:(BOOL)bordered;
+
++(BOOL)attStringExceedsAvailableSpaceGiven:(NSAttributedString *)attString
+                               displayRect:(CGRect)availableRect;
+
++(BOOL)stringExceedsAvailableSpaceGiven:(NSString *)string
+                            displayFont:(UIFont *)displayFont
+                            displayRect:(CGRect)availableRect;
+
 @end

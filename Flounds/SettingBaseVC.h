@@ -7,17 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "FloundsVCBase.h"
 
-#import "SettingUnwindDelegate.h"
 #import "AlarmClockModel.h"
+
+NSString *CANCEL_BUTTON_TITLE;
 
 @interface SettingBaseVC : FloundsVCBase
 
-@property (nonatomic, weak) id<SettingUnwindDelegate> unwindToSettingsTVCDelegate;
 
 @property (strong, nonatomic) AlarmClockModel *alarmClockModel;
 
 @property (weak, nonatomic) IBOutlet FloundsButton *cancelButton;
+
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Paul Rest. All rights reserved.
 //
 
-#import "FloundsShapeLayer.h"
+#import "FloundsAppearanceUtility.h"
 
 #import "CAAnimationFactory.h"
 
@@ -16,12 +16,15 @@
 
 @property (nonatomic, strong) UIViewController *containingVC;
 
+@property (nonatomic, strong) UITableView *containingTV;
+
+@property (nonatomic) BOOL active;
+
+
 -(void)animateCellForSelectionToPerformSegue:(NSString *)identifier;
 
 -(void)animateCellForNonSelection;
 
 -(void)animateCellForSelectionWithoutSegue;
-
--(void)animateCellForNonSelectionWithoutSegue;
 
 @end

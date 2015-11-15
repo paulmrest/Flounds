@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,19 +16,26 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="FloundsLaunchScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="VYd-at-Xpj">
-                                <rect key="frame" x="10" y="134" width="300" height="300"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FloundsLaunchScreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="VYd-at-Xpj">
+                                <rect key="frame" x="75" y="75" width="450" height="450"/>
                                 <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="VYd-at-Xpj" secondAttribute="height" multiplier="1:1" id="Hdy-jc-aTs"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="VYd-at-Xpj" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="3cs-K4-CJA"/>
+                            <constraint firstItem="VYd-at-Xpj" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.75" id="8Dk-im-V30"/>
+                            <constraint firstItem="VYd-at-Xpj" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="s0p-yS-sHG"/>
+                        </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -13,13 +13,9 @@ NSString *SETTINGS_TV_TAG_SNOOZE_VALUE;
 NSString *SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE;
 NSString *SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE;
 
-//>>>
-NSString *DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE = @"Snooze in: ";
-//<<<
-
-NSString *SEGUE_ID_SNOOZE = @"SetDefaultSnooze";
-NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
-NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
+static NSString *SEGUE_ID_SNOOZE = @"SetDefaultSnooze";
+static NSString *SEGUE_ID_DIFFICULTY = @"SetDifficulty";
+static NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
 
 @interface SettingsVC ()
 
@@ -33,15 +29,14 @@ NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.doneButton.titleLabel.font = self.fullWidthFloundsButtonFont;
+    
     SETTINGS_TV_TAG_DIFFICULTY_VALUE = NSLocalizedString(@"Difficulty", nil);
     SETTINGS_TV_TAG_SNOOZE_VALUE = NSLocalizedString(@"Default Snooze", nil);
     SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE = NSLocalizedString(@"Default Alarm Sound", nil);
     SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE = NSLocalizedString(@"Display time in:", nil);
-}
 
--(void)viewDidLayoutSubviews
-{
-    [FloundsAppearanceUtility addFloundsSublayerToView:self.doneButton withBorderThickness:2.0f];
     self.doneButton.containingVC = self;
 }
 
@@ -52,11 +47,7 @@ NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
         _tableViewSettingsTags = @{@0 : SETTINGS_TV_TAG_DIFFICULTY_VALUE,
                                    @1 : SETTINGS_TV_TAG_SNOOZE_VALUE,
                                    @2 : SETTINGS_TV_TAG_ALARM_SOUNDS_VALUE,
-                                   @3 : SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE,
-                                   //>>>
-                                   @4 : DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE
-                                   //<<<
-                                   };
+                                   @3 : SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE};
     }
     return _tableViewSettingsTags;
 }
@@ -81,6 +72,16 @@ NSString *SEGUE_ID_ALARM_SOUNDS = @"SetDefaultAlarmSound";
     }
 }
 
+#pragma UITableViewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat displayFontPointSize = self.nonFullWidthFloundsButtonAndTVCellFont.pointSize;
+    
+    CGFloat cellHeightReturnValue = displayFontPointSize + (displayFontPointSize * [FloundsViewConstants getTableViewCellHeightSizingFactor]);
+    
+    return cellHeightReturnValue;
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -97,13 +98,15 @@ numberOfRowsInSection:(NSInteger)section
 {
     UITableViewCell *TVCell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
     
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:TVCell];
     TVCell.backgroundColor = self.defaultBackgroundColor;
     
     if ([TVCell isKindOfClass:[FloundsTVCell class]])
     {
         FloundsTVCell *floundsTVCell = (FloundsTVCell *)TVCell;
+        floundsTVCell.active = YES;
         floundsTVCell.cellText.textColor = self.defaultUIColor;
+        floundsTVCell.cellText.font = self.nonFullWidthFloundsButtonAndTVCellFont;
+        
         NSNumber *indexPathRow = [NSNumber numberWithInt:(int)indexPath.row];
         NSString *cellText = [self.tableViewSettingsTags objectForKey:indexPathRow];
         if ([cellText isEqualToString:SETTINGS_TV_TAG_24HOUR_TOGGLE_VALUE])
@@ -118,21 +121,6 @@ numberOfRowsInSection:(NSInteger)section
                 cellText = [cellText stringByAppendingString:@" 12h format"];
             }
         }
-        
-        //>>>
-        if ([cellText isEqualToString:DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE])
-        {
-            if (self.alarmClockModel.debuggingSnoozeInSeconds)
-            {
-                cellText = [cellText stringByAppendingString:@"seconds"];
-            }
-            else
-            {
-                cellText = [cellText stringByAppendingString:@"minutes"];
-            }
-        }
-        //<<<
-        
         floundsTVCell.cellText.text = cellText;
     }
     return TVCell;
@@ -152,14 +140,6 @@ numberOfRowsInSection:(NSInteger)section
             [self.alarmClockModel setShowTimeIn24HourFormat:!self.alarmClockModel.showTimeIn24HourFormat];
             [self.settingsTV reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
         }
-        //>>>
-        else if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:DEBUGGING_SETTINGS_TV_TAG_SNOOZE_SECONDS_TOGGLE])
-        {
-            self.alarmClockModel.debuggingSnoozeInSeconds = !self.alarmClockModel.debuggingSnoozeInSeconds;
-            [self.settingsTV reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-        }
-        //<<<
-
         else
         {
             if ([[self.tableViewSettingsTags objectForKey:indexPathRow] isEqualToString:SETTINGS_TV_TAG_SNOOZE_VALUE])
@@ -186,7 +166,6 @@ numberOfRowsInSection:(NSInteger)section
         if ([segue.destinationViewController isKindOfClass:[SnoozeDefaultPickerVC class]])
         {
             SnoozeDefaultPickerVC *snoozePicker = (SnoozeDefaultPickerVC *)segue.destinationViewController;
-            snoozePicker.unwindToSettingsTVCDelegate = self;
             snoozePicker.alarmClockModel = self.alarmClockModel;
             snoozePicker.presentingVC = self;
         }
@@ -196,7 +175,6 @@ numberOfRowsInSection:(NSInteger)section
         if ([segue.destinationViewController isKindOfClass:[DifficultySettingsVC class]])
         {
             DifficultySettingsVC *difficultySettingsVC = (DifficultySettingsVC *)segue.destinationViewController;
-            difficultySettingsVC.unwindToSettingsTVCDelegate = self;
             difficultySettingsVC.alarmClockModel = self.alarmClockModel;
             difficultySettingsVC.floundsModel = self.floundsModel;
             difficultySettingsVC.presentingVC = self;
@@ -207,26 +185,10 @@ numberOfRowsInSection:(NSInteger)section
         if ([segue.destinationViewController isKindOfClass:[AlarmSoundDefaultChooserVC class]])
         {
             AlarmSoundDefaultChooserVC *alarmSoundDefaultChooserVC = (AlarmSoundDefaultChooserVC *)segue.destinationViewController;
-//            alarmSoundDefaultChooserVC.alarmClockModel = self.alarmClockModel;
             alarmSoundDefaultChooserVC.soundManager = self.soundManager;
             alarmSoundDefaultChooserVC.presentingVC = self;
         }
     }
-    //>>>
-    else if ([segue.destinationViewController isKindOfClass:[SettingBaseVC class]])
-    {
-        SettingBaseVC *settingBaseVC = (SettingBaseVC *)segue.destinationViewController;
-        settingBaseVC.unwindToSettingsTVCDelegate = self;
-        settingBaseVC.alarmClockModel = self.alarmClockModel;
-        settingBaseVC.presentingVC = self;
-    }
-    //<<<
-}
-
-#pragma SettingUnwindDelegate
--(void)unwindToSettingsTV
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 @end

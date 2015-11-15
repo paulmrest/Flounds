@@ -12,7 +12,6 @@
 const NSInteger NUMBER_OF_SECTIONS_IN_TABLE_VIEW = 1;
 
 
-
 @interface FloundsAlarmSoundChooserVCBase ()
 
 @end
@@ -23,13 +22,23 @@ const NSInteger NUMBER_OF_SECTIONS_IN_TABLE_VIEW = 1;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.doneButton.titleLabel.font = self.fullWidthFloundsButtonFont;
     self.alarmSoundNames = [self.soundManager getAlarmSoundNames];
 }
 
 -(void)viewDidLayoutSubviews
 {
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.doneButton];
     self.doneButton.containingVC = self;
+}
+
+#pragma UITableViewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat displayFontPointSize = self.nonFullWidthFloundsButtonAndTVCellFont.pointSize;
+    
+    CGFloat cellHeightReturnValue = displayFontPointSize + (displayFontPointSize * [FloundsViewConstants getTableViewCellHeightSizingFactor]);
+    
+    return cellHeightReturnValue;
 }
 
 #pragma UITableViewDataSource
@@ -47,38 +56,33 @@ const NSInteger NUMBER_OF_SECTIONS_IN_TABLE_VIEW = 1;
 {
     UITableViewCell *TVCell = [tableView dequeueReusableCellWithIdentifier:@"AlarmSoundCell"];
     
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:TVCell];
+//    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:TVCell];
     TVCell.backgroundColor = self.defaultBackgroundColor;
     
-    if ([TVCell isKindOfClass:[FloundsTVCell class]])
+    if ([TVCell isKindOfClass:[AlarmSoundTVCell class]])
     {
-        FloundsTVCell *floundsTVCell = (FloundsTVCell *)TVCell;
-        floundsTVCell.cellText.textColor = self.defaultUIColor;
-        floundsTVCell.cellText.text = [self.alarmSoundNames objectAtIndex:indexPath.row];
+        AlarmSoundTVCell *alarmSoundTVCell = (AlarmSoundTVCell *)TVCell;
+        alarmSoundTVCell.containingTV = self.alarmSoundsTV;
         
-        if ([floundsTVCell.cellText.text isEqualToString:[self.soundManager getDefaultAlarmSoundName]])
-        {
-            floundsTVCell.cellText.alpha = 1.0f;
-            for (CALayer *oneSublayer in floundsTVCell.layer.sublayers)
-            {
-                if ([oneSublayer isKindOfClass:[FloundsShapeLayer class]])
-                {
-                    oneSublayer.opacity = 1.0f;
-                }
-            }
-        }
-        else
-        {
-            floundsTVCell.cellText.alpha = 0.5f;
-            for (CALayer *oneSublayer in floundsTVCell.layer.sublayers)
-            {
-                if ([oneSublayer isKindOfClass:[FloundsShapeLayer class]])
-                {
-                    oneSublayer.opacity = 0.5f;
-                }
-            }
-        }
-        return floundsTVCell;
+        [alarmSoundTVCell.infoButton setTintColor:self.defaultUIColor];
+        alarmSoundTVCell.cellText.textColor = self.defaultUIColor;
+        alarmSoundTVCell.cellText.font = self.nonFullWidthFloundsButtonAndTVCellFont;
+        alarmSoundTVCell.cellText.text = [self.alarmSoundNames objectAtIndex:indexPath.row];
+        
+        alarmSoundTVCell.active = [alarmSoundTVCell.cellText.text isEqualToString:[self.soundManager getDefaultAlarmSoundName]];
+        
+//        if ([alarmSoundTVCell.cellText.text isEqualToString:[self.soundManager getDefaultAlarmSoundName]])
+//        {
+//            alarmSoundTVCell.cellText.alpha = 1.0f;
+//            alarmSoundTVCell.layer.opacity = 1.0f;
+//        }
+//        else
+//        {
+//            alarmSoundTVCell.cellText.alpha = 0.5f;
+//            alarmSoundTVCell.layer.opacity = 0.5f;
+//        }
+//        [alarmSoundTVCell setNeedsDisplay];
+        return alarmSoundTVCell;
     }
     return TVCell;
 }
@@ -96,6 +100,39 @@ didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
         FloundsButton *floundsDoneButton = (FloundsButton *)sender;
         self.unwindActivatingButton = floundsDoneButton;
         [floundsDoneButton animateForPushDismissCurrView];
+    }
+}
+
+- (IBAction)alarmSoundInfoButtonPushed:(id)sender
+{
+    CGPoint buttonPostion = [sender convertPoint:CGPointZero toView:self.alarmSoundsTV];
+    NSIndexPath *indexPathOfContainingTVC = [self.alarmSoundsTV indexPathForRowAtPoint:buttonPostion];
+    if (indexPathOfContainingTVC)
+    {
+        UITableViewCell *TVCell = [self.alarmSoundsTV cellForRowAtIndexPath:indexPathOfContainingTVC];
+        if ([TVCell isKindOfClass:[AlarmSoundTVCell class]])
+        {
+            AlarmSoundTVCell *containingAlarmSoundCell = (AlarmSoundTVCell *)TVCell;
+            NSString *alarmDisplayName = containingAlarmSoundCell.cellText.text;
+            [self performSegueWithIdentifier:ALARM_SOUND_INFO_SEGUE_ID sender:alarmDisplayName];
+        }
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:ALARM_SOUND_INFO_SEGUE_ID])
+    {
+        if ([sender isKindOfClass:[NSString class]])
+        {
+            NSString *alarmDisplayName = (NSString *)sender;
+            if ([segue.destinationViewController isKindOfClass:[AlarmSoundInfoVC class]])
+            {
+                AlarmSoundInfoVC *alarmSoundInfoVC = (AlarmSoundInfoVC *)segue.destinationViewController;
+                alarmSoundInfoVC.soundManager = self.soundManager;
+                alarmSoundInfoVC.alarmSoundDisplayName = alarmDisplayName;
+            }
+        }
     }
 }
 

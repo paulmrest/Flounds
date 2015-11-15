@@ -15,13 +15,12 @@ const NSUInteger LAYER_COPIES_FOR_ANIMATION = 3;
 
 @property (nonatomic, strong) BezierLayerManager *layerManager;
 
-@property (nonatomic, strong) NSArray *shapeLayers;
-
-//@property (nonatomic, strong) NSDictionary *shapesAndLayers;
+@property (nonatomic, strong) NSArray *shapeLayersForDisplay;
 
 @property (nonatomic, strong) BezierShapeLayerDelegate *shapeLayerDelegate;
 
 @end
+
 
 @implementation ShapeView
 
@@ -31,9 +30,7 @@ const NSUInteger LAYER_COPIES_FOR_ANIMATION = 3;
                                                      withAnimationCopies:LAYER_COPIES_FOR_ANIMATION];
     self.layerManager.animationQueueFinishDelegate = self;
     
-    self.shapeLayers = [self.layerManager shapeLayersAndCopiesForDisplay];
-//    [self presentShapes];
-//    [self setNeedsDisplay];
+    self.shapeLayersForDisplay = [self.layerManager shapeLayersAndCopiesForDisplay];
 }
 
 -(BezierShapeLayerDelegate *)shapeLayerDelegate
@@ -148,42 +145,18 @@ const NSUInteger LAYER_COPIES_FOR_ANIMATION = 3;
     [self.layerManager startAnimationQueue];
 }
 
-const CGFloat SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR = 0.08;
-
-const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
-
 -(void)bounceAllShapesTowardsPoint:(CGPoint)point
-{    
+{
     NSMutableArray *animationClusters = [[NSMutableArray alloc] initWithCapacity:LAYER_COPIES_FOR_ANIMATION];
     
     for (BezierShapeLayer *oneBaseLayer in self.layerManager.baseShapeLayers)
     {
-        CGFloat xShapeCenter = oneBaseLayer.frame.origin.x + (oneBaseLayer.bounds.size.width / 2);
-        CGFloat yShapeCenter = oneBaseLayer.frame.origin.y + (oneBaseLayer.bounds.size.height / 2);
-        CGFloat xDistToPoint = point.x - xShapeCenter;
-        CGFloat yDistToPoint = point.y - yShapeCenter;
-        
-        CGFloat xDistToTransform = xDistToPoint * SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR;
-        CGFloat yDistToTransform = yDistToPoint * SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR;
-        
-        CGMutablePathRef pathForAnimation = CGPathCreateMutable();
-        CGPathMoveToPoint(pathForAnimation, NULL, xShapeCenter, yShapeCenter);
-        CGPathAddLineToPoint(pathForAnimation, NULL, xShapeCenter + xDistToTransform,
-                                                     yShapeCenter + yDistToTransform);
-        
-        CAKeyframeAnimation *positionAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-        positionAnimation.path = pathForAnimation;
-        positionAnimation.autoreverses = YES;
-        positionAnimation.duration = SHIFT_SHAPES_TOWARDS_POINT_DURATION;
-        
-        CAAnimationCluster *animCluster = [[CAAnimationCluster alloc] initWithOneAnimationForCluster:positionAnimation
-                                                                                      forLayerCopies:LAYER_COPIES_FOR_ANIMATION
-                                                                                          forShapeID:oneBaseLayer.shapeID];
-        animCluster.timerInterval = 0.0;
-        
+        CAAnimationCluster *animCluster = [CAAnimationFactory bounceShapeTowardsPoint:point
+                                                                       withShapeFrame:oneBaseLayer.frame
+                                                                       andShapeBounds:oneBaseLayer.bounds
+                                                                      withLayerCopies:LAYER_COPIES_FOR_ANIMATION
+                                                                           andShapeID:oneBaseLayer.shapeID];
         [animationClusters addObject:animCluster];
-        
-        CFRelease(pathForAnimation);
     }
     
     [self.layerManager queueAnimationClusters:animationClusters
@@ -196,7 +169,7 @@ const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
 -(void)queueMoveShapesTowardsCenterFromEdge
 {
     NSMutableArray *animationClusters = [[NSMutableArray alloc] initWithCapacity:[self.layerManager.baseShapeLayers count]];
-    for (BezierShapeLayer *oneBaseLayer in self.shapeLayers)
+    for (BezierShapeLayer *oneBaseLayer in self.shapeLayersForDisplay)
     {
         CAAnimation *moveAwayFromCenterAnimation = [CAAnimationFactory animationToMoveShapeConfinedBy:oneBaseLayer.frame
                                                                             alongLineFromEdgeToCenter:self.frame];
@@ -227,7 +200,7 @@ const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
 -(void)moveShapesToEdgeAwayFromCenter
 {
     NSMutableArray *animationClusters = [[NSMutableArray alloc] initWithCapacity:[self.layerManager.baseShapeLayers count]];
-    for (BezierShapeLayer *oneBaseLayer in self.shapeLayers)
+    for (BezierShapeLayer *oneBaseLayer in self.shapeLayersForDisplay)
     {
         CAAnimation *moveAwayFromCenterAnimation = [CAAnimationFactory animationToMoveShapeConfinedBy:oneBaseLayer.frame
                                                                           alongLineFromCenterToEdgeOf:self.frame];
@@ -242,10 +215,9 @@ const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
 }
 
 #pragma AnimationDidFinishQueueDelegate
-
 -(void)removeSublayersOnAnimationQueueCompletion
 {
-    self.shapeLayers = nil;
+    self.shapeLayersForDisplay = nil;
     self.layer.sublayers = nil;
 }
 
@@ -254,44 +226,5 @@ const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
     [self removeSublayersOnAnimationQueueCompletion];
     [self.patternMakerDelegate dismissPatternMaker];
 }
-
-
-//>>>
--(void)animationTester
-{
-    CABasicAnimation *shiftLeftAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    shiftLeftAnimation.toValue = [NSNumber numberWithFloat:-20.0];
-    shiftLeftAnimation.duration = 0.50;
-    
-    CABasicAnimation *shiftRightAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    shiftRightAnimation.toValue = [NSNumber numberWithFloat:20.0];
-    shiftRightAnimation.duration = 0.50;
-    
-    CABasicAnimation *shiftUpAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
-    shiftUpAnimation.toValue = [NSNumber numberWithFloat:-20.0];
-    shiftUpAnimation.duration = 0.50;
-    
-    CAAnimationCluster *shiftThreeAnimationCluster = [[CAAnimationCluster alloc] initWithAnimationCluster:
-                                                      @[shiftRightAnimation, shiftUpAnimation, shiftLeftAnimation]
-                                                                                               forShapeID:0];
-    shiftThreeAnimationCluster.timerInterval = 0.25;
-    
-    
-    
-    [self.layerManager queueAnimationClusters:@[shiftThreeAnimationCluster]
-                                 withSequence:nil
-                                timerInterval:0.0];
-    
-    [self.layerManager queueOneAnimationForAllShapes:shiftLeftAnimation
-                                        withSequence:nil
-                                       timerInterval:0.5];
-    
-    [self.layerManager queueOneAnimationForAllShapes:shiftRightAnimation
-                                        withSequence:nil
-                                       timerInterval:0.0];
-    
-    [self.layerManager startAnimationQueue];
-}
-//<<<
 
 @end

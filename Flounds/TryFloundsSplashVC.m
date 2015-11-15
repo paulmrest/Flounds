@@ -20,7 +20,14 @@ static NSString *TRY_IT_DIFFICULTY_LEVEL_LABEL;
 
 static NSString *TRY_IT_STARTING_SHAPES_LABEL;
 
-const CGFloat COUNT_DOWN_TEXT_VIEW_FONT_SIZE = 150.0f;
+static NSString *CANCEL_BUTTON_TEXT;
+
+
+const CGFloat COUNT_DOWN_TEXT_VIEW_FONT_SIZE_FACTOR = 0.33;
+
+const CGFloat ORDINAL_FONT_REDUCTION_FACTOR = 0.66f;
+
+const CGFloat ORDINAL_FONT_SUPERSCRIPT_FACTOR = 1.75f;
 
 
 @interface TryFloundsSplashVC ()
@@ -51,24 +58,24 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     
     [self.tryItFloundsModel getNewStartingSequence];
     
-//    UIFont *countDownTextViewFont = [UIFont fontWithName:[FloundsViewConstants getDefaultFont].fontName size:COUNT_DOWN_TEXT_VIEW_FONT_SIZE];
-//    self.countDownTextView.displayFont = countDownTextViewFont;
-//    self.countDownTextView.centerTextOnEachRedrawCycle = NO;
+    [self setLabelsColor:self.defaultUIColor];
+    [self setLabelsFont:self.labelFont];
+    
+    [self calcCountDownLabelFont];
     
     [self setLabelsText];
+    
+    self.cancelButton.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
 }
 
 -(void)viewDidLayoutSubviews
 {
     self.cancelButton.containingVC = self;
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancelButton];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self setLabelsColor:[FloundsViewConstants getDefaultTextColor]];
     
     if (self.snoozeCount == 0)
     {
@@ -96,7 +103,6 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     if (!self.countDownTimer)
     {
         self.countDownLabel.text = [NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue];
-//        [self.countDownTextView setDisplayText:[NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue]];
         self.countDownTimer = [NSTimer timerWithTimeInterval:0.9
                                                       target:self
                                                     selector:@selector(updateCountdownDisplayFromTimer:)
@@ -105,6 +111,8 @@ const NSInteger TIMER_FIRE_VALUE = -1;
         
         [[NSRunLoop currentRunLoop] addTimer:self.countDownTimer forMode:NSDefaultRunLoopMode];
     }
+    
+    self.cancelButton.titleLabel.text = CANCEL_BUTTON_TEXT;
     
     [self.view layoutIfNeeded];
 }
@@ -120,6 +128,8 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     TRY_IT_DIFFICULTY_LEVEL_LABEL = NSLocalizedString(@"Difficulty level: ", nil);
     
     TRY_IT_STARTING_SHAPES_LABEL = NSLocalizedString(@"Shapes in next Flounds: ", nil);
+    
+    CANCEL_BUTTON_TEXT = NSLocalizedString(@"Enough", nil);
 }
 
 -(NSMutableAttributedString *)ordinalAttributedStringForInteger:(NSUInteger)integer
@@ -144,8 +154,12 @@ const NSInteger TIMER_FIRE_VALUE = -1;
         ordinalString = @"th";
     }
     
-    NSDictionary *superScriptAtt = @{(NSString *)kCTSuperscriptAttributeName : [NSNumber numberWithFloat:1.75],
-                                     NSFontAttributeName : [UIFont systemFontOfSize:([UIFont systemFontSize] / 1.5)]};
+    UIFont *superScriptFont = [UIFont fontWithName:[FloundsViewConstants getDefaultFontFamilyName]
+                                              size:(self.labelFont.pointSize * ORDINAL_FONT_REDUCTION_FACTOR)];
+    
+    NSDictionary *superScriptAtt = @{(NSString *)kCTSuperscriptAttributeName : [NSNumber numberWithFloat:ORDINAL_FONT_SUPERSCRIPT_FACTOR],
+                                    NSFontAttributeName : superScriptFont};
+    
     NSAttributedString *ordinalSuperScript = [[NSAttributedString alloc] initWithString:ordinalString
                                                                              attributes:superScriptAtt];
     
@@ -162,26 +176,26 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     self.countDownLabel.textColor = labelColor;
 }
 
-//-(void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    //>>>
-//    NSLog(@"TryItFloundsSplashVC - viewDidAppear");
-//    //<<<
-//}
+-(void)setLabelsFont:(UIFont *)labelFont
+{
+    self.welcomeLabel.font = labelFont;
+    self.difficultyLabel.font = labelFont;
+    self.startingShapesLabel.font = labelFont;
+    self.launchLabel.font = labelFont;
+}
+
+-(void)calcCountDownLabelFont
+{
+    CGFloat countDownLabelFontPointSize = self.view.frame.size.width * COUNT_DOWN_TEXT_VIEW_FONT_SIZE_FACTOR;
+    self.countDownLabel.font = [UIFont fontWithName:[FloundsViewConstants getDefaultFontFamilyName]
+                                               size:countDownLabelFontPointSize];
+}
 
 -(void)updateCountdownDisplayFromTimer:(NSTimer *)timer
 {
-    //>>>
-//    NSLog(@"updateCountdownDisplayFromTimer");
-//    NSLog(@"timer address: %p", timer);
-    //<<<
     self.countdownValue = self.countdownValue - 1;
     if (self.countdownValue == TIMER_FIRE_VALUE)
     {
-        //>>>
-//        NSLog(@"updateCountdownDisplayFromTimer - SEGUE!");
-        //<<<
         [timer invalidate];
         if (self.snoozeCount == 0)
         {
@@ -195,8 +209,6 @@ const NSInteger TIMER_FIRE_VALUE = -1;
     else if (self.countdownValue >= TIMER_FIRE_VALUE)
     {
         self.countDownLabel.text = [NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue];
-//        [self.countDownTextView setDisplayText:[NSString localizedStringWithFormat:@"%ld", (long)self.countdownValue]];
-//        [self.countDownTextView setNeedsDisplay];
     }
 }
 
@@ -259,11 +271,6 @@ const NSInteger TIMER_FIRE_VALUE = -1;
      {
          [self.cancelButton sendActionsForControlEvents:UIControlEventTouchUpInside];
      }];
-}
-
--(void)dismissPatternMakerFromCompletion
-{
-    
 }
 
 @end

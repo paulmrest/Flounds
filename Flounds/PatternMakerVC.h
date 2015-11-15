@@ -20,7 +20,7 @@
 
 #define ARC4RANDOM_MAX 0x100000000
 
-@interface PatternMakerVC : UIViewController <UIAlertViewDelegate>
+@interface PatternMakerVC : UIViewController
 
 @property (nonatomic, weak) IBOutlet ShapeView *shapeView;
 

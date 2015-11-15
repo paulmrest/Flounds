@@ -1,5 +1,5 @@
 //
-//  AnimationQueueFinishDelegate.h
+//  AnimationQueueFinishProtocol.h
 //  Flounds
 //
 //  Created by Paul Rest on 1/26/15.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol AnimationQueueFinishDelegate <NSObject>
+@protocol AnimationQueueFinishProtocol <NSObject>
 
 @optional
 

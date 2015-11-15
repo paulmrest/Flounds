@@ -58,7 +58,7 @@ NSString *PERIOD_AT_INDEX_1_STRING;
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self initHelper];
+        [self initHelperFloundsDatePicker];
     }
     return self;
 }
@@ -68,12 +68,12 @@ NSString *PERIOD_AT_INDEX_1_STRING;
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self initHelper];
+        [self initHelperFloundsDatePicker];
     }
     return self;
 }
 
--(void)initHelper
+-(void)initHelperFloundsDatePicker
 {
     self.delegate = self;
     self.dataSource = self;
@@ -87,6 +87,7 @@ NSString *PERIOD_AT_INDEX_1_STRING;
 }
 
 -(void)setShowTimeIn24HourFormat:(BOOL)showTimeIn24HourFormat
+           withPickerViewRefresh:(BOOL)refreshPickerView;
 {
     _showTimeIn24HourFormat = showTimeIn24HourFormat;
     if (showTimeIn24HourFormat)
@@ -100,7 +101,10 @@ NSString *PERIOD_AT_INDEX_1_STRING;
         self.dateFormatter.dateFormat = DATE_FORMATTER_12_HOUR_DATE_FORMAT;
     }
     [self reloadAllComponents];
-    [self setDisplayedTime:self.currSelectedTime animated:YES];
+    if (refreshPickerView)
+    {
+        [self setDisplayedTime:self.currSelectedTime animated:YES];
+    }
 }
 
 -(NSDateFormatter *)dateFormatter
@@ -212,42 +216,48 @@ rowHeightForComponent:(NSInteger)component
     return sampleAttStringWidth + (sampleAttStringWidth * PICKERVIEW_SIZING_HORIZONTAL_PADDING_FACTOR);
 }
 
--(NSAttributedString *)pickerView:(UIPickerView *)pickerView
-            attributedTitleForRow:(NSInteger)row
-                     forComponent:(NSInteger)component
+-(UIView *)pickerView:(UIPickerView *)pickerView
+           viewForRow:(NSInteger)row
+         forComponent:(NSInteger)component
+          reusingView:(UIView *)view
 {
-    NSString *unformattedReturnString = nil;
+    UILabel *returnLabel = [[UILabel alloc] initWithFrame:view.frame];
+    
+    NSString *unformattedLabelString = nil;
     if (component == PICKERVIEW_HOURS_COMPONENT_INDEX)
     {
         if (!self.showTimeIn24HourFormat && row == 0)
         {
-            unformattedReturnString = [NSString stringWithFormat:@"%u", 12];
+            unformattedLabelString = [NSString stringWithFormat:@"%u", 12];
         }
         else
         {
-            unformattedReturnString = [NSString stringWithFormat:@"%lu", (long)row];
+            unformattedLabelString = [NSString stringWithFormat:@"%lu", (long)row];
         }
     }
     else if (component == PICKERVIEW_MINUTES_COMPONENT_INDEX)
     {
         if (row < 10)
         {
-            unformattedReturnString = [NSString stringWithFormat:@"%u", 0];
-            unformattedReturnString = [unformattedReturnString stringByAppendingString:[NSString stringWithFormat:@"%lu", (long)row]];
+            unformattedLabelString = [NSString stringWithFormat:@"%u", 0];
+            unformattedLabelString = [unformattedLabelString stringByAppendingString:[NSString stringWithFormat:@"%lu", (long)row]];
         }
         else
         {
-            unformattedReturnString = [NSString stringWithFormat:@"%lu", (long)row];
+            unformattedLabelString = [NSString stringWithFormat:@"%lu", (long)row];
         }
     }
     else if (component == PICKERVIEW_PERIOD_COMPONENT_INDEX)
     {
-        unformattedReturnString = row == 0 ? PERIOD_AT_INDEX_0_STRING : PERIOD_AT_INDEX_1_STRING;
+        unformattedLabelString = row == 0 ? PERIOD_AT_INDEX_0_STRING : PERIOD_AT_INDEX_1_STRING;
     }
-    
     NSDictionary *attStringDictionary = @{NSFontAttributeName : self.displayFont,
                                           NSForegroundColorAttributeName : self.fontColor};
-    return [[NSAttributedString alloc] initWithString:unformattedReturnString attributes:attStringDictionary];
+
+    [returnLabel setAttributedText:[[NSAttributedString alloc] initWithString:unformattedLabelString attributes:attStringDictionary]];
+    returnLabel.textAlignment = NSTextAlignmentCenter;
+    
+    return returnLabel;
 }
 
 -(void)pickerView:(UIPickerView *)pickerView

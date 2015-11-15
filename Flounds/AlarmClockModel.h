@@ -23,11 +23,6 @@ extern const NSUInteger SINGLE_PICKERVIEW_COMPONENT;
 
 @property (nonatomic) BOOL showTimeIn24HourFormat;
 
-//debugging
-//>>>
-@property (nonatomic) BOOL debuggingSnoozeInSeconds;
-//<<<
-
 
 -(NSArray *)getAlarmTimes;
 

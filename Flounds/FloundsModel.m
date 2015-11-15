@@ -178,12 +178,6 @@ NSString *kDifficultyLevelKey = @"difficultyLevelKey";
     return [self generateSequence];
 }
 
-//-(NSArray *)clearCurrentAndGetNewMatchingSequence
-//{
-//    self.currentSequence = nil;
-//    return [self getNewStartingSequence];
-//}
-
 -(NSArray *)getCurrSequence
 {
     if ([self.currentSequence count] == self.currNumberOfShapes)
@@ -209,16 +203,9 @@ NSString *kDifficultyLevelKey = @"difficultyLevelKey";
 
 -(void)setNewSequenceForSnoozeCount:(NSUInteger)snoozeCount
 {
-    //>>>
-//    NSLog(@"FloundsModel - setNewSequenceForSnoozeCount...");
-//    NSLog(@"snoozeCount: %lu", snoozeCount);
-    //<<<
     self.currNumberOfShapes = self.numberOfStartingShapes;
     for (NSUInteger i = 0; i < snoozeCount; i++)
     {
-        //>>>
-//        NSLog(@"incrementing difficulty loop: %lu", i);
-        //<<<
         [self incrementDifficultyLevel];
     }
     [self generateSequence];
@@ -232,10 +219,6 @@ NSString *kDifficultyLevelKey = @"difficultyLevelKey";
 
 -(NSArray *)generateSequence
 {
-    //>>>
-//    NSLog(@"FloundsModel - generateSequence");
-//    NSLog(@"self.currNumberOfShapes: %lu", self.currNumberOfShapes);
-    //<<<
     NSMutableArray *arrayToPullFrom = [self getMutableArrayOfShapeIDs];
     
     NSMutableArray *tempBuildingArray = [[NSMutableArray alloc] initWithCapacity:self.currNumberOfShapes];
@@ -246,10 +229,6 @@ NSString *kDifficultyLevelKey = @"difficultyLevelKey";
         [arrayToPullFrom removeObjectAtIndex:randomShapeIDIndex];
         [tempBuildingArray addObject:randomShapeID];
     }
-    //>>>
-//    NSLog(@"tempBuildingArray: %@", tempBuildingArray);
-//    NSLog(@"arrayToPullFrom count: %d", [arrayToPullFrom count]);
-    //<<<
     self.currentSequence = tempBuildingArray;
     return [NSArray arrayWithArray:tempBuildingArray];
 }

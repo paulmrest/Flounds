@@ -11,12 +11,12 @@
 
 #import "FloundsAppearanceUtility.h"
 
-#import "SliderUpdateSuperViewDelegate.h"
+#import "SliderUpdateSuperViewProtocol.h"
 
 @interface SnapTickSlider : UISlider
 
 @property (nonatomic, strong) NSString *sliderKeyID;
 
-@property (weak, nonatomic) id<SliderUpdateSuperViewDelegate> updateSuperView;
+@property (weak, nonatomic) id<SliderUpdateSuperViewProtocol> updateSuperView;
 
 @end

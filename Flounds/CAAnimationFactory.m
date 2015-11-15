@@ -6,6 +6,30 @@
 //  Copyright (c) 2015 Paul Rest. All rights reserved.
 //
 
+const CFTimeInterval SLIDE_ANIMATION_DURATION = 0.1;
+
+const CFTimeInterval PULSE_AND_FADE_ANIMATION_DURATION = 0.5;
+
+const CFTimeInterval FAST_PULSE_AND_FADE_ANIMATION_DURATION = 0.1;
+
+const CFTimeInterval MOVE_TO_OR_AWAY_FROM_EDGES_ANIMATION_DURATION = 0.5f;
+
+const CGFloat SHIFT_SHAPES_TOWARDS_POINT_DURATION = 0.10;
+
+
+const CGFloat FADE_TO_VALUE = 0.5f;
+
+const CGFloat MOVE_TO_OR_AWAY_FROM_EDGES_FADE_ANIMATION_EDGE_VALUE = 0.2f;
+
+const CGFloat MOVE_TO_OR_AWAY_FORM_EDGES_SCALE_ANIMATION_EDGE_VALUE = 0.1f;
+
+
+const CGFloat SHAKE_TRANSLATION_FACTOR = 0.05;
+
+const CGFloat SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR = 0.10;
+
+
+
 #import "CAAnimationFactory.h"
 
 @implementation CAAnimationFactory
@@ -13,13 +37,13 @@
 +(CABasicAnimation *)slideAnimation
 {
     CABasicAnimation *slideAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-    slideAnimation.duration = 0.1f;
+    slideAnimation.duration = SLIDE_ANIMATION_DURATION;
     slideAnimation.fillMode = kCAFillModeForwards;
     slideAnimation.removedOnCompletion = NO;
     return slideAnimation;
 }
 
-CFTimeInterval pulseAndFadeAnimationDuration = 0.5f;
+//CFTimeInterval pulseAndFadeAnimationDuration = 0.5f;
 
 +(CAAnimation *)pulseAndFadeInAnimation
 {
@@ -28,12 +52,12 @@ CFTimeInterval pulseAndFadeAnimationDuration = 0.5f;
     
     CAAnimationGroup *pulseAndFadeIn = [CAAnimationGroup animation];
     pulseAndFadeIn.animations = @[pulseInAnimation, [CAAnimationFactory fadeAnimation]];
-    pulseAndFadeIn.duration = pulseAndFadeAnimationDuration;
+    pulseAndFadeIn.duration = PULSE_AND_FADE_ANIMATION_DURATION;
     
     return pulseAndFadeIn;
 }
 
-CFTimeInterval fastPulseAndFadeAnimationDuration = 0.15f;
+//CFTimeInterval fastPulseAndFadeAnimationDuration = 0.15f;
 
 +(CAAnimation *)fastPulseInAndFadeAnimation
 {
@@ -42,7 +66,7 @@ CFTimeInterval fastPulseAndFadeAnimationDuration = 0.15f;
     
     CAAnimationGroup *fastPulseAndFadeIn = [CAAnimationGroup animation];
     fastPulseAndFadeIn.animations = @[fastPulseInAnimation, [CAAnimationFactory fadeAnimation]];
-    fastPulseAndFadeIn.duration = fastPulseAndFadeAnimationDuration;
+    fastPulseAndFadeIn.duration = FAST_PULSE_AND_FADE_ANIMATION_DURATION;
     
     return fastPulseAndFadeIn;
 }
@@ -51,7 +75,7 @@ CFTimeInterval fastPulseAndFadeAnimationDuration = 0.15f;
 {
     CABasicAnimation *fastPulseInAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
     fastPulseInAnimation.toValue = [NSNumber numberWithFloat:0.01f];
-    fastPulseInAnimation.duration = fastPulseAndFadeAnimationDuration;
+    fastPulseInAnimation.duration = FAST_PULSE_AND_FADE_ANIMATION_DURATION;
     
     return fastPulseInAnimation;
 }
@@ -71,17 +95,17 @@ CFTimeInterval fastPulseAndFadeAnimationDuration = 0.15f;
     
     CAAnimationGroup *pulseAndFadeOut = [CAAnimationGroup animation];
     pulseAndFadeOut.animations = @[pulseOutAnimation, [CAAnimationFactory fadeAnimation]];
-    pulseAndFadeOut.duration = pulseAndFadeAnimationDuration;
+    pulseAndFadeOut.duration = PULSE_AND_FADE_ANIMATION_DURATION;
 
     return pulseAndFadeOut;
 }
 
-const CGFloat PULSE_ANIMATION_FADE_TO_VALUE = 0.5f;
+//const CGFloat PULSE_ANIMATION_FADE_TO_VALUE = 0.5f;
 
 +(CAAnimation *)fadeAnimation
 {
     CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    fadeAnimation.toValue = [NSNumber numberWithFloat:PULSE_ANIMATION_FADE_TO_VALUE];
+    fadeAnimation.toValue = [NSNumber numberWithFloat:FADE_TO_VALUE];
     
     return fadeAnimation;
 }
@@ -93,9 +117,6 @@ const CGFloat PULSE_ANIMATION_FADE_TO_VALUE = 0.5f;
     return [[CAAnimationCluster alloc] initWithAnimationCluster:pulseInAndOutArray
                                                      forShapeID:shapeID];
 }
-
-
-const CGFloat SHAKE_TRANSLATION_FACTOR = 0.05;
 
 +(CAAnimation *)shakeAnimationForContainingRect:(CGRect)rect
 {
@@ -124,11 +145,39 @@ const CGFloat SHAKE_TRANSLATION_FACTOR = 0.05;
                                                            forShapeID:shapeID];
 }
 
-const CFTimeInterval MOVE_TO_OR_AWAY_FROM_EDGES_ANIMATION_DURATION = 0.5f;
-
-const CGFloat MOVE_TO_OR_AWAY_FROM_EDGES_FADE_ANIMATION_EDGE_VALUE = 0.2f;
-
-const CGFloat MOVE_TO_OR_AWAY_FORM_EDGES_SCALE_ANIMATION_EDGE_VALUE = 0.1f;
++(CAAnimationCluster *)bounceShapeTowardsPoint:(CGPoint)point
+                                withShapeFrame:(CGRect)shapeFrame
+                                andShapeBounds:(CGRect)shapeBounds
+                               withLayerCopies:(NSUInteger)layerCopies
+                                    andShapeID:(NSUInteger)shapeID
+{
+    CGFloat xShapeCenter = shapeFrame.origin.x + (shapeBounds.size.width / 2);
+    CGFloat yShapeCenter = shapeFrame.origin.y + (shapeBounds.size.height / 2);
+    CGFloat xDistToPoint = point.x - xShapeCenter;
+    CGFloat yDistToPoint = point.y - yShapeCenter;
+    
+    CGFloat xDistToTransform = xDistToPoint * SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR;
+    CGFloat yDistToTransform = yDistToPoint * SHIFT_SHAPES_TOWARDS_POINT_TRANSFORM_FACTOR;
+    
+    CGMutablePathRef pathForAnimation = CGPathCreateMutable();
+    CGPathMoveToPoint(pathForAnimation, NULL, xShapeCenter, yShapeCenter);
+    CGPathAddLineToPoint(pathForAnimation, NULL, xShapeCenter + xDistToTransform,
+                         yShapeCenter + yDistToTransform);
+    
+    CAKeyframeAnimation *positionAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    positionAnimation.path = pathForAnimation;
+    positionAnimation.autoreverses = YES;
+    positionAnimation.duration = SHIFT_SHAPES_TOWARDS_POINT_DURATION;
+    
+    CAAnimationCluster *bounceShapesTowardsPointAnimCluster = [[CAAnimationCluster alloc] initWithOneAnimationForCluster:positionAnimation
+                                                                                  forLayerCopies:layerCopies
+                                                                                      forShapeID:shapeID];
+    bounceShapesTowardsPointAnimCluster.timerInterval = 0.0;
+    
+    CFRelease(pathForAnimation);
+    
+    return bounceShapesTowardsPointAnimCluster;
+}
 
 +(CAAnimation *)animationToMoveShapeConfinedBy:(CGRect)shapeRect
                    alongLineFromCenterToEdgeOf:(CGRect)outerRect

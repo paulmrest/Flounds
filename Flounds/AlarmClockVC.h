@@ -24,7 +24,7 @@
 #import "FloundsVCBase.h"
 
 #import "SettingsVC.h"
-#import "SettingsTVUnwindDelegate.h"
+//#import "SettingsTVUnwindDelegate.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import "AlarmSoundManager.h"
@@ -33,18 +33,12 @@
 
 @interface AlarmClockVC : FloundsVCBase <UITableViewDataSource, UITableViewDelegate, ModalPatternMakerDelegate, DeactivateSnoozeProtocol>
 
+
 @property (weak, nonatomic) IBOutlet ClockViewText *clockView;
-
-
-@property (weak, nonatomic) IBOutlet UIView *settingsButtonContainer;
 
 @property (weak, nonatomic) IBOutlet FloundsButton *settingsEndSnoozeButton;
 
-
 @property (nonatomic, weak) IBOutlet UITableView *alarmTimesTV;
-
-@property (nonatomic) BOOL applicationLaunchingFromSoundingAlarm;
-
 
 @property (nonatomic, weak) IBOutlet PatternMakerVC *patternMakerVC;
 

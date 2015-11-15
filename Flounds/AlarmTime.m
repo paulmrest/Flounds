@@ -114,16 +114,9 @@ NSString *kAlarmSoundDisplayNameKey = @"AlarmSoundName";
 
 -(BOOL)timeMatchesAlarmTimeToTheSecond:(NSDate *)compareTimeDate
 {
-//    NSDate *compareTimeHoursMinutesSecondsOnly = [NSDateUtility timeWithHoursMinutesAndSecondsOnly:compareTimeDate];
-    
     NSDate *compareTimeHoursMinutesSecondsNanosecondsOnly = [NSDateUtility timeWithHoursMinutesSecondsAndNanosecondsOnly:compareTimeDate];
     
     NSTimeInterval timeIntervalBetweenCompareAndSelf = [self.alarmTimeDate timeIntervalSinceDate:compareTimeHoursMinutesSecondsNanosecondsOnly];
-    
-    //>>>
-//    NSLog(@"AlarmTime - timeMatchesAlarmTimeToTheSecond...");
-//    NSLog(@"timeIntervalBetweenCompareAndSelf: %f", timeIntervalBetweenCompareAndSelf);
-    //<<<
     
     if (timeIntervalBetweenCompareAndSelf <= 0.0 && timeIntervalBetweenCompareAndSelf >= -3.0)
     {
@@ -133,8 +126,6 @@ NSString *kAlarmSoundDisplayNameKey = @"AlarmSoundName";
     {
         return NO;
     }
-    
-//    return [self.alarmTimeDate isEqualToDate:compareTimeHoursMinutesSecondsOnly];
 }
 
 -(void)setSnooze:(NSUInteger)snoozeMinutes

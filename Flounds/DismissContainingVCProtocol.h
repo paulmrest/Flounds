@@ -1,5 +1,5 @@
 //
-//  DismissContainingVCDelegate.h
+//  DismissContainingVCProtocol.h
 //  Flounds
 //
 //  Created by Paul M Rest on 7/21/15.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol DismissContainingVCDelegate <NSObject>
+@protocol DismissContainingVCProtocol <NSObject>
 
 @property (nonatomic) BOOL dismissContainingVCOnPush;
 

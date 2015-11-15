@@ -46,11 +46,6 @@ const NSUInteger SECONDS_PER_DAY = 60 * 60 * 24;
 
 +(NSDate *)nextOccurrenceOfTime:(NSDate *)date
 {
-    //>>>
-//    NSLog(@" ");
-//    NSLog(@"NSDateUtility - nextOccurrenceOfTime:");
-//    NSLog(@"param date: %@", [date descriptionWithLocale:[NSLocale currentLocale]]);
-    //<<<
     unsigned int yearMonthDayHoursMinutesSecondsFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay |
     NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     
@@ -65,30 +60,17 @@ const NSUInteger SECONDS_PER_DAY = 60 * 60 * 24;
     [paramDateComponents setDay:currDateComponents.day];
     
     NSDate *paramDateWithCurrYearMonthDay = [currCal dateFromComponents:paramDateComponents];
-    //>>>
-//    NSLog(@"currDate: %@", [currDate descriptionWithLocale:[NSLocale currentLocale]]);
-//    NSLog(@"paramDateWithCurrYear: %@", [paramDateWithCurrYearMonthDay descriptionWithLocale:[NSLocale currentLocale]]);
-    //<<<
-    
+
     if ([currDate isEqualToDate:paramDateWithCurrYearMonthDay]) //if param date is the same as currDate, return nil
     {
-        //>>>
-//        NSLog(@"returning nil");
-        //<<<
         return nil;
     }
     else if (currDate == [currDate earlierDate:paramDateWithCurrYearMonthDay]) //if param date will occur in the same day
     {
-        //>>>
-//        NSLog(@"returning paramDateWithCurrYearMonthDay");
-        //<<<
         return paramDateWithCurrYearMonthDay;
     }
     else //param date will occur the following day
     {
-        //>>>
-//        NSLog(@"returning paramDatePlusOneDay");
-        //<<<
         NSDate *paramDatePlusOneDay = [NSDate dateWithTimeInterval:SECONDS_PER_DAY sinceDate:paramDateWithCurrYearMonthDay];
         return paramDatePlusOneDay;
     }
@@ -96,11 +78,6 @@ const NSUInteger SECONDS_PER_DAY = 60 * 60 * 24;
 
 +(NSDate *)timeWithCurrDate:(NSDate *)date
 {
-    //>>>
-//    NSLog(@" ");
-//    NSLog(@"NSDateUtility - timeWithCurrDate:");
-//    NSLog(@"param date: %@", [date descriptionWithLocale:[NSLocale currentLocale]]);
-    //<<<
     unsigned int yearMonthDayHoursMinutesSecondsFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay |
     NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     
@@ -115,10 +92,6 @@ const NSUInteger SECONDS_PER_DAY = 60 * 60 * 24;
     [paramDateComponents setDay:currDateComponents.day];
     
     NSDate *paramDateWithCurrYearMonthDay = [currCal dateFromComponents:paramDateComponents];
-    //>>>
-//    NSLog(@"currDate: %@", [currDate descriptionWithLocale:[NSLocale currentLocale]]);
-//    NSLog(@"paramDateWithCurrYear: %@", [paramDateWithCurrYearMonthDay descriptionWithLocale:[NSLocale currentLocale]]);
-    //<<<
     return paramDateWithCurrYearMonthDay;
 }
 

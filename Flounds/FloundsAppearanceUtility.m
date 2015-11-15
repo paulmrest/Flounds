@@ -39,14 +39,16 @@
                 withBorderColor:(UIColor *)color
             withBorderThickness:(CGFloat)thickness
 {
+    BOOL floundsSublayerPresent = NO;
+    
     if ([[view class] isSubclassOfClass:[UIView class]])
     {
-        BOOL floundsSublayerPresent = NO;
         for (CALayer *oneLayer in view.layer.sublayers)
         {
             if ([oneLayer isKindOfClass:[FloundsShapeLayer class]])
             {
                 floundsSublayerPresent = YES;
+                break;
             }
         }
         if (!floundsSublayerPresent)
@@ -56,6 +58,65 @@
                                                              borderThickness:thickness]];
         }
     }
+}
+
++(UIFont *)getFloundsFontForBounds:(CGRect)boundingRect
+                   givenSampleText:(NSString *)sampleText
+                  forBorderedSpace:(BOOL)bordered
+{
+    NSString *defaultFontFamilyName = [FloundsViewConstants getDefaultFontFamilyName];
+    
+    CGFloat fontFramePaddingFactor = 0.0f;
+    if (bordered)
+    {
+        fontFramePaddingFactor = [FloundsViewConstants getFontFramePaddingFactor];
+    }
+    else
+    {
+        fontFramePaddingFactor = [FloundsViewConstants getFramePaddingFactor];
+    }
+    
+    CGFloat heightBasedFontPointSize = boundingRect.size.height - (fontFramePaddingFactor * boundingRect.size.height);
+    
+    UIFont *heightBasedReturnFont = [UIFont fontWithName:defaultFontFamilyName
+                                              size:heightBasedFontPointSize];
+    
+    NSAttributedString *tempAttString = [[NSAttributedString alloc] initWithString:sampleText
+                                                                        attributes:@{NSFontAttributeName : heightBasedReturnFont}];
+    
+    CGFloat paddedBoundingRectWidth = boundingRect.size.width - (fontFramePaddingFactor * boundingRect.size.width);
+    if (tempAttString.size.width <= paddedBoundingRectWidth)
+    {
+        return heightBasedReturnFont;
+    }
+    else
+    {
+        CGFloat widthBasedFontPointSize = heightBasedFontPointSize * (paddedBoundingRectWidth / tempAttString.size.width);
+        return [UIFont fontWithName:defaultFontFamilyName size:widthBasedFontPointSize];
+    }
+}
+
++(BOOL)attStringExceedsAvailableSpaceGiven:(NSAttributedString *)attString
+                               displayRect:(CGRect)availableRect
+{
+    CGFloat fontFramePaddingFactor = [FloundsViewConstants getFontFramePaddingFactor];
+    CGFloat availableViewTextSpace = availableRect.size.width - (availableRect.size.width * fontFramePaddingFactor);
+    
+    if (attString.size.width > availableViewTextSpace)
+    {
+        return YES;
+    }
+    return NO;
+}
+
++(BOOL)stringExceedsAvailableSpaceGiven:(NSString *)string
+                            displayFont:(UIFont *)displayFont
+                            displayRect:(CGRect)availableRect
+{
+    NSAttributedString *attStringWithFont = [[NSAttributedString alloc] initWithString:string
+                                                                            attributes:@{NSFontAttributeName : displayFont}];
+    return [FloundsAppearanceUtility attStringExceedsAvailableSpaceGiven:attStringWithFont
+                                                             displayRect:availableRect];
 }
 
 @end

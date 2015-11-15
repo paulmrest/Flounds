@@ -12,21 +12,18 @@
 
 #import "ModalPatternMakerDelegate.h"
 
-#import "GridLayer.h"
-#import "GridLayerDelegate.h"
-
 #import "BezierLayerManager.h"
 #import "BezierShapeLayer.h"
 #import "BezierShapeLayerDelegate.h"
 #import "CAAnimationCluster.h"
-#import "AnimationQueueFinishDelegate.h"
+#import "AnimationQueueFinishProtocol.h"
 
 #import "CAAnimationFactory.h"
 
 
 #define ARC4RANDOM_MAX 0x100000000
 
-@interface ShapeView : UIView <AnimationQueueFinishDelegate>
+@interface ShapeView : UIView <AnimationQueueFinishProtocol>
 
 @property (nonatomic, strong) NSArray *currMatchingSequence;
 
@@ -55,11 +52,6 @@
 -(void)dismissShapesOnly;
 
 -(void)dismissShapesAndPatternMaker;
-
-
-//>>>
--(void)animationTester;
-//<<<
 
 
 @end

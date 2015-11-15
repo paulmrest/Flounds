@@ -10,6 +10,12 @@
 
 #import "AlarmSoundManager.h"
 
+#import "AlarmSoundInfoVC.h"
+#import "AlarmSoundTVCell.h"
+
+
+NSString *ALARM_SOUND_INFO_SEGUE_ID;
+
 
 @interface FloundsAlarmSoundChooserVCBase : FloundsVCBase <UITableViewDelegate, UITableViewDataSource>
 

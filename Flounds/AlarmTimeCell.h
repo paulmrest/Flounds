@@ -22,8 +22,6 @@
 
 @property (nonatomic, strong) NSDate *alarmTimeDate;
 
-@property (nonatomic) BOOL active;
-
 @property (weak, nonatomic) IBOutlet UISwitch *activeSwitch;
 
 -(void)resetDateFormatter;

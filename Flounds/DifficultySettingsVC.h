@@ -12,27 +12,34 @@
 
 #import "SnapTickSlider.h"
 
-#import "UnwindFromTryItFloundsDelegate.h"
 #import "TryFloundsSplashVC.h"
 #import "PatternMakerVC.h"
 
-#import "SliderUpdateSuperViewDelegate.h"
+#import "SliderUpdateSuperViewProtocol.h"
 
 
-@interface DifficultySettingsVC : SettingBaseVC <UnwindFromTryItFloundsDelegate, SliderUpdateSuperViewDelegate>
+@interface DifficultySettingsVC : SettingBaseVC <SliderUpdateSuperViewProtocol>
+
 
 @property (nonatomic, strong) FloundsModel *floundsModel;
 
-@property (weak, nonatomic) IBOutlet FloundsButton *setButton;
+
+@property (weak, nonatomic) IBOutlet UILabel *startingShapesSliderLabel;
 
 @property (weak, nonatomic) IBOutlet SnapTickSlider *startingShapesSlider;
 
 @property (weak, nonatomic) IBOutlet UILabel *startShapesLabel;
 
+
+@property (weak, nonatomic) IBOutlet UILabel *difficultyLevelSliderLabel;
+
 @property (weak, nonatomic) IBOutlet SnapTickSlider *difficultyLevelSlider;
 
 @property (weak, nonatomic) IBOutlet UILabel *levelLabel;
 
-@property (weak, nonatomic) IBOutlet FloundsButton *tryAndCancelTrialButton;
+
+@property (weak, nonatomic) IBOutlet FloundsButton *setButton;
+
+@property (weak, nonatomic) IBOutlet FloundsButton *tryItButton;
 
 @end

@@ -26,4 +26,6 @@
 
 -(BOOL)selectAlarm:(NSUInteger)indexOfAlarm;
 
+-(NSString *)getAlarmInfoStringForDisplayName:(NSString *)alarmDisplayName;
+
 @end

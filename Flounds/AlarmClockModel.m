@@ -50,32 +50,9 @@ const BOOL DEFAULT_SHOW_24_TIME = NO;
         [self dateFormatter];
         [self getShowTimeIN24HourFormatFromDisk];
         [self defaultSnoozeInterval];
-        
-        //>>>
-        [self getDebuggingSnoozeInSecondsFromDisk];
-        //<<<
     }
     return self;
 }
-
-//>>>
-NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
-
--(void)getDebuggingSnoozeInSecondsFromDisk
-{
-    self.debuggingSnoozeInSeconds = [[NSUserDefaults standardUserDefaults] boolForKey:kDebuggingSnoozeInSecondsKey];
-}
-
--(void)setDebuggingSnoozeInSeconds:(BOOL)debuggingSnoozeInSeconds
-{
-    if (_debuggingSnoozeInSeconds != debuggingSnoozeInSeconds)
-    {
-        _debuggingSnoozeInSeconds = debuggingSnoozeInSeconds;
-        [[NSUserDefaults standardUserDefaults] setBool:_debuggingSnoozeInSeconds forKey:kDebuggingSnoozeInSecondsKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-//<<<
 
 -(NSDateFormatter *)dateFormatter
 {
@@ -278,10 +255,9 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
         NSError *removeFileError = nil;
         fileRemoved = [self.fileManager removeItemAtPath:self.defaultSoundingAlarmURL.path
                                                         error:&removeFileError];
-        if (!fileRemoved || removeFileError)
+        if (fileRemoved && !removeFileError)
         {
-            NSLog(@"AlarmClockModel - clearCurrentlySoundingAlarmFromDisk...");
-            NSLog(@"self.fileManager was unable to clear file");
+            fileRemoved = YES;
         }
     }
     return fileRemoved;
@@ -308,8 +284,6 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
     {
         return currentlySoundingAlarmFromDisk;
     }
-    NSLog(@"AlarmClockModel - getCurrentlySoundingAlarmFromDisk...");
-    NSLog(@"unable to retrieve self.soundingAlarm from disk");
     return nil;
 }
 
@@ -393,10 +367,6 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
             }
         }
     }
-    //>>>
-//    NSLog(@"AlarmClockModel - determineNextActiveAlarm");
-//    NSLog(@"at exit self.nextActiveAlarm: %@", [self.nextActiveAlarm descriptionWithLocale:[NSLocale currentLocale]]);
-    //<<<
 }
 
 -(NSDate *)getNextActiveAlarm
@@ -406,10 +376,6 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
 
 -(NSArray *)getAlarmTimes
 {
-    //>>>
-//    NSLog(@"AlarmClockModel - getAlarmTimes");
-//    NSLog(@"returning an array with %lu objects", [self.storedAlarmTimes count]);
-    //<<<
     return [NSArray arrayWithArray:self.storedAlarmTimes];
 }
 
@@ -427,7 +393,6 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
                                                         withAlarmSound:alarmSound];
             [self.storedAlarmTimes addObject:newAlarmTime];
             [self saveStoredAlarmTimesToDisk];
-//            [self updateSystemNotifications];
             [self determineNextActiveAlarm];
             return YES;
         }
@@ -466,10 +431,6 @@ NSString *kDebuggingSnoozeInSecondsKey = @"snoozeInSecondsKey";
 newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
      newAlarmTimeSound:(NSString *)newAlarmSound
 {
-    //>>>
-//    NSLog(@"AlarmClockModel - modifyAlarmTime...");
-//    NSLog(@"newAlarmSnoozeMinutes: %lu", (unsigned long)newAlarmSnoozeMinutes);
-    //<<<
     if (oldAlarmTimeDate)
     {
         AlarmTime *oldAlarmTime = nil;
@@ -498,7 +459,6 @@ newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
                                                      withObject:newAlarmTime];
                     if ([self saveStoredAlarmTimesToDisk])
                     {
-//                        [self updateSystemNotifications];
                         [self determineNextActiveAlarm];
                         return YES;
                     }
@@ -529,59 +489,11 @@ newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
 -(BOOL)saveStoredAlarmTimesToDisk
 {
     BOOL saveSuccess = [NSKeyedArchiver archiveRootObject:self.storedAlarmTimes toFile:self.alarmTimesURL.path];
-    //>>>
-    NSLog(@"saveStoredAlarmTimesToDisk - storedAlarmTimes was successfully saved to disk? %@", saveSuccess ? @"YES" : @"NO");
-    //<<<
     if (saveSuccess)
     {
-//        [self updateSystemNotifications];
         return YES;
     }
     return NO;
-}
-
--(void)updateSystemNotifications
-{
-    //>>>
-//    NSLog(@"AlarmClockModel - updateSystemNotifications...");
-    //<<<
-
-    UIApplication *sharedApp = [UIApplication sharedApplication];
-    if ([[sharedApp scheduledLocalNotifications] count] > 0)
-    {
-        [sharedApp cancelAllLocalNotifications];
-    }
-    for (AlarmTime *oneAlarmTime in self.storedAlarmTimes)
-    {
-        if ([oneAlarmTime isActive])
-        {
-            //>>>
-//            NSLog(@" ");
-//            NSLog(@"oneAlarmTime.alarmTime: %@", [oneAlarmTime.alarmTimeDate descriptionWithLocale:[NSLocale currentLocale]]);
-            //<<<
-            UILocalNotification *systemAlarm = [[UILocalNotification alloc] init];
-            NSDate *nextDateWithAlarmTime = [NSDateUtility nextOccurrenceOfTime:oneAlarmTime.alarmTimeDate];
-            
-            //>>>
-//            NSLog(@"nextDateWithAlarmTime: %@", [nextDateWithAlarmTime descriptionWithLocale:[NSLocale currentLocale]]);
-            //<<<
-            if (systemAlarm)
-            {
-                systemAlarm.fireDate = nextDateWithAlarmTime;
-                systemAlarm.timeZone = [NSTimeZone defaultTimeZone];
-                systemAlarm.repeatInterval = 0;
-                systemAlarm.alertBody = @"Alarm";
-                systemAlarm.soundName = UILocalNotificationDefaultSoundName;
-                [sharedApp scheduleLocalNotification:systemAlarm];
-                //>>>
-//                NSLog(@"After adding alarmTime %@ sharedApp has %lu local notifications", [oneAlarmTime.alarmTimeDate description], (unsigned long)[[sharedApp scheduledLocalNotifications] count]);
-                //<<<
-            }
-        }
-    }
-    //>>>
-//    NSLog(@"at exit, sharedApplications has %lu local notifications", (unsigned long)[[sharedApp scheduledLocalNotifications] count]);
-    //<<<
 }
 
 -(BOOL)alarmTimeAlreadyPresent:(NSDate *)alarmTime
@@ -623,7 +535,6 @@ newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
     {
         [[self.storedAlarmTimes objectAtIndex:index] makeActive];
         [self saveStoredAlarmTimesToDisk];
-//        [self updateSystemNotifications];
     }
 }
 
@@ -633,7 +544,6 @@ newAlarmTimeSnoozeMinutes:(NSUInteger)newAlarmSnoozeMinutes
     {
         [[self.storedAlarmTimes objectAtIndex:index] makeInactive];
         [self saveStoredAlarmTimesToDisk];
-//        [self updateSystemNotifications];
     }
 }
 

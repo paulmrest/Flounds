@@ -20,6 +20,10 @@ NSString *ABORT_NOTICE_TEXT;
 {
     [super viewDidLoad];
     ABORT_NOTICE_TEXT = NSLocalizedString(@"Tap any shape three times to abort", nil);
+    
+    self.abortNoticeLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
+    
+    self.okayButton.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
 }
 
 -(void)viewDidLayoutSubviews

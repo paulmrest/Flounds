@@ -29,11 +29,4 @@
 
 -(void)endShapeGenerationSession;
 
-//>>>
--(SquareBezierShape *)getSquareForBoundingRect:(CGRect)rect;
--(TriangleBezierShape *)getTriangleForBoundingRect:(CGRect)rect;
--(EllipseBezierShape *)getEllipseForBoundingRect:(CGRect)rect;
--(BezierShape *)getEllipsesAndTrianglesForBoundingRect:(CGRect)rect;
-//<<<
-
 @end

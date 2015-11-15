@@ -19,9 +19,10 @@
 
 #import "VerticallyCenteredTextView.h"
 
-#import "UnwindFromTryItFloundsDelegate.h"
 
 @interface TryFloundsSplashVC : FloundsVCBase <ModalPatternMakerDelegate>
+
+@property (nonatomic, strong) UIFont *labelFont;
 
 @property (weak, nonatomic) IBOutlet UILabel *welcomeLabel;
 
@@ -38,7 +39,5 @@
 @property (weak, nonatomic) IBOutlet FloundsButton *cancelButton;
 
 @property (nonatomic, strong) FloundsModel *tryItFloundsModel;
-
-@property (nonatomic, weak) id<UnwindFromTryItFloundsDelegate> unwindFromTryItDelegate;
 
 @end

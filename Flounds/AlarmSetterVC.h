@@ -10,7 +10,7 @@
 
 #import "AlarmClockModel.h"
 #import "AlarmSoundManager.h"
-#import "SetSnoozeDelegate.h"
+#import "SetSnoozeProtocol.h"
 
 #import "SnoozeSetterVC.h"
 #import "AlarmSoundSetterVC.h"
@@ -23,18 +23,17 @@
 #import "FloundsVCBase.h"
 
 
-@interface AlarmSetterVC : FloundsVCBase <UIGestureRecognizerDelegate, UIPickerViewDelegate, SetSnoozeDelegate, SetAlarmSoundProtocol>
+@interface AlarmSetterVC : FloundsVCBase <UIGestureRecognizerDelegate, UIPickerViewDelegate, SetSnoozeProtocol, SetAlarmSoundProtocol>
 
 @property (strong, nonatomic) AlarmClockModel *alarmClockModel;
 
 @property (nonatomic, strong) AlarmSoundManager *soundManager;
 
-@property (nonatomic, weak) IBOutlet UIDatePicker *timeSelector;
 
 @property (nonatomic, weak) IBOutlet FloundsDatePickerView *floundsTimeSelector;
 
 
-@property (weak, nonatomic) IBOutlet VerticallyCenteredTextView *snoozeTextContainerView;
+@property (weak, nonatomic) IBOutlet VerticallyCenteredTextView *snoozeMinutesTextView;
 
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *snoozeTapRecognizer;
 
@@ -49,7 +48,8 @@
 
 @property (weak, nonatomic) IBOutlet FloundsButton *cancelButton;
 
-#pragma SetSnoozeDelegate
+
+#pragma SetSnoozeProtocol
 @property (nonatomic) NSUInteger initialSnoozeMinutes;
 
 @property (nonatomic) NSUInteger currSnoozeMinutes;

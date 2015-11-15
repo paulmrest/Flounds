@@ -53,32 +53,6 @@ const NSUInteger totalPossibleShapes = 5;
     return _sessionShapeTypeTracker;
 }
 
-//>>>
--(SquareBezierShape *)getSquareForBoundingRect:(CGRect)rect
-{
-    return [[SquareBezierShape alloc] initForRect:rect];
-}
-
--(TriangleBezierShape *)getTriangleForBoundingRect:(CGRect)rect
-{
-    return [[TriangleBezierShape alloc] initForRect:rect];
-}
-
--(EllipseBezierShape *)getEllipseForBoundingRect:(CGRect)rect
-{
-    return [[EllipseBezierShape alloc] initForRect:rect];
-}
-
--(BezierShape *)getEllipsesAndTrianglesForBoundingRect:(CGRect)rect
-{
-    NSArray *ellipseAndTriangleArray = @[[EllipseBezierShape class],
-                                         [TriangleBezierShape class]];
-    NSUInteger randomIndexValue = arc4random_uniform((unsigned int)[ellipseAndTriangleArray count]);
-    Class ellipseOrTriangleClass = ellipseAndTriangleArray[randomIndexValue];
-    return [[ellipseOrTriangleClass alloc] initForRect:rect];
-}
-//<<<
-
 -(void)startShapeGenerationSessionFor:(NSUInteger)shapes
 {
     if (shapes > 0)
@@ -93,15 +67,7 @@ const NSUInteger totalPossibleShapes = 5;
     if (self.shapeGenerationSessionOpen)
     {
         NSUInteger randomIndexValue = arc4random_uniform((unsigned int)[self.masterArrayOfShapeTypes count]);
-        //>>>
-    //    NSLog(@"BezierShapeFactory - getRandomBezierShape...");
-    //    NSLog(@"randomIndexValue: %d", randomIndexValue);
-    //    if (randomIndexValue > ([self.masterArrayOfShapeTypes count] - 1))
-    //    {
-    //        NSLog(@"randomIndexValue out of range, returning nil");
-    //        return nil;
-    //    }
-        //<<<
+
         Class randomBezierShapeClass = self.masterArrayOfShapeTypes[randomIndexValue];
         
         NSString *classStringKey = NSStringFromClass(randomBezierShapeClass);

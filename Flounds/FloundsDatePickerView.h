@@ -28,6 +28,8 @@ extern NSString *FLOUNDS_DATE_PICKER_VALUE_CHANGED_NOTIFICATION;
 
 @property (nonatomic, strong) UIColor *backgroundColor;
 
+-(void)setShowTimeIn24HourFormat:(BOOL)showTimeIn24HourFormat
+           withPickerViewRefresh:(BOOL)refreshPickerView;
 
 -(void)setDisplayedTime:(NSDate *)displayTimeDate
                animated:(BOOL)animated;

@@ -8,7 +8,18 @@
 
 #import "FloundsVCBase.h"
 
+
 @implementation FloundsVCBase
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        self.showGeneralErrorOnViewWillAppear = NO;
+    }
+    return self;
+}
 
 -(void)viewDidLoad
 {
@@ -20,6 +31,7 @@
     {
         oneSubview.backgroundColor = self.defaultBackgroundColor;
     }
+    [self calculateFloundsButtonFont];
     
     self.defaultUIColor = [FloundsViewConstants getDefaultTextColor];
 }
@@ -33,12 +45,25 @@
     }
 }
 
+-(void)calculateFloundsButtonFont
+{
+    CGFloat allFloundsButtonHeight = self.view.frame.size.height * [FloundsViewConstants getAllFloundsButtonHeightSizingFactor];
+    
+    CGFloat fullWidthHeightBasedFontPointSize = allFloundsButtonHeight -
+                                        (allFloundsButtonHeight * [FloundsViewConstants getFloundsButtonFontFramePaddingFactor]);
+
+    self.fullWidthFloundsButtonFont = [UIFont fontWithName:[FloundsViewConstants getDefaultFontFamilyName]
+                                                      size:fullWidthHeightBasedFontPointSize];
+    
+    CGFloat nonFullWidthFontPointSize = fullWidthHeightBasedFontPointSize * [FloundsViewConstants getnonFullWidthFloundsButtonAndTVCellFontSizeFactor];
+    
+    self.nonFullWidthFloundsButtonAndTVCellFont = [UIFont fontWithName:[FloundsViewConstants getDefaultFontFamilyName]
+                                                         size:nonFullWidthFontPointSize];
+}
+
 -(IBAction)unwindToParentVC:(UIStoryboardSegue *)segue
 {
-//    if ([segue isKindOfClass:[FloundsButtonSegue class]] && [segue.identifier isEqualToString:@"FloundsUnwind"])
-//    {
-//    
-//    }
+    //empty implementation
 }
 
 -(void)removeAnimationsFromPresentingVC
@@ -82,6 +107,24 @@
         }
     }
     return [NSArray arrayWithArray:visibleUnselectedCells];
+}
+
+-(void)presentGeneralErrorAlert
+{
+    NSString *generalAlertTitle = NSLocalizedString(@"An Error Occurred", nil);
+    NSString *generalAlertMessage = NSLocalizedString(@"Please restart the app. If the error persists please contact the developer.", nil);
+    UIAlertController *generalAlert = [UIAlertController alertControllerWithTitle:generalAlertTitle
+                                                                          message:generalAlertMessage
+                                                                   preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSString *okayActionButtonTitle = NSLocalizedString(@"Okay", nil);
+    UIAlertAction *okayAction = [UIAlertAction actionWithTitle:okayActionButtonTitle style:UIAlertActionStyleDefault handler:NULL];
+    
+    [generalAlert addAction:okayAction];
+    
+    [self presentViewController:generalAlert
+                       animated:YES
+                     completion:NULL];
 }
 
 @end

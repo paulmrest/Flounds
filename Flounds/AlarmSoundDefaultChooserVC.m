@@ -8,7 +8,6 @@
 
 #import "AlarmSoundDefaultChooserVC.h"
 
-
 @interface AlarmSoundDefaultChooserVC ()
 
 @end
@@ -16,22 +15,32 @@
 
 @implementation AlarmSoundDefaultChooserVC
 
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        ALARM_SOUND_INFO_SEGUE_ID = @"SetDefaultAlarmSoundInfoSegue";
+    }
+    return self;
+}
+
 -(void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     UITableViewCell *selectedTVCell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([selectedTVCell isKindOfClass:[DefaultSoundTVCell class]])
+    if ([selectedTVCell isKindOfClass:[AlarmSoundTVCell class]])
     {
-        DefaultSoundTVCell *selectedDefaultSoundCell = (DefaultSoundTVCell *)selectedTVCell;
-        if ([self.soundManager setDefaultAlarmFromDisplayName:selectedDefaultSoundCell.cellText.text])
+        AlarmSoundTVCell *selectedAlarmSoundCell = (AlarmSoundTVCell *)selectedTVCell;
+        if ([self.soundManager setDefaultAlarmFromDisplayName:selectedAlarmSoundCell.cellText.text])
         {
-            [selectedDefaultSoundCell animateCellForSelectionWithoutSegue];
+            [selectedAlarmSoundCell animateCellForSelectionWithoutSegue];
             
             [self animateNonSelectedTableViewCells:tableView];
             
             NSArray *nonSelectedCells = [self getVisibleNonSelectedCellsFor:tableView];
             NSMutableArray *indexPathsForNonSelectedCells = [[NSMutableArray alloc] initWithCapacity:[nonSelectedCells count]];
-            for (DefaultSoundTVCell *oneNonSelectedCell in nonSelectedCells)
+            for (AlarmSoundTVCell *oneNonSelectedCell in nonSelectedCells)
             {
                 [indexPathsForNonSelectedCells addObject:[tableView indexPathForCell:oneNonSelectedCell]];
             }

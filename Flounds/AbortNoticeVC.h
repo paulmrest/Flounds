@@ -22,7 +22,6 @@
 
 @property (nonatomic, weak) IBOutlet AbortNoticeLabel *abortNoticeLabel;
 
-
 @property (nonatomic, strong) FloundsModel *tryItFloundsModel;
 
 @property (nonatomic, weak) id<ModalPatternMakerDelegate> patternMakerDelegate;

@@ -47,6 +47,7 @@ const CGFloat CLOCK_DISPLAY_NON24HOUR_PERIOD_SPACE_FACTOR = 0.35f;
 -(void)initHelperClockView
 {
     self.centerTextOnEachRedrawCycle = NO;
+    self.checkFontSizeOnEachRedrawCycle = NO;
     self.dateFormatter = self.alarmClockModel.dateFormatter;
     self.non24HourDrawingPointsSet = NO;
 }
@@ -63,18 +64,25 @@ const CGFloat CLOCK_DISPLAY_NON24HOUR_PERIOD_SPACE_FACTOR = 0.35f;
 -(void)updateDisplayedTime
 {
     NSDate *currDate = [NSDate date];
+    NSString *currentTimeString = [self.dateFormatter stringFromDate:currDate];
     if (self.alarmClockModel.showTimeIn24HourFormat)
     {
-        NSString *currentTime = [self.dateFormatter stringFromDate:currDate];
-        self.displayText = currentTime;
+        self.displayText = currentTimeString;
     }
     //since the client class is likely using a non-monospaced font for self.displayfont, if we are displaying
     //the time in 12-hour format, if we simply use super's single textDrawOriginPoint property the "AM/PM" part
-    //of the strong unnecessarily jumps around at the size of the characters changes
+    //of the time unnecessarily jumps around at the size of the characters changes
     //the below code cuts the string into two strings, one with the hours and minutes, and the other with the AM/PM;
     //it generates the NSAttributedStrings and the CGPoints used to draw those strings in drawRect
     else
     {
+        if (!self.displayFont)
+        {
+            self.displayFont = [FloundsAppearanceUtility getFloundsFontForBounds:self.frame
+                                                                 givenSampleText:currentTimeString
+                                                                forBorderedSpace:NO];
+        }
+        
         NSDictionary *attTextAttributes = @{NSFontAttributeName : self.displayFont, NSForegroundColorAttributeName : self.fontColor};
         
         NSDateFormatter *dateFormatterHoursMinutesSecondsOnly = [self.dateFormatter copy];

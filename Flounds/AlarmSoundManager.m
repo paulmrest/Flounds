@@ -14,6 +14,10 @@
 
 @property (nonatomic, strong) NSArray *namesOfAvailableSounds;
 
+@property (nonatomic, strong) NSDictionary *alarmInfoStrings;
+
+@property (nonatomic, strong) NSArray *alarmFilesInfoStrings;
+
 @property (nonatomic, strong) AlarmSound *currentlySelectedSound;
 
 @property (nonatomic, strong) NSURL *currentlySelectedSoundURL;
@@ -30,9 +34,15 @@
     self = [super init];
     if (self)
     {
-        [self loadAvailableSounds];
-        [self namesOfAvailableAlarmSounds];
-        [self setCurrentlySelectedSoundFromDisk];
+        if ([self loadAvailableSounds])
+        {
+            [self namesOfAvailableAlarmSounds];
+            [self setCurrentlySelectedSoundFromDisk];
+        }
+        else
+        {
+            return nil;
+        }
     }
     return self;
 }
@@ -46,30 +56,63 @@
     return _fileManager;
 }
 
--(void)loadAvailableSounds
+-(BOOL)loadAvailableSounds
 {
+    BOOL loadSoundsFromDiskSuccessful = YES;
+    
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     
     NSError *getAllBundleFilesError = nil;
     NSArray *unfilteredBundleFiles = [self.fileManager contentsOfDirectoryAtPath:bundleRoot error:&getAllBundleFilesError];
     if (!getAllBundleFilesError)
     {
+        //build NSArray of AlarmSound objects
         NSPredicate *wavFileFilter = [NSPredicate predicateWithFormat:@"self ENDSWITH[c] '.wav'"];
         NSArray *onlyWavFiles = [unfilteredBundleFiles filteredArrayUsingPredicate:wavFileFilter];
         
-        NSMutableArray *tempBuildingArray = [[NSMutableArray alloc] initWithCapacity:[onlyWavFiles count]];
+        NSMutableArray *tempSoundFileBuildingArray = [[NSMutableArray alloc] initWithCapacity:[onlyWavFiles count]];
         for (NSString *wavFileName in onlyWavFiles)
         {
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:wavFileName
+            NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:wavFileName
                                                                  ofType:nil];
             NSString *soundDisplayName = [wavFileName componentsSeparatedByString:@"."][0];
             
-            [tempBuildingArray addObject:[[AlarmSound alloc] initWithSoundFileName:wavFileName
-                                                                       andFilePath:filePath
+            [tempSoundFileBuildingArray addObject:[[AlarmSound alloc] initWithSoundFileName:wavFileName
+                                                                       andFilePath:soundFilePath
                                                                andSoundDisplayName:soundDisplayName]];
         }
-        self.availableSounds = [NSArray arrayWithArray:tempBuildingArray];
+        self.availableSounds = [NSArray arrayWithArray:tempSoundFileBuildingArray];
+        
+        //build NSArray of NSStrings containing each sound file's info and attributions
+        NSPredicate *txtFileFilter = [NSPredicate predicateWithFormat:@"self ENDSWITH[c] '.txt'"];
+        NSArray *onlyTxtFiles = [unfilteredBundleFiles filteredArrayUsingPredicate:txtFileFilter];
+        
+        NSMutableDictionary *tempSoundInfoBuildingDictionary = [[NSMutableDictionary alloc] initWithCapacity:[onlyTxtFiles count]];
+        for (NSString *txtFileName in onlyTxtFiles)
+        {
+            NSString *infoFilePath = [[NSBundle mainBundle] pathForResource:txtFileName
+                                                                 ofType:nil];
+            NSError *infoStringError = nil;
+            NSString *infoString = [NSString stringWithContentsOfFile:infoFilePath
+                                                             encoding:NSUTF8StringEncoding
+                                                                error:&infoStringError];
+            if (!infoStringError)
+            {
+                [tempSoundInfoBuildingDictionary setObject:infoString
+                                                    forKey:txtFileName];
+            }
+            else
+            {
+                loadSoundsFromDiskSuccessful = NO;
+            }
+        }
+        self.alarmInfoStrings = [NSDictionary dictionaryWithDictionary:tempSoundInfoBuildingDictionary];
     }
+    else
+    {
+        loadSoundsFromDiskSuccessful = NO;
+    }
+    return loadSoundsFromDiskSuccessful;
 }
 
 -(NSArray *)namesOfAvailableAlarmSounds
@@ -151,10 +194,6 @@ NSString *kCurrentlySelectedSoundUserDefaultKey = @"currentlySelectedSound";
 
 -(NSURL *)getCurrentlySelectedAlarmURL
 {
-    //>>>
-//    NSString *returnPath = self.currentlySelectedSound.soundFilePath;
-//    NSURL *returnURL = [NSURL fileURLWithPath:returnPath isDirectory:NO];
-    //<<<
     return [NSURL fileURLWithPath:self.currentlySelectedSound.soundFilePath isDirectory:NO];
 }
 
@@ -173,6 +212,19 @@ NSString *kCurrentlySelectedSoundUserDefaultKey = @"currentlySelectedSound";
 -(BOOL)selectAlarm:(NSUInteger)indexOfAlarm
 {
     return YES;
+}
+
+-(NSString *)getAlarmInfoStringForDisplayName:(NSString *)alarmDisplayName
+{
+    NSArray *soundInfoFileNames = [self.alarmInfoStrings allKeys];
+    
+    NSPredicate *keyFilterForDisplayName = [NSPredicate predicateWithFormat:@"self BEGINSWITH %@", alarmDisplayName];
+    NSArray *singleSoundInfoArray = [soundInfoFileNames filteredArrayUsingPredicate:keyFilterForDisplayName];
+    if ([singleSoundInfoArray count] == 1)
+    {
+        return [self.alarmInfoStrings objectForKey:singleSoundInfoArray[0]];
+    }
+    return nil;
 }
 
 @end

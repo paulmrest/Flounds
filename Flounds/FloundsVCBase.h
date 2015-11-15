@@ -25,14 +25,25 @@
 //FloundsButtonSegueProtocol
 @property (nonatomic, strong) UIViewController<FloundsUserInteractionSegueProtocol> *presentingVC;
 
+
 @property (nonatomic, strong) UIColor *defaultBackgroundColor;
 
 @property (nonatomic, strong) UIColor *defaultUIColor;
+
+@property (nonatomic, strong) UIFont *fullWidthFloundsButtonFont;
+
+@property (nonatomic, strong) UIFont *nonFullWidthFloundsButtonAndTVCellFont;
+
+
+@property (nonatomic) BOOL showGeneralErrorOnViewWillAppear;
+
 
 -(void)animateNonSelectedTableViewCells:(UITableView *)tableView;
 
 -(NSArray *)getVisibleNonSelectedCellsFor:(UITableView *)tableView;
 
 -(void)removeAnimationsFromPresentingVC;
+
+-(void)presentGeneralErrorAlert;
 
 @end

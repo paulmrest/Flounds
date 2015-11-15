@@ -9,8 +9,6 @@
 #import "SettingBaseVC.h"
 #import "FloundsAlarmSoundChooserVCBase.h"
 
-#import "DefaultSoundTVCell.h"
-
 @interface AlarmSoundDefaultChooserVC : FloundsAlarmSoundChooserVCBase
 
 //@property (nonatomic, strong) AlarmClockModel *alarmClockModel;

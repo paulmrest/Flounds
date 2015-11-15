@@ -14,10 +14,14 @@
 
 @implementation SettingBaseVC
 
--(void)viewDidLayoutSubviews
+-(void)viewDidLoad
 {
+    [super viewDidLoad];
+
+    CANCEL_BUTTON_TITLE = NSLocalizedString(@"Cancel", nil);
+    
+    self.cancelButton.titleLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
     self.cancelButton.containingVC = self;
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.cancelButton];
 }
 
 -(IBAction)cancelButton:(id)sender

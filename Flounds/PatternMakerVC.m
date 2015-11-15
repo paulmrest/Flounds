@@ -8,11 +8,13 @@
 
 #import "PatternMakerVC.h"
 
+
 const NSUInteger MAX_ORIGIN_POINTS_TO_CHECK = 1000;
 
 const NSUInteger MAX_SHAPES_TO_GENERATE = 20;
 
-const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
+const CGFloat BASE_SHAPE_SIZE_REDUCTION_FACTOR = 0.9;
+
 
 @interface PatternMakerVC ()
 
@@ -36,10 +38,6 @@ const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
 
 @property (nonatomic) BOOL cannotDismissSelf;
 
-//>>>(allShapeSequences)
-@property (nonatomic, strong) NSMutableArray *allShapeSequences;
-//<<<
-
 @end
 
 @implementation PatternMakerVC
@@ -54,6 +52,8 @@ const NSTimeInterval STARTING_SEQUENCE_SPEED = 0.30;
     {
         self.sequenceToMatchPresent = YES;
     }
+
+    self.shapeView.backgroundColor = [FloundsViewConstants getDefaultBackgroundColor];
     
     //UISwipeGestureRecognizers for the four directions
     UISwipeGestureRecognizer *swipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
@@ -179,15 +179,6 @@ NSUInteger pointsChecked = 0;
     return _shapes;
 }
 
--(NSMutableArray *)allShapeSequences
-{
-    if (!_allShapeSequences)
-    {
-        _allShapeSequences = [[NSMutableArray alloc] init];
-    }
-    return _allShapeSequences;
-}
-
 -(void)generateShapes
 {
     self.shapes = nil;
@@ -203,12 +194,7 @@ NSUInteger pointsChecked = 0;
         if (![self rectForPossibleShapeInterfersWithPreexistingShape:rectForPossibleShape])
         {
             BezierShape *newShape = [self.shapeFactory getRandomBezierShapeForBoundingRect:rectForPossibleShape];
-            
-//            BezierShape *newShape = [self.shapeFactory getEllipsesAndTrianglesForBoundingRect:rectForPossibleShape];
-            
-//            BezierShape *newShape = [self.shapeFactory getTriangleForBoundingRect:rectForPossibleShape];
-//            BezierShape *newShape = [self.shapeFactory getSquareForBoundingRect:rectForPossibleShape];
-//            BezierShape *newShape = [self.shapeFactory getEllipseForBoundingRect:rectForPossibleShape];
+
             newShape.shapeID = shapeUniqueID;
             shapeUniqueID++;
             [self.shapes addObject:newShape];
@@ -220,28 +206,15 @@ NSUInteger pointsChecked = 0;
         }
     }
     //if MAX_ORIGIN_POINTS_TO_CHECK is hit and for loop is exited without generating numOfShapesToGenerate method will reduce
-    //baseShapeSize by 0.75, remove all shapes and try again
+    //baseShapeSize by BASE_SHAPE_SIZE_REDUCTION_FACTOR, remove all shapes and try again
     if ([self.shapes count] < self.floundsModel.currNumberOfShapes)
     {
-        //>>>
-        NSLog(@"PatternMakerVC - generateShapes... resetting with baseShapeSize * 0.75");
-        //<<<
         [self.shapeFactory endShapeGenerationSession];
-        self.baseShapeSize *= 0.75;
+        self.baseShapeSize *= BASE_SHAPE_SIZE_REDUCTION_FACTOR;
         [self.shapes removeAllObjects];
         [self generateShapes];
     }
 }
-
-//>>>
--(void)displayPoint:(CGPoint)point
-{
-    CGRect pointRect = CGRectMake(point.x, point.y, 2.0, 2.0);
-    UIView *pointView = [[UIView alloc] initWithFrame:pointRect];
-    pointView.backgroundColor = [UIColor redColor];
-    [self.shapeView addSubview:pointView];
-}
-//<<<
 
 -(BOOL)rectForPossibleShapeInterfersWithPreexistingShape:(CGRect)possibleShapeRect
 {
@@ -249,8 +222,6 @@ NSUInteger pointsChecked = 0;
     CGFloat yPossibleShapeCenter = CGRectGetMidY(possibleShapeRect);
 
     CGFloat shapeToCheckRadius = [BezierShape confiningRadiusForRect:possibleShapeRect];
-    
-//    CGFloat shapeToCheckRadius = [self confiningRadiusForRect:possibleShapeRect];
     
     for (BezierShape *oneShape in self.shapes)
     {
@@ -313,9 +284,6 @@ NSUInteger pointsChecked = 0;
     }
     if (tappedShapeID < 0)
     {
-        //>>>
-//        [self.shapeView animationTester];
-        //<<<
         [self.shapeView bounceAllShapesTowardsPoint:tapPoint];
     }
 }
@@ -329,30 +297,29 @@ NSUInteger pointsChecked = 0;
     NSString *CANCEL_BUTTON_TEXT = NSLocalizedString(@"Never!", nil);
     NSString *CONFIRM_ABORT_TEXT = NSLocalizedString(@"Get me outta here", nil);
     
-    UIAlertView *abortAlert = [[UIAlertView alloc] initWithTitle:ALERT_TITLE
-                                                        message:ALERT_MESSAGE
-                                                        delegate:self
-                                                cancelButtonTitle:CANCEL_BUTTON_TEXT
-                                                otherButtonTitles:CONFIRM_ABORT_TEXT, nil];
-    [abortAlert show];
-}
-
-#pragma UIAlertViewDelegate
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1)
-    {
-        //unwind back to settings
-        [self.patternMakerDelegate dismissPatternMakerFromAbort];
-    }
+    UIAlertController *abortAlert = [UIAlertController alertControllerWithTitle:ALERT_TITLE
+                                                                        message:ALERT_MESSAGE
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *confirmAbortAction = [UIAlertAction actionWithTitle:CONFIRM_ABORT_TEXT
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction *action){
+                                                                   [self.patternMakerDelegate dismissPatternMaker];
+                                                               }];
+    
+    UIAlertAction *cancelAbortAction = [UIAlertAction actionWithTitle:CANCEL_BUTTON_TEXT
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:NULL];
+    [abortAlert addAction:confirmAbortAction];
+    [abortAlert addAction:cancelAbortAction];
+    
+    [self presentViewController:abortAlert
+                       animated:YES
+                     completion:NULL];
 }
 
 -(NSInteger)shapeTapOccursIn:(CGPoint)tapPoint
 {
-//    CGAffineTransform translationToScreenPosition;
-//    CGPathRef translatedToScreenPositionPath;
-    
     for (BezierShape *oneShape in self.shapes)
     {
         CGAffineTransform translationToScreenPosition = CGAffineTransformMakeTranslation(oneShape.drawingRect.origin.x,
@@ -423,39 +390,5 @@ NSUInteger pointsChecked = 0;
 {
     [self.patternMakerDelegate dismissPatternMaker];
 }
-
-//>>>(allShapeSequences)
--(void)catalogCurrShapeSequence
-{
-    NSArray *currShapeSequenceCopy = [NSArray arrayWithArray:self.shapes];
-    [self.allShapeSequences addObject:currShapeSequenceCopy];
-}
-
--(void)displayAllShapeSequences
-{
-    if ([self.allShapeSequences count] > 1)
-    {
-        for (NSUInteger i = 0; i < [self.allShapeSequences count]; i++)
-        {
-            NSLog(@" ");
-            NSLog(@"Shape sequence: %lu", (unsigned long)i);
-            NSArray *oneShapeSequence = [self.allShapeSequences objectAtIndex:i];
-            for (NSUInteger j = 0; j < [oneShapeSequence count]; j++)
-            {
-                BezierShape *oneBezierShape = [oneShapeSequence objectAtIndex:j];
-                NSLog(@" ");
-                NSLog(@"Looking at shape with shapeID: %lu", (unsigned long)oneBezierShape.shapeID);
-                NSLog(@"shape is of class: %@", NSStringFromClass([oneBezierShape class]));
-                NSLog(@"confiningRect origin - x: %f, y: %f",
-                      oneBezierShape.confiningRect.origin.x,
-                      oneBezierShape.confiningRect.origin.y);
-                NSLog(@"confiningRect size - width: %f, height: %f",
-                      oneBezierShape.confiningRect.size.width,
-                      oneBezierShape.confiningRect.size.height);
-            }
-        }
-    }
-}
-//<<<
 
 @end

@@ -33,10 +33,13 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 @property (nonatomic) NSUInteger snoozeCount;
 
 
-//resignedFromActiveStatus, snoozeCountDiskURL, appKillTime, appKillTimeDiskURL, and fileManager support the capability of the app to restore
-//itself if the user accidently unlocks the device from a notification, causing the device to switch to another
-//app; in that event, the user has 15 seconds (SNOOZE_STATE_RECOVERY_WINDOW) to switch back to Flounds and pick up
-//where they left off; after 15 seconds the app simply reenters its last saved state
+//resignedFromActiveStatus, snoozeCountDiskURL, appKillTime, appKillTimeDiskURL, and fileManager support
+//the capability of the app to restore itself if the user accidently unlocks the device from a notification
+//from another app, causing the device to switch to that other app at unlock (or if the user simply accidently
+//switches to another app); in that event, the user has 15 seconds (SNOOZE_STATE_RECOVERY_WINDOW) to switch
+//back to Flounds and pick upwhere they left off; after 15 seconds the app simply reenters its last saved state
+
+@property (nonatomic) BOOL errorSavingStateAtShutdown;
 
 @property (nonatomic) BOOL resignedFromActiveStatus;
 
@@ -61,13 +64,6 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 
 @property (nonatomic, strong) FloundsModel *floundsModel;
 
-//>>>
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *snoozeNowButton;
-
-@property (nonatomic, strong) NSDate *segueStartTime;
-
-@property (nonatomic) NSUInteger snoozeNowCount;
-//<<<
 
 @end
 
@@ -79,12 +75,12 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self initHelper];
+        [self initHelperAlarmClockVC];
     }
     return self;
 }
 
--(void)initHelper
+-(void)initHelperAlarmClockVC
 {
     self.alarmClockModel = [[AlarmClockModel alloc] init];
     
@@ -97,16 +93,20 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.snoozeCount = 0;
     self.alarmCurrentlySnoozing = NO;
     self.showTimeIn24HourFormat = [self.alarmClockModel showTimeIn24HourFormat];
     
     self.clockView.alarmClockModel = self.alarmClockModel;
     
+    
     self.alarmTimesTV.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     SETTINGS_BUTTON_TITLE = NSLocalizedString(@"Settings", nil);
     END_SNOOZE_BUTTON_TITLE = NSLocalizedString(@"End Snooze", nil);
+    
+    self.settingsEndSnoozeButton.fullWidthButton = YES;
     
     self.clockTimer = [NSTimer timerWithTimeInterval:0.25
                                               target:self
@@ -148,95 +148,172 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 
 -(void)viewDidLayoutSubviews
 {
+    self.settingsEndSnoozeButton.titleLabel.font = self.fullWidthFloundsButtonFont;
     self.settingsEndSnoozeButton.containingVC = self;
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.settingsEndSnoozeButton];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    if (self.showGeneralErrorOnViewWillAppear)
+    {
+        [self presentGeneralErrorAlert];
+    }
+    else
+    {
+        [self checkForSavedAlarmingAndFloundsStates];
 
-    [self restoreAlarmingAndFloundsStates];
-
-    [[NSRunLoop currentRunLoop] addTimer:self.clockTimer forMode:NSDefaultRunLoopMode];
-    self.stopUpdatingClocks = NO;
+        [[NSRunLoop currentRunLoop] addTimer:self.clockTimer forMode:NSDefaultRunLoopMode];
+        self.stopUpdatingClocks = NO;
+    }
 }
+
+NSString *kAlarmingStateSuccessfullySavedKey = @"errorSavingAlarmState";
+
+NSString *kAttemptedToSaveAlarmingStateKey = @"attemptedToSaveAlarmingState";
 
 //AppDelegate calls this every time the app enters the background, but the app only saves the
 //appropriate states if [self.alarmClockModle alarmCurrentlySounding] returns yes
 -(void)saveAlarmingAndFloundsState
 {
+    BOOL attemptedToSaveAlarmingState = NO;
+    
     if ([self.alarmClockModel alarmCurrentlySounding]) //we will only be saving these if the user quits the app while an alarm is sounding
     {
+        attemptedToSaveAlarmingState = YES;
+        
+        BOOL saveAlarmingStateSuccess = NO;
+        
         if ([self.alarmClockModel saveCurrentlySoundingAlarmToDisk] && [self saveSnoozeCountToDisk])
         {
             NSDate *appKillTime = [NSDate date];
-            if (![NSKeyedArchiver archiveRootObject:appKillTime toFile:self.appKillTimeDiskURL.path])
+            if ([NSKeyedArchiver archiveRootObject:appKillTime toFile:self.appKillTimeDiskURL.path])
             {
-                NSLog(@"AlarmClockVC - saveAlarmingAndFloundsState");
-                NSLog(@"there was an error saving appKillTime to disk");
+                saveAlarmingStateSuccess = YES;
             }
+        }
+        [[NSUserDefaults standardUserDefaults] setBool:saveAlarmingStateSuccess
+                                                forKey:kAlarmingStateSuccessfullySavedKey];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:attemptedToSaveAlarmingState
+                                            forKey:kAttemptedToSaveAlarmingStateKey];
+}
+
+-(void)checkForSavedAlarmingAndFloundsStates
+{
+    BOOL attemptedToSaveAlarmingStatePreviously = [[NSUserDefaults standardUserDefaults] boolForKey:kAttemptedToSaveAlarmingStateKey];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kAttemptedToSaveAlarmingStateKey];
+
+    if (attemptedToSaveAlarmingStatePreviously)
+    {
+        BOOL alarmStateSavedSuccessfully = [[NSUserDefaults standardUserDefaults] boolForKey:kAlarmingStateSuccessfullySavedKey];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kAlarmingStateSuccessfullySavedKey];
+        
+        if (alarmStateSavedSuccessfully)
+        {
+            if ([self.fileManager fileExistsAtPath:self.snoozeCountDiskURL.path] &&
+                [self.fileManager fileExistsAtPath:self.appKillTimeDiskURL.path])
+            {
+                NSDate *appKillTime = [NSKeyedUnarchiver unarchiveObjectWithFile:self.appKillTimeDiskURL.path];
+                NSTimeInterval intervalSinceKillTime = [[NSDate date] timeIntervalSinceDate:appKillTime];
+                if (intervalSinceKillTime <= SNOOZE_STATE_RECOVERY_WINDOW)
+                {
+                    [self restoreAlarmingAndFloundsStates];
+                }
+                
+                //even if intervalSinceKillTime > SNOOZE_STATE_RECOVERY_WINDOW we still want to clean up the files
+                //we saved to the disk for state recovery
+                [self removeAlarmingAndFloundsStateFiles];
+            }
+        }
+        else//
+        {
+            [self removeAlarmingAndFloundsStateFiles];
+            [self presentRestoreAlarmingStateAlert];
         }
     }
 }
 
+-(void)presentRestoreAlarmingStateAlert
+{
+    if (self.clockTimer.valid)
+    {
+        [self.clockTimer invalidate];
+    }
+    
+    NSString *restoreErrorAlertTitle = NSLocalizedString(@"Restore State Error", nil);
+    NSString *restoreErrorAlertBody = NSLocalizedString(@"Flounds should have restored its alarm state, but something went wrong. Pleaes restart the app. If the problem persists contact the developer.", nil);
+    
+    UIAlertController *restoreErrorAlert = [UIAlertController alertControllerWithTitle:restoreErrorAlertTitle
+                                                                               message:restoreErrorAlertBody
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+    NSString *okayActionButtonTitle = NSLocalizedString(@"Okay", nil);
+    
+    UIAlertAction *okayAction = [UIAlertAction actionWithTitle:okayActionButtonTitle
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:NULL];
+    
+    [restoreErrorAlert addAction:okayAction];
+    
+    [self presentViewController:restoreErrorAlert
+                       animated:YES
+                     completion:NULL];
+}
+
 -(void)restoreAlarmingAndFloundsStates
 {
-    if ([self.fileManager fileExistsAtPath:self.snoozeCountDiskURL.path] &&
-        [self.fileManager fileExistsAtPath:self.appKillTimeDiskURL.path])
+    NSNumber *snoozeCountFromDisk = [NSKeyedUnarchiver unarchiveObjectWithFile:self.snoozeCountDiskURL.path];
+    NSInteger potentialSnoozeCount = [snoozeCountFromDisk integerValue];
+    if (potentialSnoozeCount >= 0)
     {
-        NSDate *appKillTime = [NSKeyedUnarchiver unarchiveObjectWithFile:self.appKillTimeDiskURL.path];
-        NSTimeInterval intervalSinceKillTime = [[NSDate date] timeIntervalSinceDate:appKillTime];
-        if (intervalSinceKillTime <= SNOOZE_STATE_RECOVERY_WINDOW)
+        self.snoozeCount = potentialSnoozeCount;
+        
+        if ([self.alarmClockModel setCurrentlySoundingAlarmFromDisk] &&
+            [self setAlarmNoisePlayerForImminentAlarmTime:[self.alarmClockModel getCurrentlySoundingAlarm]])
         {
-            NSNumber *snoozeCountFromDisk = [NSKeyedUnarchiver unarchiveObjectWithFile:self.snoozeCountDiskURL.path];
-            NSInteger potentialSnoozeCount = [snoozeCountFromDisk integerValue];
-            if (potentialSnoozeCount >= 0)
+            self.alarmNoisePlayer.numberOfLoops = -1; //loops indefinitely
+            [self.alarmNoisePlayer prepareToPlay];
+            
+            if (self.snoozeCount > 0)
             {
-                self.snoozeCount = potentialSnoozeCount;
-                
-                [self.alarmClockModel setCurrentlySoundingAlarmFromDisk];
-                
-                [self alarmNoisePlayerForImminentAlarmTime:[self.alarmClockModel getCurrentlySoundingAlarm]];
-                self.alarmNoisePlayer.numberOfLoops = -1; //loops indefinitely
-                [self.alarmNoisePlayer prepareToPlay];
-                
-                if (self.snoozeCount > 0)
-                {
-                    [self.floundsModel setNewSequenceForSnoozeCount:self.snoozeCount];
-                }
-                
-                [self activateAudioSessionAndPlayAlarm];
-                [self performSegueWithIdentifier:PATTERN_MAKER_SEGUE_ID sender:self];
+                [self.floundsModel setNewSequenceForSnoozeCount:self.snoozeCount];
             }
+            
+            [self activateAudioSessionAndPlayAlarm];
+            [self performSegueWithIdentifier:PATTERN_MAKER_SEGUE_ID sender:self];
         }
-        
-        //even if intervalSinceKillTime > SNOOZE_STATE_RECOVERY_WINDOW we still want to clean up the files
-        //we saved to the disk for state recovery
-        NSError *removeSnoozeCountError = nil;
-        BOOL removeSnoozeFromDiskResult = [self.fileManager removeItemAtPath:self.snoozeCountDiskURL.path
-                                                                       error:&removeSnoozeCountError];
-        
-        NSError *removeAppKillTimeError = nil;
-        BOOL removeAppKillTimeFromDiskResult = [self.fileManager removeItemAtPath:self.appKillTimeDiskURL.path
-                                                                            error:&removeAppKillTimeError];
-        if (!removeSnoozeFromDiskResult || removeSnoozeCountError || !removeAppKillTimeFromDiskResult || removeAppKillTimeError)
+        else
         {
-            NSLog(@"AlarmClockVC - restoreAlarmingAndFloundsStates");
-            NSLog(@"there was an error removing the saved snoozeCount from the disk");
+            [self presentGeneralErrorAlert];
         }
+    }
+}
+
+-(void)removeAlarmingAndFloundsStateFiles
+{
+    NSError *removeSnoozeCountError = nil;
+    BOOL removeSnoozeFromDiskResult = [self.fileManager removeItemAtPath:self.snoozeCountDiskURL.path
+                                                                   error:&removeSnoozeCountError];
+    
+    NSError *removeAppKillTimeError = nil;
+    BOOL removeAppKillTimeFromDiskResult = [self.fileManager removeItemAtPath:self.appKillTimeDiskURL.path
+                                                                        error:&removeAppKillTimeError];
+    
+    BOOL removeSoundingAlarmFromAlarmClockModel = [self.alarmClockModel clearCurrentlySoundingAlarmFromDisk];
+    
+    if (!removeSnoozeFromDiskResult || removeSnoozeCountError ||
+        !removeAppKillTimeFromDiskResult || removeAppKillTimeError ||
+        !removeSoundingAlarmFromAlarmClockModel)
+    {
+
     }
 }
 
 -(BOOL)saveSnoozeCountToDisk
 {
-    BOOL snoozeSaved = NO;
-    snoozeSaved = [NSKeyedArchiver archiveRootObject:[NSNumber numberWithInteger:self.snoozeCount] toFile:self.snoozeCountDiskURL.path];
-    if (!snoozeSaved)
-    {
-        
-    }
-    return snoozeSaved;
+    return [NSKeyedArchiver archiveRootObject:[NSNumber numberWithInteger:self.snoozeCount] toFile:self.snoozeCountDiskURL.path];
 }
 
 -(NSURL *)snoozeCountDiskURL
@@ -286,17 +363,11 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 
 -(void)resignFromActiveStatus
 {
-    //>>>
-//    NSLog(@"AlarmClockVC - resignFromActiveStatus");
-    //<<<
     self.resignedFromActiveStatus = YES;
 }
 
 -(void)returnToActiveStatus
 {
-    //>>>
-//    NSLog(@"AlarmClockVC - returnToActiveStatus");
-    //<<<
     self.resignedFromActiveStatus = NO;
     if ([self.alarmClockModel alarmCurrentlySounding] && !self.alarmCurrentlySnoozing)
     {
@@ -309,6 +380,11 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     if (!_soundManager)
     {
         _soundManager = [[AlarmSoundManager alloc] initWithAvailableSounds];
+
+        if (!_soundManager)
+        {
+            self.showGeneralErrorOnViewWillAppear = YES;
+        }
     }
     return _soundManager;
 }
@@ -322,32 +398,18 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     return _alarmNoisePlayer;
 }
 
--(AVAudioPlayer *)alarmNoisePlayerForImminentAlarmTime:(NSDate *)alarmTimeDate;
+-(BOOL)setAlarmNoisePlayerForImminentAlarmTime:(NSDate *)alarmTimeDate;
 {
-    if (!_alarmNoisePlayer)
+    NSError *error = nil;
+    NSURL *alarmNoiseURL = [self.soundManager getAlarmURLForDisplayName:[self.alarmClockModel getAlarmSoundForAlarmTime:alarmTimeDate]];
+    
+    self.alarmNoisePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:alarmNoiseURL
+                                                               error:&error];
+    if (error || !self.alarmNoisePlayer)
     {
-        NSError *error = nil;
-        NSURL *alarmNoiseURL = [self.soundManager getAlarmURLForDisplayName:[self.alarmClockModel getAlarmSoundForAlarmTime:alarmTimeDate]];
-        
-        //>>>
-        if (!alarmNoiseURL)
-        {
-            alarmNoiseURL = [self.soundManager getCurrentlySelectedAlarmURL];
-        }
-        //<<<
-        
-        
-        _alarmNoisePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:alarmNoiseURL
-                                                                   error:&error];
-        if (error)
-        {
-            //>>>
-            NSLog(@"AlarmClockVC - alarmNoisePlayer lazy init");
-            NSLog(@"error found when initing from getCurrentlySelectedAlarmURL of self.soundManager");
-            //<<<
-        }
+        return NO;
     }
-    return _alarmNoisePlayer;
+    return YES;
 }
 
 -(void)activateAudioSessionAndPlayAlarm
@@ -357,16 +419,14 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
                                                          withOptions:AVAudioSessionCategoryOptionDuckOthers
                                                                error:&audioSessionError];
     BOOL activateResult = [self.audioSessionSingleton setActive:YES error:&audioSessionError];
+    
     if (setCategoryResult && activateResult && !audioSessionError)
     {
-        //>>>
-//        NSLog(@"BEEP BEEP BEEP BEEP");
-        //<<<
         [self.alarmNoisePlayer play];
     }
     else
     {
-        NSLog(@"AlarmClockVC - activateAudioSessionAndPlayAlarm - error setting up self.audioSessionSingleton");
+        [self presentGeneralErrorAlert];
     }
 }
 
@@ -376,20 +436,11 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     
     NSError *audioSessionError = nil;
     BOOL deactivateResult = [self.audioSessionSingleton setActive:NO error:&audioSessionError];
-    
-    if (deactivateResult && !audioSessionError)
-    {
 
-    }
-    else
+    if (!deactivateResult || audioSessionError)
     {
-        NSLog(@"AlarmClockVC - deactivateAudioSessionAndStopAlarm - error setting up self.audioSessionSingleton");
+        self.showGeneralErrorOnViewWillAppear = YES;
     }
-}
-
--(void)stopAlarmSound
-{
-    
 }
 
 #pragma DeactivateSnoozeProtocol
@@ -397,12 +448,6 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 {
     if (self.alarmCurrentlySnoozing)
     {
-        //>>>
-//        NSLog(@"AlarmClockVC - deactivateSnoozeStateForAlarmTime:...");
-//        NSLog(@"alarmDate: %@", [alarmDate description]);
-//        NSLog(@"[self.alarmClockModel getCurrentlySoundingAlarm]: %@", [[self.alarmClockModel getCurrentlySoundingAlarm] description]);
-        //<<<
-        
         if ([alarmDate isEqualToDate:[self.alarmClockModel getCurrentlySoundingAlarm]])
         {
             [self settingsEndSnoozeButtonPush:self.settingsEndSnoozeButton];
@@ -433,9 +478,15 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
                 NSTimeInterval intervalToNextAlarm = [nextAlarmTime timeIntervalSinceNow];
                 if (intervalToNextAlarm < 1.0 && intervalToNextAlarm > 0.0)
                 {
-                    [self alarmNoisePlayerForImminentAlarmTime:nextAlarmTime];
-                    self.alarmNoisePlayer.numberOfLoops = -1; //loops indefinitely
-                    [self.alarmNoisePlayer prepareToPlay];
+                    if ([self setAlarmNoisePlayerForImminentAlarmTime:nextAlarmTime])
+                    {
+                        self.alarmNoisePlayer.numberOfLoops = -1; //loops indefinitely
+                        [self.alarmNoisePlayer prepareToPlay];
+                    }
+                    else
+                    {
+                        [self presentGeneralErrorAlert];
+                    }
                 }
             }
         }
@@ -460,8 +511,17 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     [self.alarmClockModel checkAlarmTimes];
 }
 
-#pragma UITableViewDataSource
+#pragma UITableViewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat displayFontPointSize = self.nonFullWidthFloundsButtonAndTVCellFont.pointSize;
+    
+    CGFloat cellHeightReturnValue = displayFontPointSize + (displayFontPointSize * [FloundsViewConstants getTableViewCellHeightSizingFactor]);
+    
+    return cellHeightReturnValue;
+}
 
+#pragma UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -469,21 +529,23 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.alarmClockModel getAlarmTimes] count] + 1; //bottom cell will be empty but will not be nil to allow adding another alarm time
+    return [[self.alarmClockModel getAlarmTimes] count] + 1;
+    //+1 so that bottom cell will be an "Add alarm time..." cell
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView
         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *tableViewCell = [tableView dequeueReusableCellWithIdentifier:@"AlarmTime"];
+    NSInteger rowForIndexPath = [indexPath row];
     
     tableViewCell.backgroundColor = self.defaultBackgroundColor;
-    [FloundsAppearanceUtility addDefaultFloundsSublayerToView:tableViewCell];
     
     if ([tableViewCell isKindOfClass:[AlarmTimeCell class]])
     {
         AlarmTimeCell *alarmCell = (AlarmTimeCell *)tableViewCell;
         alarmCell.cellText.textColor = self.defaultUIColor;
+        alarmCell.cellText.font = self.nonFullWidthFloundsButtonAndTVCellFont;
         alarmCell.containingVC = self;
         
         alarmCell.deactivateSnoozeDelegate = self;
@@ -491,12 +553,21 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
         NSUInteger numberOfSetAlarms = [[self.alarmClockModel getAlarmTimes] count];
 
         NSDate *alarmTimeDate = nil;
-        if (indexPath.row < numberOfSetAlarms)
+
+        if (rowForIndexPath < numberOfSetAlarms + 1)
         {
             alarmTimeDate = [self.alarmClockModel alarmTimeAtIndex:indexPath.row];
-            alarmCell.active = [self.alarmClockModel alarmTimeIsActiveAtIndex:indexPath.row];
+            if (alarmTimeDate) //if cell is already populated with an alarm time we set active state based on self.alarmClockModel
+            {
+                alarmCell.active = [self.alarmClockModel alarmTimeIsActiveAtIndex:indexPath.row];
+            }
+            else //if cell is an "Add alarm time..." cell, we just set it as active
+            {
+                alarmCell.active = YES;
+            }
             alarmCell.alarmClockModel = self.alarmClockModel;
         }
+        
         alarmCell.alarmTimeDate = alarmTimeDate;
         [alarmCell setupCellDisplay];
         return alarmCell;
@@ -513,13 +584,6 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
         [selectedFloundsTVCell animateCellForSelectionToPerformSegue:ALARM_SETTER_SEGUE_ID];
     }
     [self animateNonSelectedTableViewCells:tableView];
-}
-
-//>>>
--(IBAction)snoozeNowAction:(UIBarButtonItem *)sender
-{
-//    self.segueStartTime = [NSDate date];
-    [self performSegueWithIdentifier:PATTERN_MAKER_SEGUE_ID sender:self];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue
@@ -559,17 +623,6 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
             }
             patternMaker.floundsModel = self.floundsModel;
         }
-    }
-    if ([segue.identifier isEqualToString:@"SnoozeNow"])
-    {        
-        PatternMakerVC *patternMaker = (PatternMakerVC *)segue.destinationViewController;
-        self.stopUpdatingClocks = YES;
-        patternMaker.patternMakerDelegate = self;
-        if (self.snoozeCount == 0)
-        {
-            [self.floundsModel getNewStartingSequence];
-        }
-        patternMaker.floundsModel = self.floundsModel;
     }
     if ([segue.identifier isEqualToString:@"ToSettings"])
     {
@@ -613,6 +666,16 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     [self.settingsEndSnoozeButton.layer removeAllAnimations];
 }
 
+//override super's implementation
+-(void)presentGeneralErrorAlert
+{
+    if (self.clockTimer.valid)
+    {
+        [self.clockTimer invalidate];
+    }
+    [super presentGeneralErrorAlert];
+}
+
 #pragma ModalPatternMakerDelegate
 -(void)dismissPatternMaker
 {
@@ -622,15 +685,7 @@ const NSTimeInterval SNOOZE_STATE_RECOVERY_WINDOW = 15.0;
     
     NSTimeInterval intervalToNextAlarm = [self.alarmClockModel snoozeIntervalForSoundingAlarm];
     if (intervalToNextAlarm > 0.0)
-    {
-        //>>>
-        //convert minutes to seconds for testing
-        if (self.alarmClockModel.debuggingSnoozeInSeconds)
-        {
-            intervalToNextAlarm = intervalToNextAlarm / 60;            
-        }
-        //<<<
-        
+    {        
         self.currSnoozeEndTime = [NSDate dateWithTimeIntervalSinceNow:intervalToNextAlarm];
     }
     
