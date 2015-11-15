@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CAAnimationFactory.h"
+
 @interface AbortNoticeLabel : UILabel
+
+-(void)animateForSegueWithID:(NSString *)segueID
+                  fromSender:(UIViewController *)sender;
 
 @end

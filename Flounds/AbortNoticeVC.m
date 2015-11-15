@@ -19,7 +19,7 @@ NSString *ABORT_NOTICE_TEXT;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    ABORT_NOTICE_TEXT = NSLocalizedString(@"Tap any shape three times to abort", nil);
+    ABORT_NOTICE_TEXT = NSLocalizedString(@"Tap anywhere three times to abort", nil);
     
     self.abortNoticeLabel.font = self.nonFullWidthFloundsButtonAndTVCellFont;
     
@@ -35,6 +35,11 @@ NSString *ABORT_NOTICE_TEXT;
     
     [FloundsAppearanceUtility addDefaultFloundsSublayerToView:self.okayButton];
     self.okayButton.containingVC = self;
+}
+
+-(IBAction)abortNoticeTapped:(id)sender
+{
+    [self.abortNoticeLabel animateForSegueWithID:@"TryItFromAbortNotice" fromSender:sender];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

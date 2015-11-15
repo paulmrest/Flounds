@@ -10,6 +10,20 @@
 
 @implementation AbortNoticeLabel
 
+-(void)animateForSegueWithID:(NSString *)segueID
+                  fromSender:(UIViewController *)sender
+{
+    CABasicAnimation *slideRightAnimation = [CAAnimationFactory slideAnimation];
+    slideRightAnimation.toValue = [NSNumber numberWithInteger:self.frame.size.width];
+    
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [sender performSegueWithIdentifier:segueID sender:sender];
+    }];
+    [self.layer addAnimation:slideRightAnimation forKey:nil];
+    [CATransaction commit];
+}
+
 -(void)drawTextInRect:(CGRect)rect
 {
     CGFloat leftAndRightInset = self.frame.size.width * 0.1f;

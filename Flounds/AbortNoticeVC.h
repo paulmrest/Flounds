@@ -16,9 +16,12 @@
 
 #import "ModalPatternMakerDelegate.h"
 
+
 @interface AbortNoticeVC : FloundsVCBase <ModalPatternMakerDelegate>
 
 @property (nonatomic, weak) IBOutlet FloundsButton *okayButton;
+
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *abortNoticeTapRecognizer;
 
 @property (nonatomic, weak) IBOutlet AbortNoticeLabel *abortNoticeLabel;
 
